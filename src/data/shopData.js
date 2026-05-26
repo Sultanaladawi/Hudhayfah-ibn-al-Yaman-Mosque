@@ -1,0 +1,168 @@
+export const menuCategories = [
+  {
+    id: "hot_coffee",
+    label: "Coffee & Espresso",
+    icon: "fa-mug-hot",
+    color: "#8B5E42",
+    items: [
+      { id: 1, name: "Espresso", price: "2.80 JOD", desc: "A pure, bold single origin shot with a clean and bright finish. The ultimate classic coffee experience.", tags: ["classic"] },
+      { id: 2, name: "Flat White", price: "3.60 JOD", desc: "Silky microfoam with our house espresso blend", tags: ["vegetarian"] },
+      { id: 3, name: "Cappuccino", price: "3.40 JOD", desc: "A classic Italian coffee favorite. Made with a rich shot of espresso, topped with velvety steamed milk and a thick, airy layer of milk foam.", tags: ["vegetarian"] },
+      { id: 4, name: "Latte", price: "3.80 JOD", desc: "A smooth and creamy coffee classic made with a rich double shot of espresso and topped with a generous layer of silky steamed milk.", tags: ["vegetarian"] },
+      { id: 5, name: "Long Black", price: "3.00 JOD", desc: "A bold and sophisticated coffee made by pouring a double shot of rich espresso over hot water.", tags: ["vegan"] },
+      { id: 6, name: "Pour-Over Filter Coffee", price: "3.00 JOD", desc: "A clean, light-bodied, and highly aromatic coffee brewed manually using the pour-over method.", tags: ["vegan"] },
+      { id: 19, name: "Americano", price: "2.85 JOD", desc: "A classic coffee favorite made by adding hot water to a double shot of espresso. Smooth and well-balanced.", tags: ["vegan"] },
+      { id: 20, name: "Cortado", price: "3.25 JOD", desc: "A perfectly balanced coffee consisting of equal parts rich espresso and warm, silky steamed milk.", tags: ["balanced"] },
+      { id: 21, name: "Macchiato", price: "3.45 JOD", desc: "A bold shot of espresso 'marked' with a small dollop of velvety frothed milk", tags: ["classic"] },
+      { id: 70, name: "Mocha", price: "3.00 JOD", desc: "A delicious fusion of rich espresso and velvety steamed milk blended with premium chocolate sauce.", tags: ["vegetarian"] },
+      { id: 14, name: "Con Panna", price: "3.50 JOD", desc: "A bold and elegant coffee experience. A rich double shot of espresso topped with a generous dollop of chilled whipped cream.", tags: ["vegetarian"] },
+      { id: 7, name: "British Hot Chocolate", price: "4.00 JOD", desc: "A comforting and rich classic British treat. Made with premium cocoa powder and creamy steamed milk.", tags: ["vegan"] },
+    ],
+  },
+  {
+    id: "cold_drinks",
+    label: "Cold Drinks & Ice Cream",
+    icon: "fa-snowflake",
+    color: "#5C9EAD",
+    items: [
+      { id: 45, name: "icecream", price: "0.75 JOD", desc: "A decadent soft-serve ice cream in a classic waffle cone with sprinkles and chocolate flakes.", tags: ["vegetarian"] },
+      { id: 54, name: "iced americano", price: "3.00 JOD", desc: "A refreshing and bold cold coffee made by combining a rich double shot of espresso with chilled filtered water over ice.", tags: ["iced"] },
+      { id: 55, name: "iced latte", price: "2.75 JOD", desc: "A perfectly chilled coffee classic. Features a rich double shot of espresso poured over fresh cold milk and ice cubes.", tags: ["iced"] },
+      { id: 64, name: "Latte Frappé", price: "3.25 JOD", desc: "A luxurious, ice-blended coffee treat. This smooth Frappé combines espresso with fresh milk and a hint of sweetness.", tags: ["iced"] },
+      { id: 66, name: "mango dragon fruit smoothie", price: "3.50 JOD", desc: "Experience a tropical paradise. Vibrant smoothie combining mango sweetness with the exotic flair of dragon fruit.", tags: ["fresh"] },
+      { id: 40, name: "freshly squeezed orange juice", price: "3.00 JOD", desc: "Pure, natural, and bursting with flavor. Squeezed to order from the finest, sun-ripened oranges.", tags: ["vegan", "fresh"] },
+      { id: 39, name: "freshly pressed apple juice", price: "2.00 JOD", desc: "100% pure, natural apple juice, cold-pressed from the finest crisp apples.", tags: ["vegan", "fresh"] },
+      { id: 25, name: "beetroot spinach cucumber lime apple juice", price: "3.00 JOD", desc: "A vibrant cold-pressed blend of earthy beetroot, fresh spinach, crisp cucumber, zesty lime, and sweet green apple", tags: ["vegan", "healthy"] },
+      { id: 60, name: "Green Detox Juice", price: "3.00 JOD", desc: "A vibrant and nutrient-packed cold-pressed juice with kale, cucumber, spinach, lemon & apple.", tags: ["vegan", "healthy"] },
+      { id: 78, name: "passion fruit iced tea", price: "2.75 JOD", desc: "An exotic and refreshing escape. Premium black tea infused with the vibrant essence of passion fruit.", tags: ["iced"] },
+    ],
+  },
+  {
+    id: "tea",
+    label: "Tea & Infusions",
+    icon: "fa-leaf",
+    color: "#7B9C79",
+    items: [
+      { id: 16, name: "Mug of English Breakfast Tea", price: "3.00 JOD", desc: "A quintessential British classic. Full-bodied, robust black tea served in a generous mug.", tags: ["classic"] },
+      { id: 13, name: "Mug of Peppermint Tea", price: "3.50 JOD", desc: "A naturally caffeine-free herbal infusion made from pure peppermint leaves.", tags: ["caffeine-free"] },
+      { id: 17, name: "Pot of Peppermint Tea", price: "4.00 JOD", desc: "A soothing and naturally caffeine-free herbal infusion from premium dried peppermint leaves.", tags: ["caffeine-free"] },
+      { id: 18, name: "Pot of Breakfast Tea", price: "4.85 JOD", desc: "A quintessential British tradition. Robust and full-bodied black tea blend served in a pot.", tags: ["classic"] },
+      { id: 81, name: "Pot of Earl Grey Tea", price: "4.00 JOD", desc: "An elegant black tea blend infused with the distinct, citrusy fragrance of oil of bergamot.", tags: ["classic"] },
+      { id: 82, name: "pot of green sencha tea", price: "4.00 JOD", desc: "A journey to the heart of Japan. Premium Sencha green tea with grassy, sweet, and umami notes.", tags: ["healthy"] },
+      { id: 80, name: "Pot of Apple Loves Mint Tea", price: "4.00 JOD", desc: "A soothing and fragrant blend of loose-leaf tea with dried apple pieces and garden mint.", tags: ["caffeine-free"] },
+      { id: 28, name: "chai latte", price: "3.25 JOD", desc: "A smooth blend of steamed milk and aromatic spiced black tea", tags: ["hot"] },
+    ],
+  },
+  {
+    id: "food",
+    label: "Food & Brunch",
+    icon: "fa-utensils",
+    color: "#C49A6C",
+    items: [
+      { id: 10, name: "Sandwich", price: "3.00 JOD", desc: "A vibrant and wholesome plant-based masterpiece on seeded whole-wheat bread.", tags: ["vegetarian"] },
+      { id: 8, name: "Freshly Baked Pastry", price: "3.50 JOD", desc: "Golden, buttery goodness from our daily selection of artisanal pastries.", tags: ["vegetarian"] },
+      { id: 12, name: "Vegan Pastry", price: "3.50 JOD", desc: "Indulge in our selection of plant-based artisanal pastries, crafted with dedication.", tags: ["vegan"] },
+      { id: 22, name: "avocado with poached egg halloumi", price: "4.50 JOD", desc: "Smashed avocado on sourdough toast, topped with two perfectly poached eggs and grilled halloumi.", tags: ["vegetarian"] },
+      { id: 33, name: "Eggs Florentine", price: "3.25 JOD", desc: "Two poached eggs on toasted English muffins, layered with fresh sautéed spinach and Hollandaise.", tags: ["vegetarian"] },
+      { id: 34, name: "Eggs Royale", price: "4.50 JOD", desc: "Two poached eggs on toasted English muffins, layered with premium smoked salmon and Hollandaise.", tags: ["pescatarian"] },
+      { id: 72, name: "mushroom melt", price: "3.50 JOD", desc: "Sautéed earthy mushrooms, caramelized onions, and gooey melted cheeses on toasted sourdough.", tags: ["vegetarian"] },
+    ],
+  },
+  {
+    id: "sweets",
+    label: "Sweets & Desserts",
+    icon: "fa-cookie",
+    color: "#D4A5A5",
+    items: [
+      { id: 9, name: "Cake of the Day", price: "2.50 JOD", desc: "A daily celebration of flavor. rotating selection of artisanal cakes — ask the team.", tags: ["vegetarian"] },
+      { id: 11, name: "Brunch Plate", price: "3.50 JOD", desc: "The ultimate morning feast with poached eggs, sourdough toast, and smashed avocado.", tags: ["vegetarian"] },
+      { id: 15, name: "Raspberry & Custard laminated pastry.", price: "3.45 JOD", desc: "Crispy, buttery laminated dough filled with smooth vanilla custard and fresh raspberries.", tags: ["vegetarian"] },
+      { id: 27, name: "chai basque cheesecake", price: "3.00 JOD", desc: "Creamy spiced cheesecake topped with whipped cream and dark chocolate flakes.", tags: ["vegetarian"] },
+      { id: 79, name: "pastel de nata", price: "1.75 JOD", desc: "An authentic Portuguese classic. Flaky puff pastry filled with creamy egg custard.", tags: ["vegetarian"] },
+      { id: 84, name: "very berry pancakes", price: "3.75 JOD", desc: "Fluffy buttermilk pancakes layered with mixed berry compote and fresh berries.", tags: ["vegetarian"] },
+    ],
+  },
+];
+
+export const featuredItems = [
+  {
+    id: 2,
+    name: "Flat White",
+    category: "Coffee",
+    desc: "Our signature. Silky microfoam poured over a precisely extracted house blend espresso.",
+    price: "3.60 JOD",
+    image: "/images/flat_white.jpg",
+    tag: "Most Popular",
+    vegan: false,
+  },
+  {
+    id: 10,
+    name: "Freshly Baked Pastry",
+    category: "Bakery",
+    desc: "Rotating daily bake. Cinnamon rolls, croissants and more — ask the team.",
+    price: "3.50 JOD",
+    image: "/images/freshly_baked_pastry.webp",
+    tag: "Fresh Daily",
+    vegan: false,
+  },
+  {
+    id: 16,
+    name: "Mug of English Breakfast Tea",
+    category: "Tea",
+    desc: "A quintessential British classic. This full-bodied, robust black tea is served in a generous mug, offering a comforting and traditional tea experience. Perfectly balanced to be enjoyed plain or with a splash of milk.",
+    price: "3.00 JOD",
+    image: "/images/mug_of_english_breakfast_tea.jpg",
+    tag: "MorningTea",
+    vegan: false,
+  },
+  {
+    id: 84,
+    name: "very berry pancakes",
+    category: "Sweets",
+    desc: "A vibrant and indulgent stack of fluffy, golden buttermilk pancakes, layered with a luscious mixed berry compote.",
+    price: "3.75 JOD",
+    image: "/images/very_berry_pancakes.jpg",
+    tag: "Seasonal",
+    vegan: false,
+  },
+];
+
+export const shopInfo = {
+  name: "CaffAIne",
+  tagline: "The Future of Specialty Coffee",
+  address: "Gate of Science, Prince Abdullah bin Ghazi Faculty of Information Technology, Al-Balqa Applied University, Al-Salt",
+  city: "Al-Salt",
+  country: "Jordan",
+  email: "hello@caffainecoffee.com",
+  careersEmail: "careers@caffainecoffee.com",
+  instagram: "https://instagram.com/caffainecoffee",
+  instagramHandle: "@caffainecoffee",
+  mapsUrl: "https://maps.app.goo.gl/9u91NZFGSB13oEeK6",
+};
+
+export const openingHours = [
+  { day: "Monday – Friday", open: "07:30", close: "17:00" },
+  { day: "Saturday", open: "09:00", close: "18:00" },
+  { day: "Sunday", open: "10:00", close: "16:00" },
+];
+
+export const sophieKnowledge = {
+  greeting: "Hi there! ☕ I'm Sophie, CaffAIne's AI barista. How can I help you today?",
+  followUp: "I can help with our menu, opening hours, or anything about our AI-driven coffee experience!",
+  quickReplies: [
+    "What's on the menu?",
+    "What are your opening hours?",
+    "Do you have vegan options?",
+    "What's your most popular drink?",
+    "Tell me about the Very Berry Pancakes",
+  ],
+};
+
+export const galleryImages = [
+  { id: 1, src: "/images/interior-wide.png", alt: "CaffAIne Interior", size: "large" },
+  { id: 2, src: "/images/latte2.png", alt: "Specialty Latte Art", size: "small" },
+  { id: 3, src: "/images/pastries.png", alt: "Fresh Daily Pastries", size: "small" },
+  { id: 4, src: "/images/coffee-beans.png", alt: "Our Roasted Beans", size: "medium" },
+  { id: 5, src: "/images/barista.png", alt: "Expert Brewing", size: "small" },
+  { id: 6, src: "/images/door.png", alt: "Chill Terrace", size: "small" },
+];

@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+out/
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+.env*.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Vercel
+.vercel/
+
+# Claude
+.claude/
+
+# Graduation Project Private Files
+graduation_project_*
+*.pptx
+*.docx
+*.pdf
+*.zip
+*.rar
+
+build/
