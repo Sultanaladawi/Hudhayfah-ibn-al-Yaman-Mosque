@@ -117,8 +117,20 @@ export default function Messages() {
   );
 
   return (
-    <div style={{ direction: 'rtl', fontFamily: "'Tajawal', sans-serif", minHeight: '100vh', padding: '10px 0' }}>
-
+    <div style={{ direction: 'rtl', fontFamily: "'Tajawal', sans-serif", minHeight: '100vh', padding: '10px 0', backgroundColor: 'transparent', position: 'relative' }}>
+      {/* Premium Background Elements */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: -1, overflow: 'hidden', pointerEvents: 'none' }}>
+        <div style={{ position: 'absolute', inset: 0, background: `radial-gradient(circle at 50% -20%, #1e2f1c 0%, #070504 70%)` }} />
+        <div className="orb orb-1" />
+        <div className="orb orb-2" />
+      </div>
+      <style>{`
+        .orb { position: absolute; border-radius: 50%; filter: blur(100px); z-index: 0; opacity: 0.04; animation: float 25s infinite alternate ease-in-out; }
+        .orb-1 { width: 600px; height: 600px; background: #7A8E74; top: -200px; right: -100px; }
+        .orb-2 { width: 500px; height: 500px; background: #1b3d2b; bottom: -100px; left: -100px; }
+        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(50px, 50px) scale(1.1); } }
+      `}</style>
+      
       {/* ── Header ── */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
         <div>

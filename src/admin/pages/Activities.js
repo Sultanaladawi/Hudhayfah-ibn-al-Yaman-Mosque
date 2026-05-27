@@ -174,13 +174,37 @@ export default function Activities() {
   return (
     <div className="dashboard-fade-in" style={{ 
       color: '#fff', 
-      backgroundColor: 'var(--admin-bg)', 
+      backgroundColor: 'transparent', 
       minHeight: '100vh', 
       padding: '40px 10px 40px 5px',
       position: 'relative',
       direction: 'rtl',
       fontFamily: "'Amiri', 'Tajawal', sans-serif"
     }}>
+      {/* Premium Background Elements */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+        <div style={{ position: 'absolute', inset: 0, background: `radial-gradient(circle at 50% -20%, #1e2f1c 0%, #070504 70%)` }} />
+        <div className="orb orb-1" />
+        <div className="orb orb-2" />
+      </div>
+      <style>{`
+        .orb { position: absolute; border-radius: 50%; filter: blur(100px); z-index: 0; opacity: 0.04; animation: float 25s infinite alternate ease-in-out; }
+        .orb-1 { width: 600px; height: 600px; background: #7A8E74; top: -200px; right: -100px; }
+        .orb-2 { width: 500px; height: 500px; background: #1b3d2b; bottom: -100px; left: -100px; }
+        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(50px, 50px) scale(1.1); } }
+        .premium-row {
+          transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+          cursor: pointer;
+        }
+        .premium-row:hover {
+          background-color: rgba(122, 142, 116, 0.12) !important;
+          transform: translateY(-5px) scale(1.005) !important;
+          box-shadow: 0 15px 35px rgba(0,0,0,0.4) !important;
+          border-color: rgba(122, 142, 116, 0.5) !important;
+          position: relative;
+          z-index: 10;
+        }
+      `}</style>
 
       {/* Header */}
       <div style={{ 
