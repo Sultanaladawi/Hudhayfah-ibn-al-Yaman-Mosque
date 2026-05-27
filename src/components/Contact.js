@@ -6,7 +6,7 @@ export default function Contact() {
   const [infoRef, infoVis] = useReveal();
   const [formRef, formVis] = useReveal();
 
-  const [fields, setFields] = useState({ name: '', phone: '', message: '' });
+  const [fields, setFields] = useState({ name: '', phone: '', email: '', message: '' });
   const [done, setDone] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
@@ -19,10 +19,32 @@ export default function Contact() {
     e.preventDefault();
     if (!fields.name || !fields.message) return;
     setSubmitting(true);
-    setTimeout(() => {
-      setDone(true);
+    
+    try {
+      const emailValue = fields.email || `${Date.now()}@huzaifa-mosque.com`;
+      const combinedMessage = `رقم الهاتف للتواصل: ${fields.phone || 'N/A'}\n\nالرسالة/الاقتراح:\n${fields.message}`;
+      
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: fields.name,
+          email: emailValue,
+          message: combinedMessage
+        })
+      });
+
+      if (res.ok) {
+        setDone(true);
+      } else {
+        alert("حدث خطأ أثناء إرسال رسالتكم المباركة. يرجى المحاولة لاحقاً.");
+      }
+    } catch (err) {
+      console.error("Contact submit error:", err);
+      alert("حدث خطأ في الاتصال بالخادم. يرجى المحاولة لاحقاً.");
+    } finally {
       setSubmitting(false);
-    }, 1500);
+    }
   };
 
   const prayerTimes = [
@@ -89,8 +111,13 @@ export default function Contact() {
                 </div>
 
                 <div className={styles.fg}>
+                  <label htmlFor="email" style={{ color: 'var(--olive)' }}>البريد الإلكتروني (اختياري)</label>
+                  <input id="email" name="email" type="email" placeholder="example@domain.com" value={fields.email} onChange={change} style={{ textAlign: 'right' }} />
+                </div>
+
+                <div className={styles.fg}>
                   <label htmlFor="message" style={{ color: 'var(--olive)' }}>الرسالة أو الاقتراح</label>
-                  <textarea id="message" name="message" rows={5} placeholder="تفضل بكتابة رسالتك..." value={fields.message} onChange={change} required style={{ textAlign: 'right' }} />
+                  <textarea id="message" name="message" rows={4} placeholder="تفضل بكتابة رسالتك..." value={fields.message} onChange={change} required style={{ textAlign: 'right' }} />
                 </div>
 
                 <button type="submit" className={`btn btn-primary ${styles.submitBtn}`} disabled={submitting} style={{ backgroundColor: 'var(--olive)', color: '#fff', width: '100%', marginTop: '10px' }}>

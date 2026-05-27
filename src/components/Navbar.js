@@ -222,6 +222,24 @@ export default function Navbar({ onCartOpen }) {
     };
   }, []);
 
+  const getArabicFormattedDates = () => {
+    try {
+      const today = new Date();
+      const gregOption = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const gregDate = today.toLocaleDateString('ar-JO', gregOption);
+      
+      const hijriDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      }).format(today);
+      
+      return `${gregDate} مـ | ${hijriDate} هـ`;
+    } catch (e) {
+      return '';
+    }
+  };
+
   return (
     <>
       <header className={`${styles.header} ${scrolled ? styles.scrolled : ''}`}>
@@ -248,6 +266,10 @@ export default function Navbar({ onCartOpen }) {
             animation: 'marquee 35s linear infinite',
             cursor: 'pointer'
           }}>
+            <span style={{ margin: '0 35px', color: 'var(--gold)', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <span>📅</span> {getArabicFormattedDates()}
+            </span>
+            <span style={{ color: 'var(--gold)' }}>✦</span>
             {achievements.map((ach) => (
               <span key={ach.id} style={{ margin: '0 35px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
                 <span className="emojiIcon" style={{ fontSize: '1.15rem' }}>{ach.icon}</span>
