@@ -110,6 +110,7 @@ export default function Gallery() {
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
             gap: '20px',
+            alignItems: 'start'
           }}>
             {[1,2,3,4,5,6,7].map(n => (
               <div key={n} style={{
@@ -124,8 +125,7 @@ export default function Gallery() {
               onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)';    e.currentTarget.style.boxShadow = '0 8px 30px rgba(0,0,0,0.1)'; }}
               >
                 <video
-                  src={`/video${n}.mp4`}
-                  poster={`/images/gallery${n + 2}.jpg`}
+                  src={`/video${n}.mp4#t=0.1`}
                   controls
                   preload="metadata"
                   style={{
