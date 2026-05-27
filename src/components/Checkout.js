@@ -193,13 +193,13 @@ export default function Checkout({ onClose, onعودة }) {
   function validate() {
     const e = {};
     const safeName = (form.name || '').trim();
-    const safeالبريد الإلكتروني = (form.email || '').trim();
+    const safeEmail = (form.email || '').trim();
     const safePhone = (form.phone || '').trim();
 
     if (!safeName) e.name = 'Name is required';
 
     // البريد الإلكتروني is optional
-    if (safeالبريد الإلكتروني && !safeالبريد الإلكتروني.includes('@')) {
+    if (safeEmail && !safeEmail.includes('@')) {
       e.email = 'Invalid email format';
     }
 
