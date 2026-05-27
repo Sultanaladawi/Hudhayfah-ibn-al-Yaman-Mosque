@@ -21,6 +21,7 @@ export default function Hero() {
   };
 
   return (
+    <>
     <section className={styles.hero} id="home">
 
       {/* ── Full-screen background video ── */}

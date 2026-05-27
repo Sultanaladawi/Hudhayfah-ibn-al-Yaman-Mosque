@@ -41,8 +41,8 @@
 
 .soundBtn {
   position: absolute;
-  top: 30px;
-  left: 30px;
+  bottom: 40px;
+  right: 40px;
   z-index: 10;
   display: flex;
   align-items: center;
@@ -272,8 +272,10 @@
 
 @media (max-width: 768px) {
   .soundBtn {
-    top: 20px;
-    left: 20px;
+    bottom: 20px;
+    right: 20px;
+    top: auto;
+    left: auto;
     padding: 8px 16px;
   }
   .content {
