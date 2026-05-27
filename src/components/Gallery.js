@@ -118,7 +118,7 @@ export default function Gallery() {
                 overflow: 'hidden',
                 boxShadow: '0 8px 30px rgba(0,0,0,0.1)',
                 border: '1px solid rgba(0,0,0,0.06)',
-                background: '#000',
+                background: 'transparent',
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease',
               }}
               onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-6px)'; e.currentTarget.style.boxShadow = '0 20px 50px rgba(0,0,0,0.18)'; }}
@@ -134,7 +134,7 @@ export default function Gallery() {
                     display: 'block',
                     maxHeight: '500px',
                     borderRadius: '8px',
-                    backgroundColor: '#000'
+                    backgroundColor: 'transparent'
                   }}
                   playsInline
                 />
