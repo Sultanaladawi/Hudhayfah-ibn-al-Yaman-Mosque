@@ -6,15 +6,14 @@ const GITHUB_API_KEY = process.env.REACT_APP_GITHUB_AI_KEY;
 const GITHUB_URL     = 'https://models.inference.ai.azure.com/chat/completions';
 
 const SYSTEM_PROMPT = `
-You are Sophie, the intelligent and friendly Barista Bot for CaffAIne, Al-Salt. 
-You are located in the heart of Al-Balqa Applied University. 
-- Location: Gate of Science, Prince Abdullah bin Ghazi Faculty of Information Technology, Al-Balqa Applied University, Al-Salt.
-Personality: Professional, warm, and sophisticated. Use ☕ 🏛️ ✨.
-Knowledge:
-- Location: Gate of Science, Prince Abdullah bin Ghazi Faculty of Information Technology, Al-Balqa Applied University, Al-Salt.
-- Hours: Mon-Fri 07:30-17:00, Sat 09:00-18:00, Sun 10:00-16:00.
-- Careers: Apply via the Careers section on our website.
-- Rules: Focus on CaffAIne, nutrition, and coffee culture. Keep replies under 100 words.
+أنت "مرشد"، المساعد الذكي والودود لمسجد حذيفة بن اليمان في طبربور، عمان.
+الشخصية: وقور، محترم، ودود، ومتعاون جداً. استخدم إيموجي مثل 🕌 📚 ✨.
+المعلومات والخدمات:
+- الموقع: طبربور، عمان، الأردن.
+- الخدمات والأنشطة: حلقات تحفيظ القرآن الكريم لجميع الأعمار (التمهيدي، الأشبال، الشباب)، أنشطة رياضية أسبوعية (دوري كرة قدم)، رحلات شهرية ممتعة ومسابقات ثقافية وجوائز متميزة.
+- مشايخ ومعلمو المسجد: الشيخ أسامة الطراونة، الشيخ همام البلاونة، الشيخ بكر الخالدي.
+- التطوع والتبرع: يمكن المساهمة عبر سلة التبرعات لدعم حلقات القرآن وصيانة المسجد وأنشطة الشباب والرحلات.
+- قواعد الرد: ركّز على خدمات المسجد وأهمية تحفيظ القرآن والتربية الصالحة والأنشطة الإيجابية. اجعل الإجابات لطيفة ومختصرة ومرحبة دائماً باللغة العربية (أو الإنجليزية إن سُئلت بها).
 `;
 
 async function callAI(userMsg) {
@@ -31,11 +30,11 @@ async function callAI(userMsg) {
 
     if (!res.ok) throw new Error('AI service error');
     const data = await res.json();
-    return data.reply || "I'm a bit stuck! Reach us at hello@facultycoffee.co.uk ☕";
+    return data.reply || "أواجه بعض الصعوبات حالياً! يرجى التواصل معنا عبر البريد: info@huzaifa-mosque.com 🕌";
   } catch (err) {
     if (err.name === 'AbortError') {
       console.warn("[Chatbot] Request timed out");
-      return "I'm taking a bit too long to think! Could you try again? ☕";
+      return "أستغرق وقتاً طويلاً في التفكير! هل يمكنك المحاولة مرة أخرى؟ 🕌";
     }
     console.error("[Chatbot] AI Call Failed:", err);
     throw err;
@@ -162,7 +161,7 @@ export default function Chatbot() {
       .catch(err => console.error("[Chatbot] Sync Error:", err));
 
     } catch {
-      setMsgs(p => [...p, { id: Date.now() + 1, role: 'sophie', text: `Sorry, I'm having trouble. Email us at ${shopInfo.email} ☕` }]);
+      setMsgs(p => [...p, { id: Date.now() + 1, role: 'sophie', text: `عذراً، أواجه بعض الصعوبات حالياً! يرجى التواصل معنا عبر البريد: ${shopInfo.email} 🕌` }]);
     } finally {
       setTyping(false);
     }
@@ -176,12 +175,12 @@ export default function Chatbot() {
         <div className={styles.header}>
           <div className={styles.headerLeft}>
             <div className={styles.avatar}>
-              <i className="fas fa-mug-hot" />
+              <i className="fas fa-mosque" />
               <span className={styles.dot} />
             </div>
             <div>
-              <div className={styles.name}>Sophie</div>
-              <div className={styles.status}>CaffAIne · Barista Bot</div>
+              <div className={styles.name}>مرشد</div>
+              <div className={styles.status}>مسجد حذيفة · المساعد الذكي</div>
             </div>
           </div>
           <button className={styles.closeBtn} onClick={() => setOpen(false)} aria-label="Close">
@@ -192,7 +191,7 @@ export default function Chatbot() {
         <div className={styles.messages}>
           {msgs.map(m => (
             <div key={m.id} className={`${styles.msg} ${m.role === 'user' ? styles.userMsg : styles.sophieMsg}`}>
-              {m.role === 'sophie' && <div className={styles.msgAvatar}><i className="fas fa-mug-hot" /></div>}
+              {m.role === 'sophie' && <div className={styles.msgAvatar}><i className="fas fa-mosque" /></div>}
               <div className={styles.bubble}>
                 {m.text}
                 {m.role === 'sophie' && (
@@ -213,7 +212,7 @@ export default function Chatbot() {
           ))}
           {typing && (
             <div className={`${styles.msg} ${styles.sophieMsg}`}>
-              <div className={styles.msgAvatar}><i className="fas fa-mug-hot" /></div>
+              <div className={styles.msgAvatar}><i className="fas fa-mosque" /></div>
               <div className={`${styles.bubble} ${styles.typing}`}><span /><span /><span /></div>
             </div>
           )}
@@ -234,7 +233,7 @@ export default function Chatbot() {
             type="text"
             placeholder={listening
               ? (voiceLang === 'ar-SA' ? '🎙️ جاري الاستماع...' : '🎙️ Listening...')
-              : (voiceLang === 'ar-SA' ? 'اسألي صوفي...' : 'Ask Sophie anything...')}
+              : (voiceLang === 'ar-SA' ? 'اسأل مرشد...' : 'Ask Murshid...')}
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={onKey}
@@ -258,11 +257,11 @@ export default function Chatbot() {
               className={styles.micBtn}
               onClick={startVoice}
               disabled={typing}
-              title={listening ? 'Stop recording' : 'Speak to Sophie'}
+              title={listening ? 'إيقاف التسجيل' : 'تحدث مع مرشد'}
               style={{
                 background: listening
                   ? 'linear-gradient(135deg, #ff4d4d, #cc0000)'
-                  : 'linear-gradient(135deg, #8c6a56, #5a3500)',
+                  : 'linear-gradient(135deg, #18453B, #11322b)',
                 animation: listening ? 'micPulse 1.2s infinite' : 'none',
               }}
             >
@@ -278,7 +277,7 @@ export default function Chatbot() {
       </div>
 
       <button className={`${styles.fab} ${open ? styles.fabOpen : ''}`} onClick={() => setOpen(v => !v)}>
-        {open ? <i className="fas fa-times" /> : <i className="fas fa-mug-hot" />}
+        {open ? <i className="fas fa-times" /> : <i className="fas fa-mosque" />}
         {unread && !open && <span className={styles.badge}>1</span>}
       </button>
     </>

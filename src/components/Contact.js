@@ -1,104 +1,73 @@
 import { useState } from 'react';
-import { shopInfo, openingHours } from '../data/shopData';
 import { useReveal } from '../hooks/useReveal';
 import styles from './Contact.module.css';
-
-const validate = {
-  name:    v => v.trim().length < 2   ? 'Please enter your name.' : '',
-  email:   v => !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) ? 'Please enter a valid email address.' : '',
-  message: v => v.trim().length < 10  ? 'Message is too short (min 10 chars).' : '',
-};
 
 export default function Contact() {
   const [infoRef, infoVis] = useReveal();
   const [formRef, formVis] = useReveal();
 
-  const [fields, setFields] = useState({ name: '', email: '', message: '' });
-  const [errors, setErrors] = useState({});
-  const [touched, setTouched] = useState({});
+  const [fields, setFields] = useState({ name: '', phone: '', message: '' });
   const [done, setDone] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState('');
 
   const change = e => {
     const { name, value } = e.target;
     setFields(p => ({ ...p, [name]: value }));
-    if (touched[name]) setErrors(p => ({ ...p, [name]: validate[name](value) }));
-  };
-
-  const blur = e => {
-    const { name, value } = e.target;
-    setTouched(p => ({ ...p, [name]: true }));
-    setErrors(p => ({ ...p, [name]: validate[name](value) }));
   };
 
   const submit = async e => {
     e.preventDefault();
-    const errs = Object.fromEntries(Object.entries(fields).map(([k, v]) => [k, validate[k](v)]));
-    setErrors(errs);
-    setTouched({ name: true, email: true, message: true });
-    if (!Object.values(errs).every(x => !x)) return;
-
+    if (!fields.name || !fields.message) return;
     setSubmitting(true);
-    setSubmitError('');
-
-    try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: fields.name.trim(),
-          email: fields.email.trim(),
-          message: fields.message.trim(),
-        }),
-      });
-
-      if (!response.ok) throw new Error('Failed to send message');
-      
+    setTimeout(() => {
       setDone(true);
-    } catch (error) {
-      console.error('Contact submit error:', error);
-      setSubmitError('Something went wrong. Please try again or email us directly.');
-    } finally {
       setSubmitting(false);
-    }
+    }, 1500);
   };
 
+  const prayerTimes = [
+    { day: 'الفجر', open: '04:30 ص', close: 'إقامة: 04:50 ص' },
+    { day: 'الظهر', open: '12:35 م', close: 'إقامة: 12:50 م' },
+    { day: 'العصر', open: '04:15 م', close: 'إقامة: 04:30 م' },
+    { day: 'المغرب', open: '07:45 م', close: 'إقامة: 07:55 م' },
+    { day: 'العشاء', open: '09:15 م', close: 'إقامة: 09:30 م' },
+  ];
+
   return (
-    <section className={styles.contact} id="contact">
+    <section className={styles.contact} id="contact" style={{ direction: 'rtl', textAlign: 'right' }}>
       <div className="section-wrap">
         <div className={styles.inner}>
           <div ref={infoRef} className={`${styles.info} reveal ${infoVis ? 'vis' : ''}`}>
-            <div className="label">Contact Us</div>
-            <div className="divider" />
-            <h2 className="h2">Get in Touch</h2>
-            <p className={styles.infoDesc}>
-              Visit us in the heart of {shopInfo.city} or drop a message below. 
-              We're always happy to chat about coffee.
+            <div className="label" style={{ color: 'var(--gold)' }}>تواصل معنا</div>
+            <div className="divider" style={{ backgroundColor: 'var(--olive)', marginRight: 0, marginLeft: 'auto' }} />
+            <h2 className="h2" style={{ color: 'var(--olive)', fontFamily: "'Amiri', serif" }}>نحن هنا لخدمتكم</h2>
+            <p className={styles.infoDesc} style={{ color: 'var(--text-secondary)' }}>
+              أبواب المسجد وإدارته مفتوحة للجميع، نسعد باستقبال استفساراتكم واقتراحاتكم.
             </p>
 
             <div className={styles.contactDetails}>
                <div className={styles.detailItem}>
-                  <i className="fas fa-map-marker-alt" />
+                  <i className="fas fa-map-marker-alt" style={{ color: 'var(--gold)' }} />
                   <div>
-                    <strong>Location</strong>
-                    <p>{shopInfo.address}</p>
+                    <strong style={{ color: 'var(--olive)' }}>الموقع</strong>
+                    <p style={{ color: 'var(--text-secondary)' }}>عمان، طبربور، بالقرب من كشك الشرطة</p>
                   </div>
                </div>
                <div className={styles.detailItem}>
-                  <i className="fas fa-envelope" />
+                  <i className="fas fa-phone" style={{ color: 'var(--gold)' }} />
                   <div>
-                    <strong>Email</strong>
-                    <p>{shopInfo.email}</p>
+                    <strong style={{ color: 'var(--olive)' }}>الهاتف</strong>
+                    <p style={{ color: 'var(--text-secondary)' }}>00962000000000</p>
                   </div>
                </div>
             </div>
 
             <div className={styles.hoursGrid}>
-               {openingHours.map(({ day, open, close }) => (
-                 <div key={day} className={styles.hourRow}>
-                   <span>{day}</span>
-                   <span>{open} – {close}</span>
+               <h4 style={{ color: 'var(--olive)', marginBottom: '10px', fontFamily: "'Amiri', serif", fontSize: '1.2rem' }}>أوقات الصلاة المعتمدة</h4>
+               {prayerTimes.map(({ day, open, close }) => (
+                 <div key={day} className={styles.hourRow} style={{ borderBottomColor: 'var(--divider)' }}>
+                   <span style={{ color: 'var(--espresso)', fontWeight: 'bold' }}>{day}</span>
+                   <span style={{ color: 'var(--text-secondary)' }}>{open} – {close}</span>
                  </div>
                ))}
             </div>
@@ -106,51 +75,33 @@ export default function Contact() {
 
           <div ref={formRef} className={`${styles.formWrap} reveal ${formVis ? 'vis' : ''}`}>
             {!done ? (
-              <form onSubmit={submit} noValidate>
-                <h3 className={styles.formTitle}>Send a Message</h3>
+              <form onSubmit={submit}>
+                <h3 className={styles.formTitle} style={{ color: 'var(--olive)', fontFamily: "'Amiri', serif" }}>أرسل رسالة للإدارة</h3>
                 
                 <div className={styles.fg}>
-                  <label htmlFor="name">Your Name</label>
-                  <input
-                    id="name" name="name" type="text" placeholder="e.g. Alex Smith"
-                    value={fields.name} onChange={change} onBlur={blur}
-                    className={errors.name ? styles.er : ''}
-                  />
-                  {errors.name && <span className={styles.em}>{errors.name}</span>}
+                  <label htmlFor="name" style={{ color: 'var(--olive)' }}>الاسم الكريم</label>
+                  <input id="name" name="name" type="text" placeholder="الاسم ثلاثي" value={fields.name} onChange={change} required style={{ textAlign: 'right' }} />
                 </div>
 
                 <div className={styles.fg}>
-                  <label htmlFor="email">Email Address</label>
-                  <input
-                    id="email" name="email" type="email" placeholder="you@example.com"
-                    value={fields.email} onChange={change} onBlur={blur}
-                    className={errors.email ? styles.er : ''}
-                  />
-                  {errors.email && <span className={styles.em}>{errors.email}</span>}
+                  <label htmlFor="phone" style={{ color: 'var(--olive)' }}>رقم الهاتف للتواصل</label>
+                  <input id="phone" name="phone" type="tel" placeholder="07XXXXXXXX" value={fields.phone} onChange={change} required style={{ textAlign: 'right' }} />
                 </div>
 
                 <div className={styles.fg}>
-                  <label htmlFor="message">Message</label>
-                  <textarea
-                    id="message" name="message" rows={5}
-                    placeholder="How can we help?"
-                    value={fields.message} onChange={change} onBlur={blur}
-                    className={errors.message ? styles.er : ''}
-                  />
-                  {errors.message && <span className={styles.em}>{errors.message}</span>}
+                  <label htmlFor="message" style={{ color: 'var(--olive)' }}>الرسالة أو الاقتراح</label>
+                  <textarea id="message" name="message" rows={5} placeholder="تفضل بكتابة رسالتك..." value={fields.message} onChange={change} required style={{ textAlign: 'right' }} />
                 </div>
 
-                {submitError && <p className={styles.errorText}>{submitError}</p>}
-
-                <button type="submit" className={`btn btn-primary ${styles.submitBtn}`} disabled={submitting}>
-                  {submitting ? 'Sending...' : 'Send Message'}
+                <button type="submit" className={`btn btn-primary ${styles.submitBtn}`} disabled={submitting} style={{ backgroundColor: 'var(--olive)', color: '#fff', width: '100%', marginTop: '10px' }}>
+                  {submitting ? 'جاري الإرسال...' : 'إرسال الرسالة'}
                 </button>
               </form>
             ) : (
               <div className={styles.success}>
-                <div className={styles.successIcon}><i className="fas fa-check" /></div>
-                <h3>Message Received</h3>
-                <p>Thanks for getting in touch. We'll reply within 24 hours.</p>
+                <div className={styles.successIcon} style={{ backgroundColor: 'var(--olive)', color: 'var(--gold)' }}><i className="fas fa-check" /></div>
+                <h3 style={{ color: 'var(--olive)', fontFamily: "'Amiri', serif" }}>تم استلام رسالتك</h3>
+                <p style={{ color: 'var(--text-secondary)' }}>بارك الله فيك، سيتم مراجعة رسالتك والتواصل معك قريباً.</p>
               </div>
             )}
           </div>

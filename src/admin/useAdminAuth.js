@@ -6,12 +6,12 @@ export function useAdminAuth() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const savedAdmin = sessionStorage.getItem('admin_session');
+    const savedAdmin = localStorage.getItem('admin_session');
     if (savedAdmin) {
       try {
         setAdmin(JSON.parse(savedAdmin));
       } catch (e) {
-        sessionStorage.removeItem('admin_session');
+        localStorage.removeItem('admin_session');
       }
     }
     setLoading(false);
@@ -20,6 +20,23 @@ export function useAdminAuth() {
   const login = useCallback(async (email, password) => {
     setError('');
     setLoading(true);
+
+    const checkLocalUser = () => {
+      const savedSheikhs = localStorage.getItem('sheikhs_list');
+      let customTeam = [];
+      if (savedSheikhs) {
+        try {
+          customTeam = JSON.parse(savedSheikhs);
+        } catch(e) {}
+      }
+      const team = [
+        { email: 'osama@huzaifa-mosque.com', pass: 'osama123', name: 'الشيخ أسامة الطراونة', role: 'super_admin' },
+        { email: 'hammam@huzaifa-mosque.com', pass: 'hammam123', name: 'الشيخ همام البلاونة', role: 'super_admin' },
+        { email: 'baker@huzaifa-mosque.com', pass: 'baker123', name: 'الشيخ بكر الخالدي', role: 'admin' },
+        ...customTeam
+      ];
+      return team.find(u => u.email === email.toLowerCase().trim() && u.pass === password);
+    };
 
     try {
       const response = await fetch('/api/admin/login', {
@@ -39,35 +56,39 @@ export function useAdminAuth() {
         };
 
         setAdmin(adminData);
-        sessionStorage.setItem('admin_session', JSON.stringify(adminData));
+        localStorage.setItem('admin_session', JSON.stringify(adminData));
         setLoading(false);
         return true;
       } else {
+        const localUser = checkLocalUser();
+        if (localUser) {
+          const fallbackData = { 
+            id: `local-${localUser.name}`, 
+            email: localUser.email, 
+            name: localUser.name, 
+            role: localUser.role 
+          };
+          setAdmin(fallbackData);
+          localStorage.setItem('admin_session', JSON.stringify(fallbackData));
+          setLoading(false);
+          return true;
+        }
         setError(data.message || 'Invalid email or password.');
         setLoading(false);
         return false;
       }
     } catch (err) {
       console.warn("Backend unreachable. Triggering local fallback mode.");
-      
-      const team = [
-        { email: 'omar@coffee.com', pass: 'omar2026', name: 'Omar Al-Ajarma', role: 'super_admin' },
-        { email: 'sultan@coffee.com', pass: 'sultan2026', name: 'Sultan Al-Adawi', role: 'admin' },
-        { email: 'mohammad@coffee.com', pass: 'mohammad2026', name: 'Mohammad Al-Hadidi', role: 'admin' },
-        { email: 'bashar@coffee.com', pass: 'bashar2026', name: 'Bashar Al-Dabbas', role: 'admin' }
-      ];
-      
-      const user = team.find(u => u.email === email.toLowerCase().trim() && u.pass === password);
-      
-      if (user) {
+      const localUser = checkLocalUser();
+      if (localUser) {
         const fallbackData = { 
-          id: `local-${user.name}`, 
-          email: user.email, 
-          name: user.name, 
-          role: user.role 
+          id: `local-${localUser.name}`, 
+          email: localUser.email, 
+          name: localUser.name, 
+          role: localUser.role 
         };
         setAdmin(fallbackData);
-        sessionStorage.setItem('admin_session', JSON.stringify(fallbackData));
+        localStorage.setItem('admin_session', JSON.stringify(fallbackData));
         setLoading(false);
         return true;
       }
@@ -79,7 +100,7 @@ export function useAdminAuth() {
   }, []);
 
   const logout = useCallback(() => {
-    sessionStorage.removeItem('admin_session');
+    localStorage.removeItem('admin_session');
     setAdmin(null);
   }, []);
 

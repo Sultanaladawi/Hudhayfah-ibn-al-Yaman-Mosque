@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
-import { Coffee } from 'lucide-react';
 import './styles/global.css';
 
 import { CartProvider }   from './context/CartContext';
@@ -16,7 +15,7 @@ import Footer             from './components/Footer';
 import Chatbot            from './components/Chatbot';
 import Cart               from './components/Cart';
 import Checkout           from './components/Checkout';
-import Presentation       from './components/Presentation';
+
 import LoadingScreen      from './components/LoadingScreen';
 
 import { AdminProvider }  from './admin/AdminContext';
@@ -24,14 +23,14 @@ import AdminRoute         from './admin/AdminRoute';
 import AdminLogin         from './admin/AdminLogin';
 import AdminLayout        from './admin/AdminLayout';
 import Dashboard          from './admin/pages/Dashboard';
-import Orders             from './admin/pages/Orders';
-import Products           from './admin/pages/Products';
+import Donations          from './admin/pages/Donations';
+import Circles            from './admin/pages/Circles';
 import Analytics          from './admin/pages/Analytics';
-import Inventory          from './admin/pages/Inventory';
+import Students           from './admin/pages/Students';
 import Offers             from './admin/pages/Offers';
 import AIAssistant        from './admin/pages/AIAssistant';
-import Applications       from './admin/pages/Applications';
-import Jobs               from './admin/pages/Jobs';
+import Volunteers         from './admin/pages/Volunteers';
+import Activities         from './admin/pages/Activities';
 import Feedback           from './admin/pages/Feedback';
 import Messages           from './admin/pages/Messages';
 import LeaderDashboard    from './admin/pages/LeaderDashboard';
@@ -106,33 +105,37 @@ function PublicSite() {
       {!isStoreOpen && (
         <div style={{
           position: 'fixed', inset: 0, zIndex: 9999,
-          backgroundColor: 'rgba(10, 6, 4, 0.96)',
+          backgroundColor: 'rgba(10, 24, 18, 0.97)', // Deep Islamic green tone
           backdropFilter: 'blur(15px)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: '#ffffff', textAlign: 'center', padding: '30px'
+          color: '#ffffff', textAlign: 'center', padding: '30px',
+          fontFamily: "'Tajawal', sans-serif"
         }}>
           <div style={{ maxWidth: '500px' }}>
-            <div style={{ color: '#c4a484', marginBottom: '25px', opacity: 1 }}>
-              <Coffee size={80} strokeWidth={1} />
+            <div style={{ color: '#C49B75', marginBottom: '25px', opacity: 1, display: 'flex', justifyContent: 'center' }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
             </div>
-            <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: '3rem', marginBottom: '15px', letterSpacing: '1px' }}>
-              Resting & Roasting
+            <h2 style={{ fontFamily: "'Amiri', serif", fontSize: '2.5rem', marginBottom: '15px', color: '#C49B75' }}>
+              منصة مسجد حذيفة بن اليمان
             </h2>
-            <p style={{ fontSize: '1.2rem', lineHeight: '1.7', opacity: 0.95, marginBottom: '40px', fontWeight: '300' }}>
-              We're currently enjoying our coffee break. Our doors are closed, but we'll be back soon with fresh brews and warm welcomes.
+            <p style={{ fontSize: '1.1rem', lineHeight: '1.7', opacity: 0.95, marginBottom: '40px', fontWeight: '300' }}>
+              نعتذر منكم، المنصة مغلقة حالياً لأعمال الصيانة والتحديث الدوري. نلتقي بكم قريباً إن شاء الله في خدمة بيوت الله ورعاية طلاب العلم.
             </p>
             <div style={{ 
-              padding: '25px', border: '1px solid rgba(196, 164, 132, 0.4)', 
-              borderRadius: '20px', backgroundColor: 'rgba(196, 164, 132, 0.08)',
+              padding: '25px', border: '1px solid rgba(196, 155, 117, 0.4)', 
+              borderRadius: '20px', backgroundColor: 'rgba(24, 69, 59, 0.25)',
               boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
             }}>
-              <p style={{ fontWeight: '900', textTransform: 'uppercase', fontSize: '0.85rem', letterSpacing: '3px', marginBottom: '15px', color: '#c4a484' }}>
-                Opening Hours
+              <p style={{ fontWeight: '900', textTransform: 'uppercase', fontSize: '0.95rem', letterSpacing: '1px', marginBottom: '15px', color: '#C49B75' }}>
+                أوقات الحلقات والزيارات الرسمية
               </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '1rem' }}>
-                <p style={{ margin: 0 }}>Mon–Fri: 07:30 – 17:00</p>
-                <p style={{ margin: 0 }}>Saturday: 09:00 – 18:00</p>
-                <p style={{ margin: 0 }}>Sunday: 10:00 – 16:00</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '1rem', direction: 'rtl' }}>
+                <p style={{ margin: 0 }}>الفترة الصباحية: من 08:30 صباحاً حتى 11:30 ظهراً</p>
+                <p style={{ margin: 0 }}>الفترة المسائية: من 04:00 عصراً حتى 09:30 مساءً</p>
+                <p style={{ margin: 0 }}>يوم الجمعة: أوقات الصلوات والخطبة المباركة</p>
               </div>
             </div>
           </div>
@@ -151,7 +154,6 @@ export default function App() {
             <Routes>
               <Route path="/" element={<PublicSite />} />
               <Route path="/checkout" element={<Checkout />} />
-              <Route path="/presentation" element={<Presentation />} />
 
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route
@@ -164,13 +166,13 @@ export default function App() {
               >
                 <Route index element={<Navigate to="dashboard" replace />} />
                 <Route path="dashboard"    element={<Dashboard />} />
-                <Route path="orders"       element={<Orders />} />
-                <Route path="products"     element={<Products />} />
+                <Route path="donations"    element={<Donations />} />
+                <Route path="circles"      element={<Circles />} />
                 <Route path="analytics"    element={<Analytics />} />
-                <Route path="inventory"    element={<Inventory />} />
+                <Route path="students"     element={<Students />} />
                 <Route path="offers"       element={<Offers />} />
-                <Route path="applications" element={<Applications />} />
-                <Route path="jobs"         element={<Jobs />} />
+                <Route path="volunteers"   element={<Volunteers />} />
+                <Route path="activities"   element={<Activities />} />
                 <Route path="messages"     element={<Messages />} />
                 <Route path="feedback"     element={<Feedback />} />
                 <Route path="ai-assistant" element={<AIAssistant />} />

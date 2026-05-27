@@ -1,393 +1,642 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { BsSendFill, BsTrash, BsCpu, BsPerson, BsMicFill } from 'react-icons/bs';
-import { BrainCircuit, Volume2, Square } from 'lucide-react';
+import { 
+  Bot, Send, RefreshCw, Trash2, ArrowLeft, Sparkles, 
+  HelpCircle, MessageSquare, Volume2, VolumeX, AlertCircle 
+} from 'lucide-react';
+import { useAdminContext } from '../AdminContext';
 
 const AIAssistant = () => {
-  const [messages, setMessages] = useState([
-    { 
-      id: 1, type: 'bot', 
-      text: "Welcome back, Admin. I'm your CaffAIne AI, now synced with your live data. How can I help you analyze the business today?",
-      metrics: { status: "Active", db: "Connected" }
-    }
-  ]);
-  const [input, setInput] = useState("");
-  const [customerQueries, setCustomerQueries] = useState([]);
-  const [liveStats, setLiveStats] = useState({ todaySales: 0, todayOrders: 0 });
-  const [isListening, setIsListening] = useState(false);
-  const [speakingId, setSpeakingId] = useState(null);
-  const [micLang, setMicLang] = useState('ar-SA');
+  const { admin } = useAdminContext();
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [syncing, setSyncing] = useState(false);
+  const [error, setError] = useState('');
   const chatEndRef = useRef(null);
+  const [speakingMsgId, setSpeakingMsgId] = useState(null);
 
-  const theme = {
-    espresso: 'var(--admin-bg)', 
-    bean: 'var(--admin-card)',
-    crema: 'var(--admin-accent)',
-    latte: 'var(--admin-text)',
-    border: 'var(--admin-border)'
+  // Quick Prompts Arabic for the Sheikh
+  const quickPrompts = [
+    { text: "لخص لي إحصائيات التبرعات والصدقات اليوم", category: "تبرعات" },
+    { text: "ما هي طلبات التطوع الجديدة التي تنتظر المراجعة؟", category: "تطوع" },
+    { text: "أعطني كشفاً بالرسائل الواردة من الأهالي مؤخراً", category: "رسائل" },
+    { text: "ما هي السلع والمواد التي نفدت أو شارفت على النفاد؟", category: "مخزون" },
+    { text: "ما هي آخر نشاطات المشايخ والمشرفين في لوحة التحكم؟", category: "نشاطات" }
+  ];
+
+  // Auto-scroll to bottom of chat
+  const scrollToBottom = () => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const fetchCustomerQueries = async () => {
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, loading]);
+
+  // Load chat history from backend database on mount
+  useEffect(() => {
+    const fetchHistory = async () => {
+      try {
+        setSyncing(true);
+        const res = await axios.get('/api/ai-assistant-logs');
+        const logs = Array.isArray(res.data) ? res.data : [];
+        
+        // Convert DB logs to chat messages format
+        // DB fields: id, admin_query, ai_response, created_at
+        const formattedMsgs = [];
+        // DB logs are ordered DESC (newest first). Let's reverse them to display chronologically.
+        const sortedLogs = [...logs].reverse();
+        
+        sortedLogs.forEach((log) => {
+          if (log.admin_query) {
+            formattedMsgs.push({
+              id: `q-${log.id}`,
+              role: 'user',
+              text: log.admin_query,
+              time: log.created_at
+            });
+          }
+          if (log.ai_response) {
+            formattedMsgs.push({
+              id: `a-${log.id}`,
+              role: 'assistant',
+              text: log.ai_response,
+              time: log.created_at
+            });
+          }
+        });
+
+        if (formattedMsgs.length > 0) {
+          setMessages(formattedMsgs);
+        } else {
+          // Default greeting if no history
+          setMessages([
+            {
+              id: 'welcome',
+              role: 'assistant',
+              text: `أهلاً بك يا فضيلة الشيخ ${admin?.name || 'المشرف'}. أنا مساعدك الذكي المربوط بقاعدة بيانات مسجد حذيفة بن اليمان. يمكنك سؤالي عن إحصائيات التبرعات، طلبات التطوع، رسائل الأهالي، والمستندات والعمليات الإدارية، وسأقوم بتحليلها لك فوراً. كيف يمكنني مساعدتك اليوم؟ 🕌`,
+              time: new Date().toISOString()
+            }
+          ]);
+        }
+      } catch (err) {
+        console.error("Failed to fetch AI chat logs:", err);
+        setError("فشل تحميل تاريخ المحادثة من الخادم. سنعمل في الوضع المحلي.");
+        // Set fallback welcome
+        setMessages([
+          {
+            id: 'welcome',
+            role: 'assistant',
+            text: `مرحباً بك يا فضيلة الشيخ. أواجه مشكلة في الاتصال بالخادم لجلب الأرشيف، ولكن يمكنك الاستمرار في سؤالي هنا مباشرة! 🕌`,
+            time: new Date().toISOString()
+          }
+        ]);
+      } finally {
+        setSyncing(false);
+      }
+    };
+
+    fetchHistory();
+  }, [admin]);
+
+  const handleSend = async (textToSend) => {
+    const query = (textToSend || input).trim();
+    if (!query) return;
+
+    if (!textToSend) setInput('');
+    setError('');
+
+    // Add user message to UI
+    const userMsgId = Date.now().toString();
+    const newUserMsg = {
+      id: userMsgId,
+      role: 'user',
+      text: query,
+      time: new Date().toISOString()
+    };
+    setMessages(prev => [...prev, newUserMsg]);
+    setLoading(true);
+
     try {
-      const res = await axios.get('/api/messages');
-      setCustomerQueries(res.data);
-      
-      const statsRes = await axios.get('/api/dashboard-stats');
-      const d = statsRes.data.data || statsRes.data;
-      setLiveStats({
-        todaySales: d.todaySales || 0,
-        todayOrders: d.todayOrders || 0
+      // Build conversation history for the AI API context
+      // Limit to last 10 messages to keep request payload reasonable
+      const recentChat = messages.slice(-10).map(m => ({
+        role: m.role === 'user' ? 'user' : 'assistant',
+        content: m.text
+      }));
+
+      // Call AI endpoint in server.js
+      const res = await axios.post('/api/ai-chat', {
+        message: query,
+        isAdmin: true,
+        history: recentChat
       });
+
+      const replyText = res.data?.reply || "معذرة، لم أتمكن من صياغة إجابة مناسبة حالياً.";
+
+      // Add assistant response to UI
+      const assistantMsgId = (Date.now() + 1).toString();
+      const newAssistantMsg = {
+        id: assistantMsgId,
+        role: 'assistant',
+        text: replyText,
+        time: new Date().toISOString()
+      };
+      setMessages(prev => [...prev, newAssistantMsg]);
+
+      // Save log to DB
+      try {
+        await axios.post('/api/ai-assistant-logs', {
+          admin_query: query,
+          ai_response: replyText
+        });
+      } catch (logErr) {
+        console.warn("Failed to save AI log in DB:", logErr);
+      }
+
     } catch (err) {
-      console.error("Fetch Queries Error:", err);
+      console.error("AI service error:", err);
+      setError("حدث خطأ أثناء الاتصال بخدمة الذكاء الاصطناعي. يرجى التحقق من اتصال الإنترنت أو خادم OpenAI.");
+      
+      // Add error message as bot reply
+      setMessages(prev => [...prev, {
+        id: Date.now().toString(),
+        role: 'assistant',
+        text: "نعتذر منك يا فضيلة الشيخ، تعذر الاتصال بخدمة الذكاء الاصطناعي حالياً (AI service offline). يرجى التأكد من توفر مفتاح OpenAI API وصلاحية الخادم.",
+        time: new Date().toISOString()
+      }]);
+    } finally {
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchCustomerQueries();
-    const interval = setInterval(fetchCustomerQueries, 5000);
-    return () => clearInterval(interval);
-  }, []);
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
 
-  useEffect(() => {
-    return () => {
-      if (window.speechSynthesis) window.speechSynthesis.cancel();
-    };
-  }, []);
+  // Text to Speech for Sheikh's convenience
+  const toggleSpeech = (msgId, text) => {
+    if (!window.speechSynthesis) return;
 
-  const toggleSpeech = (id, text) => {
-    if (speakingId === id) {
+    if (speakingMsgId === msgId) {
       window.speechSynthesis.cancel();
-      setSpeakingId(null);
+      setSpeakingMsgId(null);
     } else {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
-      const isArabic = /[\u0600-\u06FF]/.test(text);
-      utterance.lang = isArabic ? 'ar-SA' : 'en-US';
-
-      const voices = window.speechSynthesis.getVoices();
-      let bestVoice = null;
-
-      if (isArabic) {
-        // Look for premium online/cloud Arabic voices, or specific high-quality local ones
-        bestVoice = voices.find(v => v.lang.includes('ar') && (v.name.includes('Online') || v.name.includes('Google') || v.name.includes('Microsoft Naayf') || v.name.includes('Microsoft Hoda')));
-        if (!bestVoice) bestVoice = voices.find(v => v.lang.includes('ar'));
-      } else {
-        bestVoice = voices.find(v => v.lang.includes('en') && (v.name.includes('Online') || v.name.includes('Google') || v.name.includes('Microsoft Zira') || v.name.includes('Samantha')));
-        if (!bestVoice) bestVoice = voices.find(v => v.lang.includes('en'));
-      }
-
-      if (bestVoice) {
-        utterance.voice = bestVoice;
-      }
-
-      // Small tweaks to make the voice sound more natural and less fuzzy
-      utterance.rate = 1.05; 
-      utterance.pitch = 1.1; 
-
-      utterance.onend = () => setSpeakingId(null);
-      utterance.onerror = () => setSpeakingId(null);
+      utterance.lang = 'ar-SA';
+      utterance.onend = () => setSpeakingMsgId(null);
+      utterance.onerror = () => setSpeakingMsgId(null);
+      setSpeakingMsgId(msgId);
       window.speechSynthesis.speak(utterance);
-      setSpeakingId(id);
     }
   };
 
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
-  const handleSend = async () => {
-    if (!input.trim()) return;
-    
-    const userMsg = { id: Date.now(), type: 'user', text: input };
-    setMessages(prev => [...prev, userMsg]);
-    const sentMessage = input;
-    setInput("");
-
-    // Show typing indicator
-    const typingId = Date.now() + 1;
-    setMessages(prev => [...prev, { id: typingId, type: 'bot', text: '...' }]);
-
-    try {
-      const chatHistory = messages.slice(-10).map(m => ({ role: m.type === 'user' ? 'user' : 'assistant', content: m.text }));
-      // Increased to 120 seconds to guarantee no aborted requests
-      const response = await axios.post('/api/ai-chat', { message: sentMessage, isAdmin: true, history: chatHistory }, {
-        timeout: 120000 
-      });
-      setMessages(prev => prev.filter(m => m.id !== typingId));
-      const botMsg = { id: Date.now() + 2, type: 'bot', text: response.data.reply };
-      setMessages(prev => [...prev, botMsg]);
-
-      // Save to assistant specific logs
-      axios.post('/api/ai-assistant-logs', { 
-        admin_query: sentMessage, 
-        ai_response: response.data.reply 
-      }).catch(err => console.error("Log Error:", err));
-
-      // NEW: Log the action for the Leader Audit Log
-      try {
-        await axios.post('/api/log-action', {
-          action: 'AI Business Inquiry',
-          details: `Admin queried AI: "${sentMessage.substring(0, 60)}${sentMessage.length > 60 ? '...' : ''}"`
-        });
-      } catch (logErr) {}
-
-    } catch (error) {
-      setMessages(prev => prev.filter(m => m.id !== typingId));
-      if (error.code === 'ECONNABORTED') {
-        setMessages(prev => [...prev, { id: Date.now()+1, type: 'bot', text: "عذراً، السيرفر مشغول حالياً بتحليل كمية بيانات ضخمة، يرجى المحاولة بعد قليل." }]);
-      } else {
-        setMessages(prev => [...prev, { id: Date.now()+1, type: 'bot', text: "Connection error. Please check that the server and database are running." }]);
-      }
+  // Clear Chat History display (client-side restart)
+  const handleClearChat = () => {
+    if (window.confirm("هل أنت متأكد من رغبتك في إعادة بدء المحادثة وتصفية الشاشة؟ (ملاحظة: هذا لن يمسح الأرشيف المحفوظ بالخادم)")) {
+      setMessages([
+        {
+          id: 'welcome-reset',
+          role: 'assistant',
+          text: `مرحباً بك مجدداً يا فضيلة الشيخ. لقد قمنا ببدء جلسة جديدة. كيف يمكنني مساعدتك الآن في إدارة شؤون المسجد؟ 🕌`,
+          time: new Date().toISOString()
+        }
+      ]);
     }
-  };
-
-  // Voice Recognition Logic (Web Speech API)
-  const toggleListening = () => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    
-    if (!SpeechRecognition) {
-      alert("Your browser does not support speech recognition. Please use Google Chrome or Edge.");
-      return;
-    }
-
-    if (isListening) {
-      setIsListening(false);
-      return;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognition.lang = micLang;
-    recognition.continuous = false;
-    recognition.interimResults = false;
-
-    recognition.onstart = () => {
-      setIsListening(true);
-    };
-
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      setInput(prev => prev + (prev ? ' ' : '') + transcript);
-    };
-
-    recognition.onerror = (event) => console.error("Speech recognition error", event.error);
-    
-    recognition.onend = () => setIsListening(false);
-
-    recognition.start();
   };
 
   return (
-    <div className="dashboard-fade-in ai-assistant-container" style={{ 
-      color: theme.latte, 
-      backgroundColor: theme.espresso, 
-      minHeight: '100vh', 
-      padding: '40px',
-      position: 'relative',
-      display: 'flex', gap: '25px'
+    <div style={{ 
+      minHeight: '85vh', 
+      padding: '10px 5px', 
+      direction: 'rtl', 
+      fontFamily: "'Amiri', 'Tajawal', sans-serif",
+      color: '#fff',
+      position: 'relative'
     }}>
-      {/* Premium Background Elements */}
-      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}>
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: `radial-gradient(circle at 50% -20%, #2a1b10 0%, #070504 70%)` }} />
-        <div className="orb orb-1" />
-        <div className="orb orb-2" />
+      {/* Background Glow */}
+      <div style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+        <div style={{ position: 'absolute', top: '-10%', left: '30%', width: '400px', height: '400px', borderRadius: '50%', background: 'rgba(196, 155, 117, 0.03)', filter: 'blur(100px)' }} />
+        <div style={{ position: 'absolute', bottom: '10%', right: '10%', width: '350px', height: '350px', borderRadius: '50%', background: 'rgba(24, 69, 59, 0.05)', filter: 'blur(90px)' }} />
       </div>
-      <style>{`
-        .orb { position: absolute; border-radius: 50%; filter: blur(100px); z-index: 0; opacity: 0.05; animation: float 25s infinite alternate ease-in-out; }
-        .orb-1 { width: 600px; height: 600px; background: ${theme.crema}; top: -200px; right: -100px; }
-        .orb-2 { width: 500px; height: 500px; background: #2a1b10; bottom: -100px; left: -100px; }
-        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(50px, 50px) scale(1.1); } }
-        .page-badge { background: #1b130e; border: 1px solid ${theme.border}; padding: 12px 25px; border-radius: 18px; display: inline-flex; align-items: center; gap: 12px; margin: 20px 0; }
-        .page-badge span { font-family: 'Inter', sans-serif; font-size: 2rem; font-weight: 900; color: #fff; letter-spacing: -0.5px; }
-        .premium-row {
-          transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
-          cursor: pointer;
-        }
-        .premium-row:hover {
-          background-color: rgba(196, 164, 132, 0.12) !important;
-          transform: translateY(-2px) scale(1.005);
-          box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
-          position: relative;
-          z-index: 10;
-        }
-        .ai-sidebar {
-          position: sticky;
-          top: 40px;
-          z-index: 1;
-          flex: 1;
-          height: calc(100vh - 80px);
-        }
-        @media (max-width: 768px) {
-          .ai-assistant-container {
-            flex-direction: column !important;
-            padding: 20px !important;
-          }
-          .ai-sidebar {
-            position: static !important;
-            height: 400px !important;
-            flex: none !important;
-            width: 100% !important;
-          }
-          .page-badge span { font-size: 1.4rem !important; }
-        }
-      `}</style>
-      
-      <div style={{ position: 'relative', zIndex: 1, flex: 2, display: 'flex', flexDirection: 'column' }}>
-        <header style={{ borderBottom: `1px dashed ${theme.border}`, paddingBottom: '20px', marginBottom: '25px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        {/* Page Title Header */}
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          marginBottom: '25px', 
+          flexWrap: 'wrap', 
+          gap: '15px' 
+        }}>
           <div>
-            <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: '2.8rem', color: theme.crema, lineHeight: 1 }}>
-              CaffAIne <span style={{ color: '#fff', fontStyle: 'italic' }}>Coffee</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '5px' }}>
+              <Bot size={32} color="var(--admin-accent)" />
+              <h1 style={{ 
+                fontSize: '2.3rem', 
+                color: 'var(--admin-accent)', 
+                margin: 0, 
+                fontWeight: 'bold',
+                fontFamily: "'Amiri', serif"
+              }}>
+                مساعد الشيخ الذكي
+              </h1>
             </div>
-            <div className="page-badge">
-              <BrainCircuit size={28} color={theme.crema} />
-              <span>AI Intelligence</span>
-            </div>
+            <p style={{ color: '#aaa', margin: 0, fontSize: '0.95rem' }}>
+              نظام الاستعلام الذكي المربوط بالذكاء الاصطناعي وببيانات المسجد مباشرة
+            </p>
+          </div>
+          
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button 
+              onClick={handleClearChat}
+              title="تصفية الشاشة"
+              style={{
+                background: 'rgba(255, 255, 255, 0.03)',
+                border: '1px solid var(--admin-border)',
+                borderRadius: '12px',
+                padding: '10px 15px',
+                color: '#aaa',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                fontSize: '0.85rem',
+                transition: 'all 0.3s'
+              }}
+            >
+              <Trash2 size={16} />
+              <span>بدء محادثة جديدة</span>
+            </button>
             
-            {/* Real-time Summary Cards */}
-            <div style={{ display: 'flex', gap: '15px', marginTop: '15px' }}>
-              <div style={{ background: 'rgba(56, 239, 125, 0.05)', border: '1px solid rgba(56, 239, 125, 0.15)', padding: '10px 20px', borderRadius: '14px' }}>
-                <div style={{ fontSize: '0.6rem', color: '#38ef7d', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}>Today's Revenue</div>
-                <div style={{ fontSize: '1.2rem', color: '#fff', fontWeight: '900' }}>JOD {parseFloat(liveStats.todaySales || 0).toFixed(2)}</div>
+            {syncing && (
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                fontSize: '0.85rem',
+                color: 'var(--admin-accent)',
+                padding: '10px'
+              }}>
+                <RefreshCw size={14} className="spin-animation" style={{ animation: 'spin 2s linear infinite' }} />
+                <span>جاري المزامنة...</span>
               </div>
-              <div style={{ background: 'rgba(79, 172, 254, 0.05)', border: '1px solid rgba(79, 172, 254, 0.15)', padding: '10px 20px', borderRadius: '14px' }}>
-                <div style={{ fontSize: '0.6rem', color: '#4facfe', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}>Today's Orders</div>
-                <div style={{ fontSize: '1.2rem', color: '#fff', fontWeight: '900' }}>{liveStats.todayOrders || 0}</div>
-              </div>
+            )}
+          </div>
+        </div>
+
+        {error && (
+          <div style={{ 
+            backgroundColor: 'rgba(231, 76, 60, 0.12)', 
+            border: '1px solid #e74c3c', 
+            borderRadius: '12px', 
+            padding: '12px 18px', 
+            marginBottom: '20px', 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '12px',
+            color: '#e74c3c',
+            fontSize: '0.9rem'
+          }}>
+            <AlertCircle size={18} />
+            <span>{error}</span>
+          </div>
+        )}
+
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: '3fr 1fr', 
+          gap: '25px',
+          alignItems: 'start',
+          '@media (maxWidth: 1024px)': {
+            gridTemplateColumns: '1fr'
+          }
+        }} className="ai-assistant-grid">
+          
+          {/* Main Chat Interface */}
+          <div style={{ 
+            background: 'var(--admin-card)', 
+            border: '1px solid var(--admin-border)',
+            borderRadius: '24px',
+            display: 'flex',
+            flexDirection: 'column',
+            height: '65vh',
+            boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
+            overflow: 'hidden'
+          }}>
+            {/* Chat Body */}
+            <div style={{ 
+              flex: 1, 
+              padding: '25px', 
+              overflowY: 'auto',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '20px',
+              backgroundColor: 'rgba(0, 0, 0, 0.1)'
+            }}>
+              {messages.map((msg) => {
+                const isUser = msg.role === 'user';
+                return (
+                  <div 
+                    key={msg.id}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: isUser ? 'flex-start' : 'flex-end',
+                      maxWidth: '85%',
+                      alignSelf: isUser ? 'flex-start' : 'flex-end',
+                    }}
+                  >
+                    {/* Sender Label */}
+                    <div style={{ 
+                      fontSize: '0.8rem', 
+                      color: 'var(--admin-accent)', 
+                      marginBottom: '6px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      fontFamily: 'Tajawal'
+                    }}>
+                      {!isUser && <Bot size={14} />}
+                      <span>{isUser ? `المشرف: ${admin?.name || ''}` : 'مساعد الشيخ الذكي'}</span>
+                    </div>
+
+                    {/* Bubble */}
+                    <div style={{
+                      backgroundColor: isUser ? 'rgba(255, 255, 255, 0.05)' : 'rgba(24, 69, 59, 0.65)',
+                      color: isUser ? '#e2e8f0' : '#fff',
+                      padding: '16px 20px',
+                      borderRadius: isUser ? '20px 20px 20px 4px' : '20px 20px 4px 20px',
+                      border: isUser ? '1px solid rgba(255,255,255,0.05)' : '1px solid rgba(196,155,117,0.3)',
+                      fontSize: '1.05rem',
+                      lineHeight: '1.7',
+                      whiteSpace: 'pre-wrap',
+                      boxShadow: '0 4px 15px rgba(0,0,0,0.05)',
+                      position: 'relative'
+                    }}>
+                      {msg.text}
+
+                      {/* Text to Speech button for Assistant messages */}
+                      {!isUser && (
+                        <div style={{ 
+                          marginTop: '10px', 
+                          display: 'flex', 
+                          justifyContent: 'flex-start',
+                          borderTop: '1px solid rgba(196,155,117,0.15)',
+                          paddingTop: '8px'
+                        }}>
+                          <button
+                            onClick={() => toggleSpeech(msg.id, msg.text)}
+                            style={{
+                              background: 'transparent',
+                              border: 'none',
+                              color: 'var(--admin-accent)',
+                              cursor: 'pointer',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '6px',
+                              fontSize: '0.8rem',
+                              padding: '2px 6px',
+                              borderRadius: '4px',
+                              transition: 'all 0.2s',
+                              opacity: 0.8
+                            }}
+                            onMouseOver={e => e.currentTarget.style.opacity = 1}
+                            onMouseOut={e => e.currentTarget.style.opacity = 0.8}
+                          >
+                            {speakingMsgId === msg.id ? <VolumeX size={13} /> : <Volume2 size={13} />}
+                            <span>{speakingMsgId === msg.id ? 'إيقاف الاستماع' : 'استمع للرد الشرعي/الإداري'}</span>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+
+              {/* Bot typing loader */}
+              {loading && (
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-end',
+                  alignSelf: 'flex-end',
+                  maxWidth: '85%'
+                }}>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--admin-accent)', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    <Bot size={14} />
+                    <span>مساعد الشيخ الذكي يقرأ قاعدة البيانات...</span>
+                  </div>
+                  <div style={{
+                    backgroundColor: 'rgba(24, 69, 59, 0.4)',
+                    padding: '16px 25px',
+                    borderRadius: '20px 20px 4px 20px',
+                    border: '1px solid rgba(196,155,117,0.15)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}>
+                    <span className="dot-pulse" style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--admin-accent)', display: 'inline-block', animation: 'pulse 1.4s infinite ease-in-out both' }} />
+                    <span className="dot-pulse" style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--admin-accent)', display: 'inline-block', animation: 'pulse 1.4s infinite ease-in-out both 0.2s' }} />
+                    <span className="dot-pulse" style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--admin-accent)', display: 'inline-block', animation: 'pulse 1.4s infinite ease-in-out both 0.4s' }} />
+                  </div>
+                </div>
+              )}
+              
+              <div ref={chatEndRef} />
+            </div>
+
+            {/* Chat Input Footer */}
+            <div style={{ 
+              padding: '20px', 
+              borderTop: '1px solid var(--admin-border)',
+              backgroundColor: 'rgba(0, 0, 0, 0.15)',
+              display: 'flex',
+              gap: '12px',
+              alignItems: 'center'
+            }}>
+              <textarea
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                onKeyDown={handleKeyPress}
+                placeholder="اسأل مساعد الشيخ الذكي عن تبرعات اليوم، أو المتطوعين، أو الطلاب، أو تقارير..."
+                disabled={loading}
+                style={{
+                  flex: 1,
+                  background: 'rgba(255, 255, 255, 0.02)',
+                  border: '1px solid var(--admin-border)',
+                  borderRadius: '16px',
+                  padding: '14px 18px',
+                  color: '#fff',
+                  fontSize: '0.95rem',
+                  outline: 'none',
+                  resize: 'none',
+                  height: '50px',
+                  fontFamily: 'Tajawal',
+                  lineHeight: '1.4',
+                  boxSizing: 'border-box'
+                }}
+              />
+              
+              <button
+                onClick={() => handleSend()}
+                disabled={loading || !input.trim()}
+                style={{
+                  background: 'linear-gradient(135deg, var(--admin-accent), #a47c4f)',
+                  color: 'var(--admin-bg)',
+                  border: 'none',
+                  borderRadius: '16px',
+                  width: '50px',
+                  height: '50px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: (loading || !input.trim()) ? 'not-allowed' : 'pointer',
+                  opacity: (loading || !input.trim()) ? 0.5 : 1,
+                  transition: 'all 0.3s',
+                  flexShrink: 0
+                }}
+              >
+                <Send size={20} />
+              </button>
             </div>
           </div>
-          <button onClick={() => setMessages([])} style={{ background: 'transparent', border: `1px solid ${theme.border}`, color: '#666', padding: '8px 18px', borderRadius: '10px', cursor: 'pointer' }}>
-            <BsTrash /> Clear Logs
-          </button>
-        </header>
 
-        <div style={{ flex: 1, background: theme.bean, borderRadius: '20px', border: `1px solid ${theme.border}`, padding: '25px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '20px', maxHeight: '480px' }}>
-          {messages.map((msg) => (
-            <div key={msg.id} style={{ display: 'flex', gap: '12px', alignSelf: msg.type === 'user' ? 'flex-end' : 'flex-start', flexDirection: msg.type === 'user' ? 'row-reverse' : 'row', maxWidth: '85%' }}>
-              <div style={{ background: msg.type === 'user' ? theme.border : theme.crema, width: '40px', height: '40px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                {msg.type === 'user' ? <BsPerson color={theme.crema} size={20} /> : <BsCpu color={theme.espresso} size={20} />}
+          {/* Sidebar / Quick Prompts */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            
+            {/* Quick Prompts Container */}
+            <div style={{
+              background: 'var(--admin-card)',
+              border: '1px solid var(--admin-border)',
+              borderRadius: '24px',
+              padding: '24px',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px', color: 'var(--admin-accent)' }}>
+                <Sparkles size={18} />
+                <h3 style={{ margin: 0, fontSize: '1.15rem', fontFamily: "'Amiri', serif", fontWeight: 'bold' }}>
+                  استفسارات سريعة ومقترحة
+                </h3>
               </div>
-              <div style={{ background: msg.type === 'user' ? theme.crema : theme.espresso, color: msg.type === 'user' ? theme.espresso : theme.latte, padding: '15px 20px', borderRadius: '18px', border: `1px solid ${theme.border}` }}>
-                <div dir="auto" style={{ fontSize: '0.95rem', whiteSpace: 'pre-wrap' }}>{msg.text}</div>
-                
-                {msg.type === 'bot' && msg.text !== '...' && (
-                  <button 
-                    onClick={() => toggleSpeech(msg.id, msg.text)}
-                    style={{
-                      marginTop: '10px', background: 'transparent', border: 'none', 
-                      color: speakingId === msg.id ? '#e74a3b' : theme.crema, 
-                      cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px',
-                      fontSize: '0.8rem', padding: '4px 8px', borderRadius: '8px',
-                      transition: '0.3s', backgroundColor: 'rgba(255,255,255,0.05)'
-                    }}
-                    title={speakingId === msg.id ? "Stop reading" : "Listen to response"}
-                  >
-                    {speakingId === msg.id ? <Square size={14} /> : <Volume2 size={14} />}
-                    {speakingId === msg.id ? 'Stop' : 'Listen'}
-                  </button>
-                )}
+              <p style={{ color: '#aaa', fontSize: '0.82rem', margin: '0 0 18px 0', lineHeight: '1.6' }}>
+                اضغط على أي استعلام بالأسفل ليسأل المساعد الذكي قاعدة البيانات ويعطيك تقريراً تحليلياً فورياً:
+              </p>
 
-                {msg.metrics && (
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '15px', marginTop: '15px', borderTop: `1px solid ${theme.border}`, paddingTop: '12px' }}>
-                    {Object.entries(msg.metrics).map(([k, v]) => (
-                      <div key={k} style={{ textAlign: 'center' }}>
-                        <span style={{ display: 'block', fontSize: '1rem', fontWeight: '900', color: theme.crema }}>{v}</span>
-                        <span style={{ fontSize: '0.6rem', opacity: 0.6, textTransform: 'uppercase', color: theme.latte }}>{k}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {quickPrompts.map((prompt, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleSend(prompt.text)}
+                    disabled={loading}
+                    style={{
+                      background: 'rgba(196, 155, 117, 0.05)',
+                      border: '1px solid rgba(196,155,117,0.15)',
+                      borderRadius: '12px',
+                      padding: '12px 14px',
+                      textAlign: 'right',
+                      color: '#ddd',
+                      cursor: loading ? 'not-allowed' : 'pointer',
+                      fontSize: '0.88rem',
+                      lineHeight: '1.5',
+                      fontFamily: 'Tajawal',
+                      transition: 'all 0.2s',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '4px'
+                    }}
+                    onMouseOver={e => {
+                      if (!loading) {
+                        e.currentTarget.style.background = 'rgba(196, 155, 117, 0.12)';
+                        e.currentTarget.style.borderColor = 'var(--admin-accent)';
+                      }
+                    }}
+                    onMouseOut={e => {
+                      if (!loading) {
+                        e.currentTarget.style.background = 'rgba(196, 155, 117, 0.05)';
+                        e.currentTarget.style.borderColor = 'rgba(196,155,117,0.15)';
+                      }
+                    }}
+                  >
+                    <span style={{ 
+                      fontSize: '0.72rem', 
+                      backgroundColor: 'rgba(24, 69, 59, 0.6)', 
+                      color: 'var(--admin-accent)', 
+                      padding: '2px 8px', 
+                      borderRadius: '8px',
+                      alignSelf: 'flex-start',
+                      fontWeight: 'bold'
+                    }}>
+                      {prompt.category}
+                    </span>
+                    <span>{prompt.text}</span>
+                  </button>
+                ))}
               </div>
             </div>
-          ))}
-          <div ref={chatEndRef} />
-        </div>
 
-        <div style={{ marginTop: '20px', display: 'flex', gap: '12px', background: theme.bean, padding: '12px', borderRadius: '18px', border: `1px solid ${theme.border}` }}>
-          <button 
-            onClick={() => setMicLang(prev => prev === 'ar-SA' ? 'en-US' : 'ar-SA')}
-            style={{
-              background: 'transparent', border: `1px solid ${theme.border}`, 
-              color: theme.crema, width: '50px', height: '50px', borderRadius: '14px', 
-              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: '1rem', fontWeight: '900', transition: 'all 0.3s'
-            }}
-            title="Toggle Mic Language"
-          >
-            {micLang === 'ar-SA' ? 'AR' : 'EN'}
-          </button>
-          <button 
-            onClick={toggleListening} 
-            style={{ 
-              background: isListening ? 'rgba(231, 74, 59, 0.2)' : 'transparent', 
-              border: `1px solid ${isListening ? '#e74a3b' : theme.border}`, 
-              width: '50px', height: '50px', borderRadius: '14px', 
-              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              transition: 'all 0.3s'
-            }}
-            title={isListening ? "Listening... Click to stop" : "Use Voice Typing"}
-          >
-            <BsMicFill color={isListening ? "#e74a3b" : theme.crema} size={20} className={isListening ? "animate-pulse" : ""} />
-          </button>
-          <textarea dir="auto" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSend())} style={{ flex: 1, background: 'transparent', border: 'none', color: '#fff', outline: 'none', padding: '10px', resize: 'none', fontSize: '0.95rem' }} placeholder="Ask about sales, stock or trends..." />
-          <button onClick={handleSend} style={{ background: theme.crema, border: 'none', width: '50px', height: '50px', borderRadius: '14px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <BsSendFill color={theme.espresso} size={20} />
-          </button>
-        </div>
-      </div>
-
-      <div className="ai-sidebar" style={{ 
-        background: 'rgba(255,255,255,0.02)', 
-        borderRadius: '20px', 
-        border: `1px solid rgba(255,255,255,0.06)`, 
-        backdropFilter: 'blur(10px)', 
-        display: 'flex', 
-        flexDirection: 'column', 
-        overflow: 'hidden', 
-        boxShadow: '0 20px 40px rgba(0,0,0,0.4)' 
-      }}>
-        <style>{`
-          @keyframes pulse-mic { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.7; } 100% { transform: scale(1); opacity: 1; } }
-          .animate-pulse { animation: pulse-mic 1.5s infinite; }
-        `}</style>
-        <div style={{ padding: '20px', borderBottom: `1px solid ${theme.border}`, background: 'rgba(255,255,255,0.02)' }}>
-          <h3 style={{ color: theme.crema, margin: 0, fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Customer Queries</h3>
-          <p style={{ color: theme.latte, fontSize: '0.7rem', margin: '5px 0 0', opacity: 0.7 }}>Live logs from Client Chatbot</p>
-        </div>
-        <div className="custom-scrollbar" style={{ flex: 1, overflowY: 'auto', padding: '15px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
-          <style>{`
-            .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-            .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-            .custom-scrollbar::-webkit-scrollbar-thumb { background: ${theme.border}; border-radius: 10px; }
-            .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: ${theme.crema}; }
-          `}</style>
-          {customerQueries.length === 0 ? (
-            <div style={{ color: '#444', textAlign: 'center', marginTop: '50px', fontSize: '0.9rem' }}>No recent inquiries</div>
-          ) : (
-            customerQueries.map(q => (
-              <div key={q.id} className="premium-row" style={{ padding: '15px', background: 'rgba(0,0,0,0.3)', borderRadius: '12px', border: `1px solid ${theme.border}` }}>
-                <div style={{ display: 'flex', gap: '10px', marginBottom: '8px' }}>
-                  <div style={{ background: theme.border, width: '24px', height: '24px', borderRadius: '5px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <BsPerson size={14} color={theme.crema} />
-                  </div>
-                  <span style={{ color: theme.crema, fontSize: '0.85rem', fontWeight: 'bold' }}>Customer</span>
-                </div>
-                <p dir="auto" style={{ color: theme.latte, fontSize: '0.85rem', margin: '0 0 10px 0', paddingLeft: '34px' }}>{q.user_msg}</p>
-                
-                <div style={{ display: 'flex', gap: '10px', marginTop: '12px', borderTop: `1px dotted ${theme.border}`, paddingTop: '10px' }}>
-                  <div style={{ background: theme.crema, width: '24px', height: '24px', borderRadius: '5px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <BsCpu size={14} color={theme.espresso} />
-                  </div>
-                  <span style={{ color: theme.latte, fontSize: '0.75rem', fontStyle: 'italic' }}>Sophie's Reply:</span>
-                </div>
-                <p dir="auto" style={{ color: theme.latte, fontSize: '0.8rem', margin: '5px 0 0', paddingLeft: '34px', opacity: 0.8 }}>{q.ai_msg}</p>
-                <div style={{ fontSize: '0.6rem', color: '#444', textAlign: 'right', marginTop: '8px' }}>
-                  {new Date(q.created_at).toLocaleString()}
-                </div>
+            {/* Instruction Notice */}
+            <div style={{
+              background: 'linear-gradient(135deg, rgba(24, 69, 59, 0.3) 0%, rgba(18, 48, 38, 0.1) 100%)',
+              border: '1px solid rgba(196,155,117,0.1)',
+              borderRadius: '24px',
+              padding: '24px',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.05)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px', color: 'var(--admin-accent)' }}>
+                <HelpCircle size={18} />
+                <h4 style={{ margin: 0, fontSize: '1rem', fontFamily: "'Amiri', serif", fontWeight: 'bold' }}>
+                  إرشادات الاستخدام
+                </h4>
               </div>
-            ))
-          )}
+              <ul style={{ 
+                margin: 0, 
+                paddingRight: '18px', 
+                color: '#aaa', 
+                fontSize: '0.8rem', 
+                lineHeight: '1.7',
+                fontFamily: 'Tajawal'
+              }}>
+                <li>يقوم المساعد بتحليل البيانات المخزنة لحظياً.</li>
+                <li>عند الاستعلام عن التبرعات، يتم استقصاء إحصائيات الدفع الإلكتروني والنقدي.</li>
+                <li>يتم حفظ الأسئلة الشائعة في سجل النظام للرجوع إليها لاحقاً لرفع مستوى الخدمات.</li>
+                <li>تتم الإجابة باللغة العربية الفصحى دائماً لتليق بفضيلتكم.</li>
+              </ul>
+            </div>
+
+          </div>
+
         </div>
+
       </div>
+
+      {/* Embedded CSS styles in style tag */}
+      <style>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(-360deg); }
+        }
+        @keyframes pulse {
+          0%, 100% { transform: scale(0.6); opacity: 0.4; }
+          50% { transform: scale(1.2); opacity: 1; }
+        }
+        .ai-assistant-grid {
+          display: grid;
+          grid-template-columns: 3fr 1fr;
+          gap: 25px;
+        }
+        @media (max-width: 1024px) {
+          .ai-assistant-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

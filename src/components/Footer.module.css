@@ -1,215 +1,219 @@
 .footer {
-  background: linear-gradient(180deg, #1b110a 0%, #000000 100%);
-  color: #fff;
-  padding: 100px 0 40px;
+  background: linear-gradient(170deg, #0d1f1a 0%, #111e19 60%, #0a1510 100%);
+  color: #e8e3dc;
+  padding: 70px 0 0;
+  direction: rtl;
+  text-align: right;
   position: relative;
   overflow: hidden;
 }
 
+/* Subtle Islamic pattern overlay */
 .footer::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(196, 164, 132, 0.3), transparent);
+  inset: 0;
+  background-image: radial-gradient(circle at 20% 50%, rgba(196,155,117,0.04) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, rgba(196,155,117,0.03) 0%, transparent 40%);
+  pointer-events: none;
 }
 
 .inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 40px;
+  padding: 0 50px;
   display: grid;
-  grid-template-columns: 2fr 1.5fr 1fr 1.5fr;
-  gap: 60px;
+  grid-template-columns: 2fr 1fr 1.5fr;
+  gap: 70px;
+  position: relative;
 }
 
+/* ── Brand ── */
 .brand {
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 20px;
 }
 
-.logo {
-  text-decoration: none;
+.logoWrap {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 14px;
+  text-decoration: none;
 }
 
-.logoMark {
-  font-family: 'DM Serif Display', serif;
-  font-size: 2.5rem;
-  color: #c4a484;
-  background: rgba(196, 164, 132, 0.1);
-  padding: 10px 20px;
-  border-radius: 15px;
-  border: 1px solid rgba(196, 164, 132, 0.2);
+.logoImg {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  border-radius: 12px;
+  /* no background, no border radius circle — clean */
+  flex-shrink: 0;
 }
 
 .logoName {
-  font-family: 'DM Serif Display', serif;
-  font-size: 1.8rem;
+  font-family: 'Amiri', serif;
+  font-size: 1.45rem;
   color: #fff;
-  line-height: 1;
+  line-height: 1.2;
+  font-weight: 700;
 }
 
 .logoCity {
-  color: #c4a484;
   font-size: 0.8rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-top: 5px;
+  color: var(--gold);
+  letter-spacing: 1px;
+  margin-top: 3px;
+  opacity: 0.9;
 }
 
 .brandDesc {
-  color: #aaa;
-  font-size: 1rem;
-  line-height: 1.8;
-  max-width: 300px;
+  color: rgba(232,227,220,0.65);
+  font-size: 0.92rem;
+  line-height: 1.85;
+  max-width: 320px;
 }
 
 .socialGroup {
   display: flex;
-  gap: 15px;
+  gap: 10px;
+  margin-top: 5px;
 }
 
 .socialIcon {
-  width: 45px;
-  height: 45px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(196,155,117,0.08);
+  border: 1px solid rgba(196,155,117,0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: var(--gold);
   text-decoration: none;
-  transition: all 0.4s ease;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
 }
 
 .socialIcon:hover {
-  background: #c4a484;
-  color: #2c1810;
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(196, 164, 132, 0.3);
+  background: var(--gold);
+  color: #0d1f1a;
+  border-color: var(--gold);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(196,155,117,0.3);
 }
 
-.col h4 {
-  font-family: 'DM Serif Display', serif;
-  font-size: 1.4rem;
-  color: #c4a484;
-  margin-bottom: 30px;
-  position: relative;
-}
-
-.col h4::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 0;
-  width: 30px;
-  height: 2px;
-  background: #c4a484;
-}
-
-.col ul {
-  list-style: none;
-  padding: 0;
+/* ── Columns ── */
+.col {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 18px;
 }
 
-.col ul li a {
-  color: #aaa;
-  text-decoration: none;
-  transition: 0.3s;
-  font-size: 0.95rem;
+.colTitle {
+  font-family: 'Amiri', serif;
+  font-size: 1.15rem;
+  color: var(--gold);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(196,155,117,0.2);
+  margin: 0;
 }
 
-.col ul li a:hover {
-  color: #fff;
-  padding-left: 5px;
-}
-
-.hoursRow {
+.linkList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
-  justify-content: space-between;
-  color: #aaa;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.navLink {
+  color: rgba(232,227,220,0.65);
+  text-decoration: none;
   font-size: 0.9rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  padding-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.25s ease;
 }
 
-.time {
-  color: #fff;
-  font-weight: 600;
+.navLink:hover {
+  color: var(--gold);
+  padding-right: 4px;
 }
 
+.linkDot {
+  color: var(--gold);
+  font-size: 1.1rem;
+  line-height: 1;
+  opacity: 0.7;
+}
+
+/* ── Map ── */
 .mapContainer {
-  width: 100%;
-  height: 150px;
-  border-radius: 20px;
+  border-radius: 12px;
   overflow: hidden;
-  margin-bottom: 20px;
-  border: 1px solid rgba(196, 164, 132, 0.2);
-  filter: grayscale(1) invert(0.9) contrast(1.2);
-  transition: 0.5s;
+  border: 1px solid rgba(196,155,117,0.15);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  transition: 0.4s ease;
 }
 
 .mapContainer:hover {
-  filter: grayscale(0) invert(0) contrast(1);
+  box-shadow: 0 12px 40px rgba(196,155,117,0.15);
+  border-color: rgba(196,155,117,0.3);
 }
 
-.address, .emailLink {
+.addressLine {
+  color: rgba(232,227,220,0.65);
+  font-size: 0.85rem;
   display: flex;
-  gap: 12px;
-  color: #aaa;
-  text-decoration: none;
-  font-size: 0.9rem;
+  align-items: flex-start;
+  gap: 8px;
   line-height: 1.6;
-  margin-bottom: 15px;
-  transition: 0.3s;
 }
 
-.address i, .emailLink i {
-  color: #c4a484;
-  margin-top: 4px;
+.addressLine i {
+  color: var(--gold);
+  margin-top: 3px;
+  flex-shrink: 0;
 }
 
-.address:hover, .emailLink:hover {
-  color: #fff;
-}
-
+/* ── Bottom bar ── */
 .bottom {
   max-width: 1200px;
-  margin: 80px auto 0;
-  padding: 40px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  margin: 50px auto 0;
+  padding: 22px 50px;
+  border-top: 1px solid rgba(196,155,117,0.12);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #666;
-  font-size: 0.85rem;
+  color: rgba(232,227,220,0.4);
+  font-size: 0.8rem;
+  position: relative;
 }
 
+/* ── Responsive ── */
 @media (max-width: 1024px) {
   .inner {
     grid-template-columns: 1fr 1fr;
     gap: 40px;
+    padding: 0 30px;
   }
+  .brand { grid-column: 1 / -1; }
 }
 
 @media (max-width: 600px) {
   .inner {
     grid-template-columns: 1fr;
-    padding: 0 25px;
+    padding: 0 20px;
   }
   .bottom {
     flex-direction: column;
-    gap: 20px;
+    gap: 12px;
     text-align: center;
+    padding: 20px;
   }
 }

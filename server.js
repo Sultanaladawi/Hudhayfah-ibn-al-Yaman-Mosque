@@ -17,8 +17,7 @@ if (!fs.existsSync(imgDir)) {
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, imgDir),
   filename: (req, file, cb) => {
-    const uniqueName = Date.now() + '-' + file.originalname.replace(/\s+/g, '-');
-    cb(null, uniqueName);
+    cb(null, file.originalname);
   }
 });
 const upload = multer({
@@ -533,6 +532,45 @@ db.query(`CREATE TABLE IF NOT EXISTS admin_logs (id INT AUTO_INCREMENT PRIMARY K
 db.query(`CREATE TABLE IF NOT EXISTS ai_assistant_logs (id INT AUTO_INCREMENT PRIMARY KEY, admin_query TEXT, ai_response TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`, (err) => { if (err) console.error('Ensure ai_assistant_logs table error:', err); });
 db.query("UPDATE addons SET price = 0.50 WHERE price = 0", (err) => { if (err) console.error('Update addon prices error:', err); });
 
+// --- Student Honors Seeding Migration ---
+db.query("SHOW COLUMNS FROM offers", (err, results) => {
+  if (!err && Array.isArray(results)) {
+    const colNames = results.map(c => c.Field);
+    const hasProductName = colNames.includes('product_name');
+    const nameCol = hasProductName ? 'product_name' : 'title';
+    const reasonCol = colNames.includes('reason') ? 'reason' : 'description';
+    
+    db.query(`SELECT * FROM offers LIMIT 15`, (selErr, rows) => {
+      if (!selErr) {
+        const hasCoffeePromos = rows.some(r => {
+          const name = String(r[nameCol] || '').toLowerCase();
+          const reason = String(r[reasonCol] || '').toLowerCase();
+          return name.includes('latte') || name.includes('espresso') || name.includes('coffee') || name.includes('all') || reason.includes('discount') || reason.includes('off') || reason.includes('promo');
+        });
+        
+        if (hasCoffeePromos || rows.length === 0) {
+          console.log('[Migration] Seeding premium student honors into offers table...');
+          db.query("DELETE FROM offers", (delErr) => {
+            if (!delErr) {
+              const seedHonors = [
+                ['أحمد محمد الزعبي', 100, 'أتم حفظ سورة البقرة كاملاً بتميز وإتقان', '2026-12-31', 1],
+                ['حلقة الفجر بقيادة الشيخ أسامة الطراونة', 100, 'الحلقة النموذجية المتميزة لهذا الأسبوع لمواظبتها على الترتيل', '2026-12-31', 1],
+                ['يوسف عمر أحمد', 98, 'أتم حفظ جزء عمّ بالتجويد والترتيل بتقدير ممتاز', '2026-12-31', 1],
+                ['عبدالرحمن خالد', 95, 'اجتاز اختبار حفظ 5 أجزاء متتالية بتقدير ممتاز جداً', '2026-12-31', 1],
+                ['سند عمار البيطار', 100, 'الفائز الأول في مسابقة الأذان لطلاب الحلقات التمهيدية', '2026-12-31', 1]
+              ];
+              seedHonors.forEach(([name, percent, reason, date, active]) => {
+                db.query(`INSERT INTO offers (${nameCol}, discount_percent, ${reasonCol}, end_date, active) VALUES (?, ?, ?, ?, ?)`, [name, percent, reason, date, active]);
+              });
+              console.log('[Migration] Successfully seeded student honors into offers table.');
+            }
+          });
+        }
+      }
+    });
+  }
+});
+
 // --- Calorie Migration: add calories_per_unit to inventory if missing ---
 db.query("SHOW COLUMNS FROM inventory LIKE 'calories_per_unit'", (err, results) => {
   if (!err && results.length === 0) {
@@ -903,9 +941,65 @@ app.get('/api/analytics-all-sold-products', async (req, res) => {
 
 
 app.get('/api/offers', (req, res) => {
-  db.query('SELECT * FROM offers ORDER BY id DESC', (err, results) => {
+  db.query('SELECT * FROM offers', (err, rows) => {
     if (err) return res.status(500).json({ error: err.message });
-    res.json(results);
+    
+    // Dynamically scan columns to avoid errors
+    db.query("SHOW COLUMNS FROM offers", (colErr, cols) => {
+      if (colErr) return res.status(500).json({ error: colErr.message });
+      const colNames = cols.map(c => c.Field);
+      const nameCol = colNames.includes('product_name') ? 'product_name' : 'title';
+      const reasonCol = colNames.includes('reason') ? 'reason' : 'description';
+      
+      const hasCoffeePromos = rows.some(r => {
+        const name = String(r[nameCol] || '').toLowerCase();
+        const reason = String(r[reasonCol] || '').toLowerCase();
+        return name.includes('latte') || name.includes('espresso') || name.includes('coffee') || name.includes('all') || reason.includes('discount') || reason.includes('off') || reason.includes('promo');
+      });
+      
+      if (hasCoffeePromos || rows.length === 0) {
+        console.log('[API] Dynamic Seeding of Student Honors...');
+        db.query("DELETE FROM offers", (delErr) => {
+          if (delErr) return res.status(500).json({ error: delErr.message });
+          
+          const seedHonors = [
+            ['أحمد محمد الزعبي', 100, 'أتم حفظ سورة البقرة كاملاً بتميز وإتقان', '2026-12-31', 1],
+            ['حلقة الفجر بقيادة الشيخ أسامة الطراونة', 100, 'الحلقة النموذجية المتميزة لهذا الأسبوع لمواظبتها على الترتيل والحضور', '2026-12-31', 1],
+            ['يوسف عمر أحمد', 98, 'أتم حفظ جزء عمّ بالتجويد والترتيل بتقدير ممتاز', '2026-12-31', 1],
+            ['عبدالرحمن خالد', 95, 'اجتاز اختبار حفظ 5 أجزاء متتالية بتقدير ممتاز جداً', '2026-12-31', 1],
+            ['سند عمار البيطار', 100, 'الفائز الأول في مسابقة الأذان لطلاب الحلقات التمهيدية', '2026-12-31', 1]
+          ];
+          
+          let completed = 0;
+          const inserted = [];
+          
+          seedHonors.forEach(([name, percent, reason, date, active]) => {
+            db.query(
+              `INSERT INTO offers (${nameCol}, discount_percent, ${reasonCol}, end_date, active) VALUES (?, ?, ?, ?, ?)`,
+              [name, percent, reason, date, active],
+              (insErr, result) => {
+                completed++;
+                if (!insErr) {
+                  inserted.push({
+                    id: result.insertId,
+                    [nameCol]: name,
+                    discount_percent: percent,
+                    [reasonCol]: reason,
+                    end_date: date,
+                    active: active
+                  });
+                }
+                if (completed === seedHonors.length) {
+                  res.json(inserted.reverse());
+                }
+              }
+            );
+          });
+        });
+      } else {
+        res.json(rows.reverse());
+      }
+    });
   });
 });
 
@@ -1201,10 +1295,15 @@ app.get('/api/inventory', (req, res) => {
 app.post('/api/admin/login', (req, res) => {
   const { email, password } = req.body;
   const team = [
-    { email: 'omar@coffee.com', pass: 'omar2026', name: 'Omar Al-Ajarma', role: 'super_admin' },
-    { email: 'sultan@coffee.com', pass: 'sultan2026', name: 'Sultan Al-Adawi', role: 'admin' },
-    { email: 'mohammad@coffee.com', pass: 'mohammad2026', name: 'Mohammad Al-Hadidi', role: 'admin' },
-    { email: 'bashar@coffee.com', pass: 'bashar2026', name: 'Bashar Al-Dabbas', role: 'admin' }
+    { email: 'osama@huzaifa-mosque.com', pass: 'osama123', name: 'الشيخ أسامة الجلودي', role: 'super_admin' },
+    { email: 'hammam@huzaifa-mosque.com', pass: 'hammam123', name: 'الشيخ همام النجار', role: 'super_admin' },
+    { email: 'hassan@huzaifa-mosque.com', pass: 'hassan123', name: 'الشيخ حسن الجلودي', role: 'admin' },
+    { email: 'hamzah@huzaifa-mosque.com', pass: 'hamzah123', name: 'الشيخ حمزة أبو الرب', role: 'admin' },
+    { email: 'baraa@huzaifa-mosque.com', pass: 'baraa123', name: 'الشيخ براء الجلودي', role: 'admin' },
+    { email: 'mosaab@huzaifa-mosque.com', pass: 'mosaab123', name: 'الشيخ مصعب الجلودي', role: 'admin' },
+    { email: 'hammam.r@huzaifa-mosque.com', pass: 'hammamr123', name: 'الشيخ همام ربابعة', role: 'admin' },
+    { email: 'ahmad@huzaifa-mosque.com', pass: 'ahmad123', name: 'الشيخ أحمد زقيرات', role: 'admin' },
+    { email: 'abdullah@huzaifa-mosque.com', pass: 'abdullah123', name: 'الشيخ عبد الله زيادة', role: 'admin' }
   ];
   const user = team.find(u => u.email === email?.toLowerCase().trim() && u.pass === password);
   if (user) {
@@ -1747,7 +1846,7 @@ app.get('/api/test-ai', (req, res) => {
 
 app.post('/api/ai-assistant-logs', (req, res) => {
   const { admin_query, ai_response } = req.body;
-  db.query('INSERT INTO ai_assistant_logs (admin_query, ai_response) VALUES (?, ?)', [admin_query, ai_response], (err) => {
+  db.query('INSERT INTO ai_assistant_messages (admin_query, ai_response) VALUES (?, ?)', [admin_query, ai_response], (err) => {
     if (err) console.error('AI Log Error:', err);
     res.json({ success: true });
   });

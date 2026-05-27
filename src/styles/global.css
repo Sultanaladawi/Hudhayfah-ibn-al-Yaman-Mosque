@@ -45,12 +45,14 @@
   --border-hover:     rgba(196, 155, 117, 0.4);
   --divider:          rgba(0, 0, 0, 0.06);
 
-  /* ── Admin Panel (unchanged dark theme, modified accents) ── */
-  --admin-bg:     #121212;
-  --admin-card:   #1A1A1A;
-  --admin-accent: #C49B75;
-  --admin-text:   #EAEAEA;
-  --admin-border: #2A2A2A;
+  /* ── Admin Panel (Mosque VIP Theme) ── */
+  --admin-bg:     #F8FAFC;
+  --admin-card:   #FFFFFF;
+  --admin-accent: #C49B75; /* Elegant Gold */
+  --admin-text:   #1E293B;
+  --admin-border: #E2E8F0;
+  --admin-sidebar-bg: #FFFFFF; /* Pure White to blend with logo */
+  --admin-sidebar-text: #18453B; /* Royal Green for text */
 }
 
 /* ── Dark Mode ── */

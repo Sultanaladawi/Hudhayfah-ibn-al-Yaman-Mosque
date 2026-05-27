@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { MessageSquare, Star, Coffee, Store, Clock, Download, CheckCircle2, X } from 'lucide-react';
+import { MessageSquare, Star, BookOpen, Clock, Download, CheckCircle2, X } from 'lucide-react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
@@ -34,18 +34,18 @@ const Feedback = () => {
       // Header
       doc.setFontSize(22);
       doc.setTextColor(45, 41, 38);
-      const title = activeTab === 'general' ? 'General Store Feedback' : 'Product Reviews';
-      doc.text(`CaffAIne - ${title}`, 14, 22);
+      const title = activeTab === 'general' ? 'General Academy Feedback' : 'Class & Teacher Reviews';
+      doc.text(`Quran Academy - ${title}`, 14, 22);
       
       doc.setFontSize(10);
       doc.setTextColor(100);
       doc.text(`Generated on: ${new Date().toLocaleString('en-GB', { timeZone: 'Asia/Amman' })}`, 14, 32);
-      doc.text(`A complete record of customer ratings and comments for ${activeTab}.`, 14, 38);
+      doc.text(`A complete record of ratings and comments for ${activeTab}.`, 14, 38);
       
       // Table
       let tableColumn, tableRows;
       if (activeTab === 'general') {
-        tableColumn = ["Date", "Customer Name", "Rating", "Comment"];
+        tableColumn = ["Date", "Reviewer Name", "Rating", "Comment"];
         tableRows = data.general.map(f => [
           new Date(f.created_at).toLocaleDateString('en-GB', { timeZone: 'Asia/Amman' }),
           f.reviewer_name || 'Anonymous',
@@ -53,7 +53,7 @@ const Feedback = () => {
           f.comment || ''
         ]);
       } else {
-        tableColumn = ["Date", "Product", "Reviewer", "Rating", "Comment"];
+        tableColumn = ["Date", "Class", "Reviewer", "Rating", "Comment"];
         tableRows = data.products.map(f => [
           new Date(f.created_at).toLocaleDateString('en-GB', { timeZone: 'Asia/Amman' }),
           f.product_name || 'N/A',
@@ -69,7 +69,7 @@ const Feedback = () => {
         startY: 45,
         theme: 'grid',
         headStyles: { 
-          fillColor: [196, 164, 132], 
+          fillColor: [122, 142, 116], 
           textColor: [255, 255, 255],
           fontSize: 10,
           fontStyle: 'bold'
@@ -83,7 +83,7 @@ const Feedback = () => {
         }
       });
 
-      doc.save(`CaffAIne_Feedback_${activeTab}_${Date.now()}.pdf`);
+      doc.save(`Quran_Academy_Feedback_${activeTab}_${Date.now()}.pdf`);
     } catch (error) {
       console.error("PDF Export Error:", error);
       alert("Error generating PDF: " + error.message);
@@ -156,31 +156,31 @@ const Feedback = () => {
     }}>
       {/* Premium Background Elements */}
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}>
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: `radial-gradient(circle at 50% -20%, #2a1b10 0%, #070504 70%)` }} />
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: `radial-gradient(circle at 50% -20%, #1e2f1c 0%, #070504 70%)` }} />
         <div className="orb orb-1" />
         <div className="orb orb-2" />
       </div>
       <style>{`
-        .orb { position: absolute; border-radius: 50%; filter: blur(100px); z-index: 0; opacity: 0.05; animation: float 25s infinite alternate ease-in-out; }
-        .orb-1 { width: 600px; height: 600px; background: ${colors.crema}; top: -200px; right: -100px; }
-        .orb-2 { width: 500px; height: 500px; background: #2a1b10; bottom: -100px; left: -100px; }
+        .orb { position: absolute; border-radius: 50%; filter: blur(100px); z-index: 0; opacity: 0.04; animation: float 25s infinite alternate ease-in-out; }
+        .orb-1 { width: 600px; height: 600px; background: #7A8E74; top: -200px; right: -100px; }
+        .orb-2 { width: 500px; height: 500px; background: #1b3d2b; bottom: -100px; left: -100px; }
         @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(50px, 50px) scale(1.1); } }
-        .page-badge { background: #1b130e; border: 1px solid ${colors.border}; padding: 12px 25px; border-radius: 18px; display: inline-flex; align-items: center; gap: 12px; margin: 20px 0; }
+        .page-badge { background: #131c12; border: 1px solid var(--admin-border); padding: 12px 25px; border-radius: 18px; display: inline-flex; align-items: center; gap: 12px; margin: 20px 0; }
         .page-badge span { font-family: 'Inter', sans-serif; font-size: 2rem; font-weight: 900; color: #fff; letter-spacing: -0.5px; }
-        /* Premium Row Hover Animation */
         .premium-row {
           transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
           cursor: pointer;
         }
         .premium-row:hover {
-          background-color: rgba(196, 164, 132, 0.12) !important;
+          background-color: rgba(122, 142, 116, 0.12) !important;
           transform: translateY(-5px) scale(1.005) !important;
           box-shadow: 0 15px 35px rgba(0,0,0,0.4) !important;
-          border-color: rgba(196, 164, 132, 0.5) !important;
+          border-color: rgba(122, 142, 116, 0.5) !important;
           position: relative;
           z-index: 10;
         }
       `}</style>
+      
       {/* Elegant Notification Toast */}
       {notification && (
         <div className={`premium-toast ${notification.type}`}>
@@ -199,17 +199,17 @@ const Feedback = () => {
         marginBottom: '40px'
       }}>
         <div>
-          <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: '2.8rem', color: colors.crema, lineHeight: 1 }}>
-              CaffAIne <span style={{ color: '#fff', fontStyle: 'italic' }}>Coffee</span>
+          <div style={{ fontFamily: "'Amiri', 'Tajawal', sans-serif", fontSize: '2.5rem', color: colors.crema, lineHeight: 1 }}>
+              مسجد <span style={{ color: '#fff', fontWeight: 'bold' }}>حذيفة بن اليمان</span>
           </div>
 
           <div className="page-badge">
             <MessageSquare size={28} color={colors.crema} />
-            <span>Feedback & Reviews</span>
+            <span>Feedback & Notes</span>
           </div>
 
           <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '1rem', fontWeight: 500, marginTop: '5px' }}>
-            CaffAIne | Monitoring Customer Satisfaction & Product Ratings
+            Quran Academy | Monitoring Student Satisfaction & Class Ratings
           </p>
           <button 
             onClick={exportPDF}
@@ -222,13 +222,13 @@ const Feedback = () => {
               display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer',
               transition: '0.3s'
             }}>
-            <Download size={18} /> Export {activeTab === 'general' ? 'General' : 'Product'} PDF
+            <Download size={18} /> Export {activeTab === 'general' ? 'General' : 'Class'} PDF
           </button>
         </div>
         
         <div style={{ display: 'flex', gap: '15px' }}>
-          <TabButton id="general" icon={Store} label="Store Feedback" />
-          <TabButton id="products" icon={Coffee} label="Product Reviews" />
+          <TabButton id="general" icon={BookOpen} label="General Feedback" />
+          <TabButton id="products" icon={BookOpen} label="Class Reviews" />
         </div>
       </div>
 
@@ -238,7 +238,7 @@ const Feedback = () => {
         <div style={{ position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))', gap: '25px' }}>
           
           {activeTab === 'general' && data.general.length === 0 && (
-            <div style={{ color: colors.muted, gridColumn: '1 / -1' }}>No store feedback received yet.</div>
+            <div style={{ color: colors.muted, gridColumn: '1 / -1' }}>No general feedback received yet.</div>
           )}
           
           {activeTab === 'general' && data.general.map(item => (
@@ -263,7 +263,7 @@ const Feedback = () => {
           ))}
 
           {activeTab === 'products' && data.products.length === 0 && (
-            <div style={{ color: colors.muted, gridColumn: '1 / -1' }}>No product reviews received yet.</div>
+            <div style={{ color: colors.muted, gridColumn: '1 / -1' }}>No class reviews received yet.</div>
           )}
 
           {activeTab === 'products' && data.products.map(item => (

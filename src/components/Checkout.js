@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import styles from './Checkout.module.css';
-import { Coffee, AlertTriangle } from 'lucide-react';
+import { HeartHandshake, AlertTriangle } from 'lucide-react';
 
 export default function Checkout({ onClose, onBack }) {
   const { items, totalPrice, clearCart } = useCart();
@@ -14,7 +14,7 @@ export default function Checkout({ onClose, onBack }) {
     cardNumber: '', expiry: '', cvc: '', address: '', phone: '',
     postcode: '', location: '', deliveryType: 'postcode'
   });
-  const [orderType, setOrderType] = useState('dine-in');
+  const [orderType, setOrderType] = useState('general');
   const [errors, setErrors] = useState({});
   const [storeRating, setStoreRating] = useState(5);
   const [storeComment, setStoreComment] = useState('');
@@ -50,24 +50,24 @@ export default function Checkout({ onClose, onBack }) {
 
     // Load saved customer profiles (array)
     try {
-      const raw = localStorage.getItem('caffaine_profiles');
+      const raw = localStorage.getItem('mosque_profiles');
       if (raw) {
         const arr = JSON.parse(raw);
         if (Array.isArray(arr) && arr.length > 0) setSavedProfiles(arr);
       } else {
         // Migrate old single-profile format
-        const savedName = localStorage.getItem('caffaine_customer_name');
+        const savedName = localStorage.getItem('mosque_customer_name');
         if (savedName) {
           const legacy = {
             name: savedName,
-            phone: localStorage.getItem('caffaine_customer_phone') || '',
-            email: localStorage.getItem('caffaine_customer_email') || '',
-            cardNumber: localStorage.getItem('caffaine_customer_cardNumber') || '',
-            expiry: localStorage.getItem('caffaine_customer_expiry') || '',
-            cvc: localStorage.getItem('caffaine_customer_cvc') || ''
+            phone: localStorage.getItem('mosque_customer_phone') || '',
+            email: localStorage.getItem('mosque_customer_email') || '',
+            cardNumber: localStorage.getItem('mosque_customer_cardNumber') || '',
+            expiry: localStorage.getItem('mosque_customer_expiry') || '',
+            cvc: localStorage.getItem('mosque_customer_cvc') || ''
           };
           setSavedProfiles([legacy]);
-          localStorage.setItem('caffaine_profiles', JSON.stringify([legacy]));
+          localStorage.setItem('mosque_profiles', JSON.stringify([legacy]));
         }
       }
     } catch(e) {}
@@ -319,7 +319,7 @@ export default function Checkout({ onClose, onBack }) {
 
       // Save customer info — add to profiles array (no duplicates by name)
       try {
-        const raw = localStorage.getItem('caffaine_profiles');
+        const raw = localStorage.getItem('mosque_profiles');
         let profiles = raw ? JSON.parse(raw) : [];
         if (!Array.isArray(profiles)) profiles = [];
         const newProfile = {
@@ -335,7 +335,7 @@ export default function Checkout({ onClose, onBack }) {
         profiles.unshift(newProfile);
         // Keep max 10 profiles
         if (profiles.length > 10) profiles = profiles.slice(0, 10);
-        localStorage.setItem('caffaine_profiles', JSON.stringify(profiles));
+        localStorage.setItem('mosque_profiles', JSON.stringify(profiles));
         setSavedProfiles(profiles);
       } catch(e) {}
 
@@ -448,7 +448,7 @@ export default function Checkout({ onClose, onBack }) {
             marginBottom: '30px'
           }} />
 
-          {/* Animated Gold Coffee Cup */}
+          {/* Animated Gold HeartHandshake */}
           <div style={{ 
             color: '#c4a484', 
             marginBottom: '25px', 
@@ -456,7 +456,7 @@ export default function Checkout({ onClose, onBack }) {
             justifyContent: 'center',
             animation: 'float 3s ease-in-out infinite' 
           }}>
-            <Coffee size={85} strokeWidth={1} />
+            <HeartHandshake size={85} strokeWidth={1} />
           </div>
 
           <style>{`
@@ -651,52 +651,52 @@ export default function Checkout({ onClose, onBack }) {
           <form className={styles.form} onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
 
             {/* Order Type Selection */}
-            <div className={styles.formSection} style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '20px', border: '1px solid #eee', marginBottom: '25px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
-              <label className={styles.label} style={{ fontSize: '1.2rem', color: '#2c1810', marginBottom: '20px', display: 'block', fontWeight: '800', fontFamily: "'DM Serif Display', serif", textAlign: 'center' }}>How would you like to receive your order?</label>
-              <div className={styles.orderTypeGrid}>
+            <div className={styles.formSection} style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '20px', border: '1px solid #eee', marginBottom: '25px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)', direction: 'rtl' }}>
+              <label className={styles.label} style={{ fontSize: '1.25rem', color: '#18453B', marginBottom: '20px', display: 'block', fontWeight: '800', fontFamily: "'Amiri', 'Tajawal', sans-serif", textAlign: 'center' }}>تحديد باب المساهمة والخير:</label>
+              <div className={styles.orderTypeGrid} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '15px' }}>
                 <div
-                  onClick={() => setOrderType('dine-in')}
+                  onClick={() => setOrderType('general')}
                   style={{
                     padding: '20px 10px', textAlign: 'center', borderRadius: '16px', cursor: 'pointer', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    border: orderType === 'dine-in' ? '2px solid #c4a484' : '2px solid transparent',
-                    backgroundColor: orderType === 'dine-in' ? 'rgba(196,164,132,0.08)' : '#f8f9fa',
-                    boxShadow: orderType === 'dine-in' ? '0 10px 25px rgba(196,164,132,0.25)' : 'none',
-                    transform: orderType === 'dine-in' ? 'translateY(-4px)' : 'translateY(0)'
+                    border: orderType === 'general' ? '2px solid #18453B' : '2px solid transparent',
+                    backgroundColor: orderType === 'general' ? 'rgba(24,69,59,0.08)' : '#f8f9fa',
+                    boxShadow: orderType === 'general' ? '0 10px 25px rgba(24,69,59,0.15)' : 'none',
+                    transform: orderType === 'general' ? 'translateY(-4px)' : 'translateY(0)'
                   }}
                 >
-                  <i className="fas fa-coffee" style={{ fontSize: '2rem', color: orderType === 'dine-in' ? '#c4a484' : '#a0a0a0', marginBottom: '12px', transition: '0.3s' }} />
-                  <div style={{ fontWeight: '800', color: orderType === 'dine-in' ? '#2c1810' : '#777', fontSize: '1rem', letterSpacing: '0.5px' }}>Dine-In</div>
-                  <div style={{ fontSize: '0.75rem', color: '#999', marginTop: '6px', fontWeight: '500' }}>Enjoy at Cafe</div>
+                  <i className="fas fa-hand-holding-heart" style={{ fontSize: '2rem', color: orderType === 'general' ? '#18453B' : '#a0a0a0', marginBottom: '12px', transition: '0.3s' }} />
+                  <div style={{ fontWeight: '800', color: orderType === 'general' ? '#18453B' : '#777', fontSize: '1rem', fontFamily: 'Tajawal' }}>صدقة عامة</div>
+                  <div style={{ fontSize: '0.75rem', color: '#999', marginTop: '6px', fontWeight: '500', fontFamily: 'Tajawal' }}>أبواب الصدقات العامة</div>
                 </div>
 
                 <div
-                  onClick={() => setOrderType('takeaway')}
+                  onClick={() => setOrderType('quran')}
                   style={{
                     padding: '20px 10px', textAlign: 'center', borderRadius: '16px', cursor: 'pointer', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    border: orderType === 'takeaway' ? '2px solid #c4a484' : '2px solid transparent',
-                    backgroundColor: orderType === 'takeaway' ? 'rgba(196,164,132,0.08)' : '#f8f9fa',
-                    boxShadow: orderType === 'takeaway' ? '0 10px 25px rgba(196,164,132,0.25)' : 'none',
-                    transform: orderType === 'takeaway' ? 'translateY(-4px)' : 'translateY(0)'
+                    border: orderType === 'quran' ? '2px solid #18453B' : '2px solid transparent',
+                    backgroundColor: orderType === 'quran' ? 'rgba(24,69,59,0.08)' : '#f8f9fa',
+                    boxShadow: orderType === 'quran' ? '0 10px 25px rgba(24,69,59,0.15)' : 'none',
+                    transform: orderType === 'quran' ? 'translateY(-4px)' : 'translateY(0)'
                   }}
                 >
-                  <i className="fas fa-shopping-bag" style={{ fontSize: '2rem', color: orderType === 'takeaway' ? '#c4a484' : '#a0a0a0', marginBottom: '12px', transition: '0.3s' }} />
-                  <div style={{ fontWeight: '800', color: orderType === 'takeaway' ? '#2c1810' : '#777', fontSize: '1rem', letterSpacing: '0.5px' }}>Takeaway</div>
-                  <div style={{ fontSize: '0.75rem', color: '#999', marginTop: '6px', fontWeight: '500' }}>Grab & Go</div>
+                  <i className="fas fa-book-open" style={{ fontSize: '2rem', color: orderType === 'quran' ? '#18453B' : '#a0a0a0', marginBottom: '12px', transition: '0.3s' }} />
+                  <div style={{ fontWeight: '800', color: orderType === 'quran' ? '#18453B' : '#777', fontSize: '1rem', fontFamily: 'Tajawal' }}>كفالة الحلقات</div>
+                  <div style={{ fontSize: '0.75rem', color: '#999', marginTop: '6px', fontWeight: '500', fontFamily: 'Tajawal' }}>طلاب ومعلمو القرآن</div>
                 </div>
 
                 <div
-                  onClick={() => setOrderType('delivery')}
+                  onClick={() => setOrderType('maintenance')}
                   style={{
                     padding: '20px 10px', textAlign: 'center', borderRadius: '16px', cursor: 'pointer', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    border: orderType === 'delivery' ? '2px solid #c4a484' : '2px solid transparent',
-                    backgroundColor: orderType === 'delivery' ? 'rgba(196,164,132,0.08)' : '#f8f9fa',
-                    boxShadow: orderType === 'delivery' ? '0 10px 25px rgba(196,164,132,0.25)' : 'none',
-                    transform: orderType === 'delivery' ? 'translateY(-4px)' : 'translateY(0)'
+                    border: orderType === 'maintenance' ? '2px solid #18453B' : '2px solid transparent',
+                    backgroundColor: orderType === 'maintenance' ? 'rgba(24,69,59,0.08)' : '#f8f9fa',
+                    boxShadow: orderType === 'maintenance' ? '0 10px 25px rgba(24,69,59,0.15)' : 'none',
+                    transform: orderType === 'maintenance' ? 'translateY(-4px)' : 'translateY(0)'
                   }}
                 >
-                  <i className="fas fa-motorcycle" style={{ fontSize: '2rem', color: orderType === 'delivery' ? '#c4a484' : '#a0a0a0', marginBottom: '12px', transition: '0.3s' }} />
-                  <div style={{ fontWeight: '800', color: orderType === 'delivery' ? '#2c1810' : '#777', fontSize: '1rem', letterSpacing: '0.5px' }}>Delivery</div>
-                  <div style={{ fontSize: '0.75rem', color: '#999', marginTop: '6px', fontWeight: '500' }}>To your door</div>
+                  <i className="fas fa-tools" style={{ fontSize: '2rem', color: orderType === 'maintenance' ? '#18453B' : '#a0a0a0', marginBottom: '12px', transition: '0.3s' }} />
+                  <div style={{ fontWeight: '800', color: orderType === 'maintenance' ? '#18453B' : '#777', fontSize: '1rem', fontFamily: 'Tajawal' }}>صيانة وإعمار</div>
+                  <div style={{ fontSize: '0.75rem', color: '#999', marginTop: '6px', fontWeight: '500', fontFamily: 'Tajawal' }}>خدمة وتجهيز بيت الله</div>
                 </div>
               </div>
 

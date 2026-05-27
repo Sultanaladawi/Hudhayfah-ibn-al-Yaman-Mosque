@@ -1,282 +1,438 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { Mail, Trash2, Reply, CheckCircle2, User, Clock, Inbox, MailOpen, Download } from 'lucide-react';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import {
+  Mail, Trash2, Eye, EyeOff, Search, RefreshCw,
+  User, Clock, CheckCircle, Filter, MailOpen, X
+} from 'lucide-react';
 
-const Messages = () => {
+const COLORS = {
+  green: '#18453B',
+  gold: '#C49B75',
+  bg: 'var(--admin-bg)',
+  card: 'var(--admin-card)',
+  border: 'var(--admin-border)',
+  text: 'var(--admin-text)',
+  muted: '#94a3b8',
+};
+
+const Badge = ({ children, color = COLORS.green }) => (
+  <span style={{
+    display: 'inline-flex', alignItems: 'center',
+    padding: '3px 10px', borderRadius: '20px',
+    background: color + '18', color, border: `1px solid ${color}30`,
+    fontSize: '0.72rem', fontWeight: '700', letterSpacing: '0.5px',
+    whiteSpace: 'nowrap'
+  }}>
+    {children}
+  </span>
+);
+
+const formatDate = (dateStr) => {
+  if (!dateStr) return '—';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('ar-JO', { year: 'numeric', month: 'long', day: 'numeric' })
+    + ' • ' + d.toLocaleTimeString('ar-JO', { hour: '2-digit', minute: '2-digit' });
+};
+
+export default function Messages() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [search, setSearch] = useState('');
+  const [filter, setFilter] = useState('all'); // all | unread | read
+  const [selected, setSelected] = useState(null);
+  const [deleting, setDeleting] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const exportPDF = async () => {
+  const fetchMessages = useCallback(async (silent = false) => {
+    if (!silent) setLoading(true);
+    setRefreshing(true);
     try {
-      if (messages.length === 0) {
-        alert("No messages available to export.");
-        return;
-      }
-      
-      // Log the export action
-      await axios.post('/api/log-action', { 
-        action: 'Export PDF', 
-        details: 'Administrator exported the Inbox Messages report to PDF.' 
-      });
-
-      const doc = new jsPDF();
-      
-      // Header
-      doc.setFontSize(22);
-      doc.setTextColor(45, 41, 38);
-      doc.text('CaffAIne - Customer Inquiries', 14, 22);
-      
-      doc.setFontSize(10);
-      doc.setTextColor(100);
-      doc.text(`Generated on: ${new Date().toLocaleString('en-GB', { timeZone: 'Asia/Amman' })}`, 14, 32);
-      doc.text('Full log of messages received via the contact form.', 14, 38);
-      
-      // Table
-      const tableColumn = ["Date", "Customer Name", "Email", "Message Content"];
-      const tableRows = messages.map(msg => [
-        new Date(msg.created_at).toLocaleDateString('en-GB', { timeZone: 'Asia/Amman' }),
-        msg.name || 'Anonymous',
-        msg.email || 'N/A',
-        msg.message ? (msg.message.length > 80 ? msg.message.substring(0, 80) + '...' : msg.message) : ''
-      ]);
-
-      autoTable(doc, {
-        head: [tableColumn],
-        body: tableRows,
-        startY: 45,
-        theme: 'grid',
-        headStyles: { 
-          fillColor: [196, 164, 132], 
-          textColor: [255, 255, 255],
-          fontSize: 10,
-          fontStyle: 'bold'
-        },
-        styles: { 
-          fontSize: 9,
-          cellPadding: 4
-        },
-        alternateRowStyles: {
-          fillColor: [250, 250, 250]
-        }
-      });
-
-      doc.save(`CaffAIne_Messages_${Date.now()}.pdf`);
-    } catch (error) {
-      console.error("PDF Export Error:", error);
-      alert("Error generating PDF: " + error.message);
-    }
-  };
-
-  const colors = {
-    espresso: 'var(--admin-bg)',
-    bean: 'var(--admin-card)',
-    crema: 'var(--admin-accent)',
-    latte: 'var(--admin-text)',
-    border: 'var(--admin-border)'
-  };
-
-  const fetchMessages = async () => {
-    try {
-      setLoading(true);
       const res = await axios.get('/api/contact');
       setMessages(Array.isArray(res.data) ? res.data : []);
+      setError(null);
     } catch (err) {
-      console.error("API Error:", err);
+      setError('تعذّر تحميل الرسائل. تأكد من اتصالك بالخادم.');
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
-  };
-
-  useEffect(() => {
-    fetchMessages();
   }, []);
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this message?")) {
-      try {
-        await axios.delete(`/api/contact/${id}`);
-        setMessages(messages.filter(m => m.id !== id));
-      } catch (err) {
-        alert("Failed to delete message");
-      }
-    }
-  };
+  useEffect(() => { fetchMessages(); }, [fetchMessages]);
 
-  const handleToggleRead = async (id, currentStatus) => {
+  const markRead = async (id, isRead) => {
     try {
-      await axios.put(`/api/contact/${id}/read`, { is_read: !currentStatus });
-      setMessages(messages.map(m => m.id === id ? { ...m, is_read: !currentStatus } : m));
-    } catch (err) {
-      console.error("Failed to toggle read status", err);
+      await axios.put(`/api/contact/${id}/read`, { is_read: isRead ? 1 : 0 });
+      setMessages(prev => prev.map(m => m.id === id ? { ...m, is_read: isRead ? 1 : 0 } : m));
+      if (selected?.id === id) setSelected(prev => ({ ...prev, is_read: isRead ? 1 : 0 }));
+    } catch {}
+  };
+
+  const deleteMsg = async (id) => {
+    if (!window.confirm('هل أنت متأكد من حذف هذه الرسالة؟')) return;
+    setDeleting(id);
+    try {
+      await axios.delete(`/api/contact/${id}`);
+      setMessages(prev => prev.filter(m => m.id !== id));
+      if (selected?.id === id) setSelected(null);
+    } catch {
+      alert('فشل الحذف. حاول مجدداً.');
+    } finally {
+      setDeleting(null);
     }
   };
 
-  const handleReply = (email, name) => {
-    const subject = encodeURIComponent("Re: Your message to CaffAIne");
-    const body = encodeURIComponent(`Hi ${name},\n\nThank you for reaching out to us.\n\n`);
-    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+  const openMessage = (msg) => {
+    setSelected(msg);
+    if (!msg.is_read) markRead(msg.id, true);
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      day: 'numeric', month: 'short', year: 'numeric',
-      hour: '2-digit', minute: '2-digit'
-    });
-  };
+  const filtered = messages.filter(m => {
+    const matchSearch = !search
+      || m.name?.toLowerCase().includes(search.toLowerCase())
+      || m.email?.toLowerCase().includes(search.toLowerCase())
+      || m.message?.toLowerCase().includes(search.toLowerCase());
+    const matchFilter =
+      filter === 'all' ? true :
+      filter === 'unread' ? !m.is_read :
+      filter === 'read' ? !!m.is_read : true;
+    return matchSearch && matchFilter;
+  });
+
+  const unreadCount = messages.filter(m => !m.is_read).length;
+
+  if (loading) return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh', direction: 'rtl' }}>
+      <div style={{ textAlign: 'center' }}>
+        <div style={{
+          width: '52px', height: '52px', borderRadius: '50%',
+          border: `3px solid ${COLORS.gold}`, borderTopColor: 'transparent',
+          margin: '0 auto 16px', animation: 'spin 0.8s linear infinite'
+        }} />
+        <p style={{ color: COLORS.muted, fontFamily: "'Tajawal', sans-serif" }}>جاري تحميل الرسائل...</p>
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      </div>
+    </div>
+  );
 
   return (
-    <div className="dashboard-fade-in" style={{ 
-      color: colors.latte, 
-      backgroundColor: colors.espresso, 
-      minHeight: '100vh', 
-      padding: '40px 10px 40px 5px',
-      position: 'relative'
-    }}>
-      {/* Premium Background Elements */}
-      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}>
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: `radial-gradient(circle at 50% -20%, #2a1b10 0%, #070504 70%)` }} />
-        <div className="orb orb-1" />
-        <div className="orb orb-2" />
-      </div>
-      <style>{`
-        .orb { position: absolute; border-radius: 50%; filter: blur(100px); z-index: 0; opacity: 0.05; animation: float 25s infinite alternate ease-in-out; }
-        .orb-1 { width: 600px; height: 600px; background: ${colors.crema}; top: -200px; right: -100px; }
-        .orb-2 { width: 500px; height: 500px; background: #2a1b10; bottom: -100px; left: -100px; }
-        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(50px, 50px) scale(1.1); } }
-        .page-badge { background: #1b130e; border: 1px solid ${colors.border}; padding: 12px 25px; border-radius: 18px; display: inline-flex; align-items: center; gap: 12px; margin: 20px 0; }
-        .page-badge span { font-family: 'Inter', sans-serif; font-size: 2rem; font-weight: 900; color: #fff; letter-spacing: -0.5px; }
-        /* Premium Row Hover Animation */
-        .premium-row {
-          transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
-          cursor: pointer;
-        }
-        .premium-row:hover {
-          background-color: rgba(196, 164, 132, 0.12) !important;
-          transform: translateY(-2px) scale(1.005);
-          box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
-          position: relative;
-          z-index: 10;
-        }
-      `}</style>
-      
-      {/* Header */}
-      <div style={{ 
-        position: 'relative',
-        zIndex: 1,
-        width: '100%', 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'flex-start', 
-        marginBottom: '40px'
-      }}>
+    <div style={{ direction: 'rtl', fontFamily: "'Tajawal', sans-serif", minHeight: '100vh', padding: '10px 0' }}>
+
+      {/* ── Header ── */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: '2.8rem', color: colors.crema, lineHeight: 1 }}>
-              CaffAIne <span style={{ color: '#fff', fontStyle: 'italic' }}>Coffee</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
+            <div style={{
+              width: '48px', height: '48px', borderRadius: '14px',
+              background: `linear-gradient(135deg, ${COLORS.green}, #2C6D5F)`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center'
+            }}>
+              <Mail size={22} color="#fff" />
+            </div>
+            <div>
+              <h1 style={{ fontSize: '1.75rem', color: COLORS.green, margin: 0, fontWeight: '800' }}>
+                تواصل الأهالي
+              </h1>
+              {unreadCount > 0 && (
+                <span style={{ fontSize: '0.8rem', color: COLORS.gold, fontWeight: '700' }}>
+                  {unreadCount} رسالة جديدة غير مقروءة
+                </span>
+              )}
+            </div>
           </div>
-
-          <div className="page-badge">
-            <Mail size={28} color={colors.crema} />
-            <span>Customer Messages</span>
-          </div>
-
-          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '1rem', fontWeight: 500, marginTop: '5px' }}>
-            CaffAIne | Customer Support & Feedback Inquiries
+          <p style={{ color: COLORS.muted, margin: 0, fontSize: '0.9rem' }}>
+            الرسائل المُرسَلة عبر نموذج التواصل في الموقع
           </p>
         </div>
-        <button 
-          onClick={exportPDF}
-          style={{ 
-            backgroundColor: 'rgba(196, 164, 132, 0.1)', 
-            color: colors.crema, 
-            border: `1px solid ${colors.crema}`, 
-            padding: '12px 24px', borderRadius: '12px', fontWeight: 'bold', 
-            display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer',
-            transition: '0.3s'
-          }}>
-          <Download size={18} /> Export PDF
+        <button
+          onClick={() => fetchMessages(true)}
+          disabled={refreshing}
+          style={{
+            display: 'flex', alignItems: 'center', gap: '8px',
+            padding: '10px 20px', borderRadius: '12px', cursor: 'pointer',
+            background: COLORS.green, color: '#fff', border: 'none',
+            fontFamily: "'Tajawal', sans-serif", fontWeight: '700', fontSize: '0.9rem',
+            opacity: refreshing ? 0.7 : 1, transition: 'all 0.2s'
+          }}
+        >
+          <RefreshCw size={16} style={{ animation: refreshing ? 'spin 0.8s linear infinite' : 'none' }} />
+          تحديث
         </button>
       </div>
 
-      {loading ? (
-        <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', color: colors.crema, padding: '100px' }}>
-          <div className="loader-spinner"></div>
-          <p>Loading messages...</p>
+      {/* ── Error State ── */}
+      {error && (
+        <div style={{
+          background: '#fff5f5', border: '1px solid #fed7d7', borderRadius: '12px',
+          padding: '16px 20px', marginBottom: '20px', color: '#c53030',
+          display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem'
+        }}>
+          ⚠️ {error}
         </div>
-      ) : (
-        <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {messages.length > 0 ? messages.map((msg) => (
-            <div key={msg.id} className="premium-row" style={{ 
-              backgroundColor: 'rgba(196,164,132,0.1)', 
-              borderRadius: '20px', 
-              border: `1px solid ${colors.crema}`,
-              padding: '25px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '20px',
-              boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
-              position: 'relative'
-            }}>
-              
-              {/* Message Header */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: `1px solid ${colors.border}`, paddingBottom: '15px' }}>
-                <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-                  <div style={{ backgroundColor: msg.is_read ? 'rgba(255,255,255,0.05)' : 'rgba(196,164,132,0.2)', padding: '12px', borderRadius: '50%', color: msg.is_read ? '#888' : colors.crema }}>
-                    <User size={24} />
-                  </div>
-                  <div>
-                    <h3 style={{ margin: 0, color: '#fff', fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      {msg.name} {!msg.is_read && <span style={{ fontSize: '0.7rem', backgroundColor: colors.crema, color: colors.espresso, padding: '2px 8px', borderRadius: '10px', fontWeight: 'bold' }}>NEW</span>}
-                    </h3>
-                    <a href={`mailto:${msg.email}`} style={{ color: colors.crema, textDecoration: 'none', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '5px', marginTop: '5px' }}>
-                      <Mail size={14} /> {msg.email}
-                    </a>
-                  </div>
-                </div>
-                
-                <div style={{ color: '#888', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                  <Clock size={14} /> {formatDate(msg.created_at)}
-                </div>
-              </div>
+      )}
 
-              {/* Message Body */}
-              <div style={{ color: msg.is_read ? '#bbb' : '#fff', fontSize: '1.05rem', lineHeight: '1.6', padding: '10px 0', whiteSpace: 'pre-wrap' }}>
-                {msg.message}
-              </div>
-
-              {/* Actions */}
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '15px', paddingTop: '15px', borderTop: `1px dashed ${colors.border}` }}>
-                <button 
-                  onClick={() => handleToggleRead(msg.id, msg.is_read)}
-                  style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '10px', backgroundColor: 'transparent', border: `1px solid ${colors.border}`, color: '#fff', cursor: 'pointer', fontWeight: 'bold' }}>
-                  {msg.is_read ? <><Mail size={16} /> Mark as Unread</> : <><MailOpen size={16} /> Mark as Read</>}
-                </button>
-                <button 
-                  onClick={() => handleDelete(msg.id)}
-                  style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '10px', backgroundColor: 'transparent', border: `1px solid #ff4444`, color: '#ff4444', cursor: 'pointer', fontWeight: 'bold' }}>
-                  <Trash2 size={16} /> Delete
-                </button>
-                <button 
-                  onClick={() => handleReply(msg.email, msg.name)}
-                  style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 24px', borderRadius: '10px', backgroundColor: colors.crema, border: 'none', color: colors.espresso, cursor: 'pointer', fontWeight: 'bold' }}>
-                  <Reply size={16} /> Reply via Email
-                </button>
-              </div>
-
+      {/* ── Stats Row ── */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+        {[
+          { label: 'إجمالي الرسائل', value: messages.length, icon: Mail, color: COLORS.green },
+          { label: 'غير مقروءة', value: unreadCount, icon: EyeOff, color: '#e67e22' },
+          { label: 'مقروءة', value: messages.length - unreadCount, icon: MailOpen, color: '#27ae60' },
+        ].map((stat, i) => (
+          <div key={i} style={{
+            background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: '16px',
+            padding: '20px', display: 'flex', alignItems: 'center', gap: '14px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+          }}>
+            <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: stat.color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <stat.icon size={20} color={stat.color} />
             </div>
-          )) : (
-            <div style={{ textAlign: 'center', padding: '100px', backgroundColor: colors.bean, borderRadius: '24px', border: `1px dashed ${colors.border}` }}>
-              <CheckCircle2 size={48} color={colors.crema} style={{ marginBottom: '20px' }} />
-              <h3 style={{ color: '#fff' }}>Inbox is empty!</h3>
-              <p style={{ color: '#777' }}>All customer messages have been read and replied to.</p>
+            <div>
+              <div style={{ fontSize: '1.6rem', fontWeight: '800', color: stat.color, lineHeight: 1 }}>{stat.value}</div>
+              <div style={{ fontSize: '0.78rem', color: COLORS.muted, marginTop: '3px' }}>{stat.label}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* ── Filters & Search ── */}
+      <div style={{ display: 'flex', gap: '12px', marginBottom: '20px', flexWrap: 'wrap', alignItems: 'center' }}>
+        <div style={{ position: 'relative', flex: 1, minWidth: '220px' }}>
+          <Search size={16} style={{ position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)', color: COLORS.muted }} />
+          <input
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="ابحث بالاسم أو الإيميل أو الرسالة..."
+            style={{
+              width: '100%', padding: '11px 40px 11px 14px', borderRadius: '12px',
+              border: `1px solid ${COLORS.border}`, background: COLORS.card, color: COLORS.text,
+              fontFamily: "'Tajawal', sans-serif", fontSize: '0.9rem', outline: 'none',
+              boxSizing: 'border-box'
+            }}
+          />
+        </div>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          {[
+            { key: 'all', label: 'الكل' },
+            { key: 'unread', label: 'غير مقروء' },
+            { key: 'read', label: 'مقروء' },
+          ].map(f => (
+            <button
+              key={f.key}
+              onClick={() => setFilter(f.key)}
+              style={{
+                padding: '10px 18px', borderRadius: '10px', cursor: 'pointer',
+                border: `1px solid ${filter === f.key ? COLORS.green : COLORS.border}`,
+                background: filter === f.key ? COLORS.green : COLORS.card,
+                color: filter === f.key ? '#fff' : COLORS.text,
+                fontFamily: "'Tajawal', sans-serif", fontWeight: '700', fontSize: '0.85rem',
+                transition: 'all 0.2s'
+              }}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Main Layout ── */}
+      <div style={{ display: 'grid', gridTemplateColumns: selected ? '1fr 1.3fr' : '1fr', gap: '20px', alignItems: 'start' }}>
+
+        {/* ── Messages List ── */}
+        <div style={{
+          background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: '20px',
+          overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,0.04)'
+        }}>
+          {filtered.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '60px 20px', color: COLORS.muted }}>
+              <Mail size={48} style={{ opacity: 0.3, marginBottom: '16px' }} />
+              <h3 style={{ margin: '0 0 8px 0', color: COLORS.text, fontSize: '1.1rem' }}>
+                {search || filter !== 'all' ? 'لا توجد نتائج مطابقة' : 'لا توجد رسائل حالياً'}
+              </h3>
+              <p style={{ margin: 0, fontSize: '0.9rem' }}>
+                {search ? 'جرّب البحث بكلمات مختلفة' : 'ستظهر هنا رسائل الأهالي المُرسَلة من الموقع'}
+              </p>
+            </div>
+          ) : (
+            <div>
+              {filtered.map((msg, idx) => (
+                <div
+                  key={msg.id}
+                  onClick={() => openMessage(msg)}
+                  style={{
+                    display: 'flex', alignItems: 'flex-start', gap: '14px', padding: '18px 20px',
+                    borderBottom: idx < filtered.length - 1 ? `1px solid ${COLORS.border}` : 'none',
+                    cursor: 'pointer',
+                    background: selected?.id === msg.id ? COLORS.green + '08' :
+                      !msg.is_read ? '#fffbf0' : 'transparent',
+                    borderLeft: selected?.id === msg.id ? `3px solid ${COLORS.green}` :
+                      !msg.is_read ? `3px solid ${COLORS.gold}` : '3px solid transparent',
+                    transition: 'background 0.2s',
+                  }}
+                  onMouseEnter={e => { if (selected?.id !== msg.id) e.currentTarget.style.background = '#f8fafc'; }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.background = selected?.id === msg.id ? COLORS.green + '08' :
+                      !msg.is_read ? '#fffbf0' : 'transparent';
+                  }}
+                >
+                  {/* Avatar */}
+                  <div style={{
+                    width: '42px', height: '42px', borderRadius: '12px', flexShrink: 0,
+                    background: `linear-gradient(135deg, ${COLORS.green}, #2C6D5F)`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: '#fff', fontWeight: '800', fontSize: '1rem'
+                  }}>
+                    {(msg.name || 'م')[0]}
+                  </div>
+
+                  {/* Content */}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                      <span style={{ fontWeight: msg.is_read ? '600' : '800', fontSize: '0.95rem', color: COLORS.text, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {msg.name || 'غير معروف'}
+                      </span>
+                      <span style={{ fontSize: '0.72rem', color: COLORS.muted, flexShrink: 0 }}>
+                        {new Date(msg.created_at).toLocaleDateString('ar-JO', { month: 'short', day: 'numeric' })}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: COLORS.gold, marginBottom: '5px', fontWeight: '600' }}>
+                      {msg.email}
+                    </div>
+                    <p style={{
+                      margin: 0, fontSize: '0.85rem', color: COLORS.muted,
+                      overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                      fontWeight: msg.is_read ? '400' : '600'
+                    }}>
+                      {msg.message}
+                    </p>
+                  </div>
+
+                  {/* Unread dot */}
+                  {!msg.is_read && (
+                    <div style={{
+                      width: '9px', height: '9px', borderRadius: '50%',
+                      background: COLORS.gold, flexShrink: 0, marginTop: '6px',
+                      boxShadow: `0 0 8px ${COLORS.gold}80`
+                    }} />
+                  )}
+                </div>
+              ))}
             </div>
           )}
         </div>
-      )}
+
+        {/* ── Message Detail ── */}
+        {selected && (
+          <div style={{
+            background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: '20px',
+            padding: '28px', boxShadow: '0 4px 20px rgba(0,0,0,0.06)', position: 'sticky', top: '20px'
+          }}>
+            {/* Close */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+              <h2 style={{ margin: 0, fontSize: '1.15rem', color: COLORS.text, fontWeight: '800' }}>
+                تفاصيل الرسالة
+              </h2>
+              <button
+                onClick={() => setSelected(null)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: COLORS.muted, padding: '4px', borderRadius: '8px' }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Sender Info */}
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px',
+              padding: '18px', background: COLORS.green + '08', borderRadius: '14px', border: `1px solid ${COLORS.green}20`
+            }}>
+              <div style={{
+                width: '52px', height: '52px', borderRadius: '14px',
+                background: `linear-gradient(135deg, ${COLORS.green}, #2C6D5F)`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: '#fff', fontWeight: '800', fontSize: '1.3rem', flexShrink: 0
+              }}>
+                {(selected.name || 'م')[0]}
+              </div>
+              <div>
+                <div style={{ fontWeight: '800', fontSize: '1.1rem', color: COLORS.text, marginBottom: '4px' }}>
+                  {selected.name || 'غير معروف'}
+                </div>
+                <a href={`mailto:${selected.email}`} style={{ color: COLORS.gold, fontSize: '0.85rem', fontWeight: '600', textDecoration: 'none' }}>
+                  {selected.email}
+                </a>
+              </div>
+              <div style={{ marginRight: 'auto' }}>
+                {selected.is_read
+                  ? <Badge color={COLORS.green}><CheckCircle size={12} style={{ marginLeft: '4px' }} /> مقروءة</Badge>
+                  : <Badge color='#e67e22'>جديدة</Badge>
+                }
+              </div>
+            </div>
+
+            {/* Date */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px', color: COLORS.muted, fontSize: '0.85rem' }}>
+              <Clock size={15} />
+              {formatDate(selected.created_at)}
+            </div>
+
+            {/* Message Body */}
+            <div style={{
+              background: '#f8fafc', borderRadius: '14px', padding: '20px',
+              border: `1px solid ${COLORS.border}`, marginBottom: '24px',
+              lineHeight: '1.8', color: COLORS.text, fontSize: '0.95rem',
+              whiteSpace: 'pre-wrap', wordBreak: 'break-word'
+            }}>
+              {selected.message}
+            </div>
+
+            {/* Reply Button */}
+            <a
+              href={`mailto:${selected.email}?subject=ردنا على رسالتك — مسجد حذيفة بن اليمان`}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+                width: '100%', padding: '13px', borderRadius: '12px', cursor: 'pointer',
+                background: `linear-gradient(135deg, ${COLORS.green}, #2C6D5F)`,
+                color: '#fff', fontFamily: "'Tajawal', sans-serif",
+                fontWeight: '800', fontSize: '0.95rem', textDecoration: 'none',
+                marginBottom: '12px', boxSizing: 'border-box', textAlign: 'center',
+                boxShadow: `0 6px 20px ${COLORS.green}40`
+              }}
+            >
+              <Mail size={18} />
+              الرد عبر الإيميل
+            </a>
+
+            {/* Action Buttons */}
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button
+                onClick={() => markRead(selected.id, !selected.is_read)}
+                style={{
+                  flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                  padding: '11px', borderRadius: '10px', cursor: 'pointer',
+                  border: `1px solid ${COLORS.border}`, background: COLORS.card,
+                  color: COLORS.text, fontFamily: "'Tajawal', sans-serif",
+                  fontWeight: '700', fontSize: '0.85rem', transition: 'all 0.2s'
+                }}
+              >
+                {selected.is_read ? <><EyeOff size={15} /> وضع علامة غير مقروء</> : <><Eye size={15} /> وضع علامة مقروء</>}
+              </button>
+              <button
+                onClick={() => deleteMsg(selected.id)}
+                disabled={deleting === selected.id}
+                style={{
+                  padding: '11px 18px', borderRadius: '10px', cursor: 'pointer',
+                  border: '1px solid #fee2e2', background: '#fff5f5', color: '#ef4444',
+                  display: 'flex', alignItems: 'center', gap: '6px',
+                  fontFamily: "'Tajawal', sans-serif", fontWeight: '700', fontSize: '0.85rem',
+                  transition: 'all 0.2s', opacity: deleting === selected.id ? 0.6 : 1
+                }}
+              >
+                <Trash2 size={15} /> حذف
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
-};
-
-export default Messages;
+}

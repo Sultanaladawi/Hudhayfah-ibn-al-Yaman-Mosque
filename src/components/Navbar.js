@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { shopInfo } from '../data/shopData';
 import { useCart } from '../context/CartContext';
 import styles from './Navbar.module.css';
@@ -24,12 +24,12 @@ const InstaIcon = () => (
 
 
 const LINKS = [
-  { label: 'Home',    href: '#home' },
-  { label: 'Menu',    href: '#menu' },
-  { label: 'Gallery', href: '#gallery' },
-  { label: 'About',   href: '#about' },
-  { label: 'Careers', href: '#careers' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'الرئيسية',    href: '#home' },
+  { label: 'الأنشطة',    href: '#menu' },
+  { label: 'معرض الصور', href: '#gallery' },
+  { label: 'عن المسجد',   href: '#about' },
+  { label: 'التطوع', href: '#careers' },
+  { label: 'تواصل معنا', href: '#contact' },
 ];
 
 export default function Navbar({ onCartOpen }) {
@@ -37,93 +37,262 @@ export default function Navbar({ onCartOpen }) {
   const [open, setOpen] = useState(false);
   const { totalItems } = useCart();
   const [bounce, setBounce] = useState(false);
-  const [offers, setOffers] = useState([]);
+
+  const [playing, setPlaying] = useState(false);
+  const audioRef = useRef(null);
 
   useEffect(() => {
-    fetch('/api/offers')
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data)) setOffers(data);
-      })
-      .catch(console.error);
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 48);
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
-    if (totalItems > 0) {
-      setBounce(true);
-      const timer = setTimeout(() => setBounce(false), 500);
-      return () => clearTimeout(timer);
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+    };
+  }, []);
+
+  const toggleTakbeerat = (e) => {
+    triggerGoldSparkles(e);
+    if (!audioRef.current) {
+      audioRef.current = new Audio(process.env.PUBLIC_URL + "/eid_takbeerat.mp3");
+      audioRef.current.loop = true;
     }
-  }, [totalItems]);
+
+    if (playing) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play().catch(err => console.log("Audio play failed:", err));
+    }
+    setPlaying(!playing);
+  };
+
+  const triggerGoldSparkles = (e) => {
+    const clickX = e.clientX;
+    const clickY = e.clientY;
+    
+    for (let i = 0; i < 20; i++) {
+      const particle = document.createElement('div');
+      particle.innerText = '⭐';
+      particle.style.position = 'fixed';
+      particle.style.left = clickX + 'px';
+      particle.style.top = clickY + 'px';
+      particle.style.fontSize = (Math.random() * 15 + 10) + 'px';
+      particle.style.pointerEvents = 'none';
+      particle.style.zIndex = '999999';
+      particle.style.transition = 'all 1.2s cubic-bezier(0.25, 0.8, 0.25, 1)';
+      
+      document.body.appendChild(particle);
+      
+      const angle = Math.random() * Math.PI * 2;
+      const velocity = Math.random() * 120 + 40;
+      const xTranslate = Math.cos(angle) * velocity;
+      const yTranslate = Math.sin(angle) * velocity;
+      
+      setTimeout(() => {
+        particle.style.transform = `translate(${xTranslate}px, ${yTranslate}px) scale(0) rotate(${Math.random() * 360}deg)`;
+        particle.style.opacity = '0';
+      }, 50);
+      
+      setTimeout(() => {
+        if (document.body.contains(particle)) {
+          document.body.removeChild(particle);
+        }
+      }, 1300);
+    }
+  };
+  const DEFAULT_ACHIEVEMENTS = [
+    { id: 1, name: 'أحمد محمد الزعبي', grade: 100, reason: 'أتم حفظ سورة البقرة كاملاً بتميز وإتقان', icon: '🏆', date: '2026-05-26' },
+    { id: 2, name: 'حلقة الفجر بقيادة الشيخ أسامة الطراونة', grade: null, reason: 'الحلقة النموذجية المتميزة لهذا الأسبوع لمواظبتها على الترتيل والحضور', icon: '🕌', date: '2026-05-26' },
+    { id: 3, name: 'يوسف عمر أحمد', grade: 98, reason: 'أتم حفظ جزء عمّ بالتجويد والترتيل بتقدير ممتاز', icon: '📜', date: '2026-05-26' },
+    { id: 4, name: 'عبدالرحمن خالد', grade: 95, reason: 'اجتاز اختبار حفظ 5 أجزاء متتالية بتقدير ممتاز جداً', icon: '🌟', date: '2026-05-26' },
+    { id: 5, name: 'سند عمار البيطار', grade: 100, reason: 'الفائز الأول في مسابقة الأذان لطلاب الحلقات التمهيدية', icon: '📢', date: '2026-05-26' },
+    { id: 6, name: 'حلقة العصر بقيادة الشيخ معاذ الضمور', grade: null, reason: 'حققت أعلى نسبة حضور وانضباط في الحفظ هذا الشهر', icon: '🕌', date: '2026-05-26' }
+  ];
+
+  const [achievements, setAchievements] = useState(() => {
+    const saved = localStorage.getItem('student_honors');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        return DEFAULT_ACHIEVEMENTS;
+      }
+    }
+    localStorage.setItem('student_honors', JSON.stringify(DEFAULT_ACHIEVEMENTS));
+    return DEFAULT_ACHIEVEMENTS;
+  });
 
   useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
-  }, [open]);
+    const isCoffeeItem = (item) => {
+      const name = String(item.product_name || item.name || item.title || '').toLowerCase();
+      const reason = String(item.reason || item.description || '').toLowerCase();
+      
+      const coffeeKeywords = [
+        'latte', 'espresso', 'cappuccino', 'flat white', 'long black', 'tea', 'pastry', 
+        'americano', 'cortado', 'macchiato', 'mocha', 'chocolate', 'juice', 'smoothie', 
+        'cake', 'cheesecake', 'pancakes', 'sandwich', 'icecream', 'toast', 'muffin',
+        'hot chocolate', 'breakfast tea', 'brunch', 'natata', 'nata'
+      ];
+      
+      const offerKeywords = [
+        'discount', 'off', 'clearance', 'promo', 'special', 'sale', 'employee', 'storewide'
+      ];
 
-  useEffect(() => {
-    const handleEsc = (e) => { if (e.key === 'Escape') setOpen(false); };
-    document.addEventListener('keydown', handleEsc);
-    return () => document.removeEventListener('keydown', handleEsc);
+      const hasCoffeeName = coffeeKeywords.some(kw => name.includes(kw));
+      const hasOfferReason = offerKeywords.some(kw => reason.includes(kw));
+
+      return hasCoffeeName || hasOfferReason;
+    };
+
+    const handleStorageChange = () => {
+      const saved = localStorage.getItem('student_honors');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          const filtered = parsed.filter(item => !isCoffeeItem(item));
+          if (filtered.length > 0) {
+            setAchievements(filtered);
+          } else {
+            setAchievements(DEFAULT_ACHIEVEMENTS);
+          }
+        } catch (e) {}
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('honors_updated', handleStorageChange);
+    
+    // Initial filter check of what was in localStorage
+    const saved = localStorage.getItem('student_honors');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        const filtered = parsed.filter(item => !isCoffeeItem(item));
+        if (filtered.length > 0) {
+          setAchievements(filtered);
+        } else {
+          setAchievements(DEFAULT_ACHIEVEMENTS);
+          localStorage.setItem('student_honors', JSON.stringify(DEFAULT_ACHIEVEMENTS));
+        }
+      } catch (e) {}
+    }
+
+    fetch('/api/offers')
+      .then(res => {
+        if (res.ok) return res.json();
+        throw new Error('No connection');
+      })
+      .then(data => {
+        if (Array.isArray(data)) {
+          const filtered = data.filter(item => !isCoffeeItem(item));
+          if (filtered.length > 0) {
+            const mapped = filtered.map(o => ({
+              id: o.id,
+              name: o.product_name || o.title || '',
+              reason: o.reason || o.description || '',
+              grade: o.discount_percent || null,
+              icon: (o.product_name || o.title || '').includes('حلقة') ? '🕌' : '⭐',
+              date: o.end_date
+            }));
+            setAchievements(mapped);
+            localStorage.setItem('student_honors', JSON.stringify(mapped));
+          } else {
+            // DB has no valid achievements, fall back
+            setAchievements(DEFAULT_ACHIEVEMENTS);
+            localStorage.setItem('student_honors', JSON.stringify(DEFAULT_ACHIEVEMENTS));
+          }
+        }
+      })
+      .catch(() => {
+        // Fallback silently to localStorage
+      });
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('honors_updated', handleStorageChange);
+    };
   }, []);
 
   return (
     <>
       <header className={`${styles.header} ${scrolled ? styles.scrolled : ''}`}>
         
-        {/* Integrated Offers Banner (Transparent Text-Only) */}
-        {offers.length > 0 && (
-          <div style={{
-            backgroundColor: 'transparent',
-            color: '#2c1810', // Dark espresso for readability
-            paddingTop: '2px',    // Moved text higher up
-            paddingBottom: '8px', 
-            textAlign: 'center',
-            fontSize: '0.95rem',
-            fontWeight: '600',
-            letterSpacing: '1.5px',
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            width: '100%',
-            opacity: 0.9
+        {/* Student Achievements / Honors Marquee Banner */}
+        <div style={{
+          background: 'linear-gradient(95deg, #132a13 0%, #31572c 50%, #132a13 100%)', // Premium royal Islamic emerald green
+          color: '#FEF9F4',
+          paddingTop: '6px',
+          paddingBottom: '6px', 
+          textAlign: 'center',
+          fontSize: '0.85rem',
+          fontWeight: '600',
+          letterSpacing: '0.5px',
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          width: '100%',
+          borderBottom: '1px solid var(--gold)', // Gold border
+          boxShadow: '0 2px 10px rgba(0, 0, 0, 0.15)',
+          fontFamily: "'Amiri', 'Tajawal', sans-serif"
+        }}>
+          <div className="marquee-container" onClick={triggerGoldSparkles} style={{ 
+            display: 'inline-block', 
+            animation: 'marquee 35s linear infinite',
+            cursor: 'pointer'
           }}>
-            <div className="marquee-container" style={{ display: 'inline-block', animation: 'marquee 25s linear infinite' }}>
-              {offers.map((offer) => (
-                <span key={offer.id} style={{ margin: '0 40px' }}>
-                  <span style={{ color: '#c4a484', margin: '0 10px' }}>★</span>
-                  <span style={{ color: '#8a6240' }}>{offer.product_name === 'All' ? 'STOREWIDE:' : offer.product_name}</span> &mdash; {offer.reason} <span style={{ color: '#c4a484', border: '1px solid #c4a484', padding: '2px 8px', borderRadius: '12px', marginLeft: '5px' }}>{offer.discount_percent}% OFF</span>
-                  <span style={{ color: '#c4a484', margin: '0 10px' }}>★</span>
-                </span>
-              ))}
-            </div>
-            <style>{`
-              @keyframes marquee {
-                0% { transform: translateX(100%); }
-                100% { transform: translateX(-100%); }
-              }
-              .marquee-container:hover { animation-play-state: paused; }
-            `}</style>
+            {achievements.map((ach) => (
+              <span key={ach.id} style={{ margin: '0 35px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                <span className="emojiIcon" style={{ fontSize: '1.15rem' }}>{ach.icon}</span>
+                <span style={{ color: 'var(--gold)', fontWeight: 'bold' }}>{ach.name}</span>
+                <span style={{ color: '#E8D5C8', margin: '0 4px' }}>&mdash;</span>
+                <span style={{ color: '#FEF9F4' }}>{ach.reason}</span>
+                {ach.grade && ach.grade > 0 && (
+                  <span style={{ 
+                    color: 'var(--gold)', 
+                    border: '1px solid var(--gold)', 
+                    padding: '1px 8px', 
+                    borderRadius: '12px', 
+                    fontSize: '0.75rem',
+                    marginLeft: '8px',
+                    backgroundColor: 'rgba(200, 156, 116, 0.1)'
+                  }}>
+                    بتقدير {ach.grade}%
+                  </span>
+                )}
+                <span style={{ color: 'var(--gold)', margin: '0 10px' }}>✦</span>
+              </span>
+            ))}
           </div>
-        )}
+          <style>{`
+            @keyframes marquee {
+              0% { transform: translateX(100%); }
+              100% { transform: translateX(-100%); }
+            }
+            .marquee-container:hover { animation-play-state: paused; }
+          `}</style>
+        </div>
 
-        <div className={styles.inner}>
-          <a href="#home" className={styles.logo} aria-label={`${shopInfo.name} home`} style={{ textDecoration: 'none' }}>
+        <div className={styles.inner} style={{flexDirection: 'row-reverse'}}>
+          <a href="#home" className={styles.logo} aria-label={`مسجد حذيفة بن اليمان`} style={{ textDecoration: 'none' }}>
             <div style={{ 
-              fontFamily: "'DM Serif Display', serif", 
-              fontSize: '2rem', 
-              color: '#2c1810', 
+              fontFamily: "'Amiri', serif", 
+              fontSize: '1.8rem', 
+              color: 'var(--olive)', 
               lineHeight: '1',
               display: 'flex',
               alignItems: 'center',
               gap: '12px'
             }}>
-              Caff<span style={{ color: '#c4a484', fontStyle: 'italic' }}>AIne</span>
+              <img src="/images/logo.jpg" alt="شعار المسجد" style={{ height: '50px', objectFit: 'contain' }} />
+              مسجد <span style={{ color: 'var(--gold)', fontWeight: 'bold' }}>حذيفة بن اليمان</span>
             </div>
           </a>
 
@@ -141,7 +310,7 @@ export default function Navbar({ onCartOpen }) {
             <button
               className={`${styles.cartBtn} ${scrolled ? styles.cartBtnScrolled : ''}`}
               onClick={onCartOpen}
-              aria-label={`Open cart, ${totalItems} items`}
+              aria-label={`التبرعات`}
             >
               <BagIcon />
               {totalItems > 0 && (
@@ -178,7 +347,7 @@ export default function Navbar({ onCartOpen }) {
             onClick={() => { setOpen(false); onCartOpen(); }}
           >
             <BagIcon />
-            My Order
+            سلة التبرعات
             {totalItems > 0 && <span className={styles.mobileBadge}>{totalItems}</span>}
           </button>
         </nav>
@@ -186,6 +355,52 @@ export default function Navbar({ onCartOpen }) {
           <InstaIcon /> {shopInfo.instagramHandle}
         </a>
       </div>
+      {/* Floating Gold Crescent Eid Takbeerat Player */}
+      <button 
+        onClick={toggleTakbeerat}
+        style={{
+          position: 'fixed',
+          bottom: '30px',
+          left: '30px',
+          zIndex: 9999,
+          width: '65px',
+          height: '65px',
+          borderRadius: '50%',
+          backgroundColor: '#18453b',
+          border: '2px solid #c4a484',
+          color: '#c4a484',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          boxShadow: playing ? '0 0 25px #c4a484' : '0 10px 25px rgba(0,0,0,0.5)',
+          transition: 'all 0.4s ease',
+          animation: playing ? 'crescentPulse 2s infinite' : 'none',
+          outline: 'none'
+        }}
+        title={playing ? "إيقاف تكبيرات العيد" : "تشغيل تكبيرات العيد المباركة"}
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+          <span style={{ fontSize: '1.6rem', lineHeight: '1', animation: playing ? 'spinSpin 5s linear infinite' : 'none' }}>
+            🌙
+          </span>
+          <span style={{ fontSize: '0.65rem', fontWeight: 'bold', marginTop: '2px', color: '#FEF9F4', fontFamily: 'Tajawal' }}>
+            {playing ? "توقف" : "تكبيرات"}
+          </span>
+        </div>
+      </button>
+
+      <style>{`
+        @keyframes crescentPulse {
+          0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(196, 164, 132, 0.7); }
+          70% { transform: scale(1.08); box-shadow: 0 0 0 15px rgba(196, 164, 132, 0); }
+          100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(196, 164, 132, 0); }
+        }
+        @keyframes spinSpin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
     </>
   );
 }

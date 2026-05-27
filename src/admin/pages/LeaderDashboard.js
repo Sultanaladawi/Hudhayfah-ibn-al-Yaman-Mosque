@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Activity, AlertTriangle, ShieldAlert, User, Clock, Search, Filter, Download } from 'lucide-react';
+import { Activity, AlertTriangle, ShieldAlert, User, Clock, Search, Filter, Download, UserPlus, Trash2 } from 'lucide-react';
 import { useAdminContext } from '../AdminContext';
 import { useNavigate } from 'react-router-dom';
 import jsPDF from 'jspdf';
@@ -16,13 +16,21 @@ const LeaderDashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [hoveredRow, setHoveredRow] = useState(null);
 
+  // Dynamic Sheikhs States
+  const [showSheikhsModal, setShowSheikhsModal] = useState(false);
+  const [sheikhs, setSheikhs] = useState(() => {
+    const saved = localStorage.getItem('sheikhs_list');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [newSheikh, setNewSheikh] = useState({ name: '', email: '', pass: '', role: 'admin' });
+
   const colors = {
     espresso: 'var(--admin-bg)',
     bean: 'var(--admin-card)',
     crema: 'var(--admin-accent)',
     latte: 'var(--admin-text)',
     border: 'var(--admin-border)',
-    input: '#2D2926',
+    input: '#12251f',
     gold: 'var(--admin-accent)'
   };
 
@@ -54,13 +62,32 @@ const LeaderDashboard = () => {
     return () => clearInterval(interval);
   }, [admin, navigate]);
 
-  // Combine and filter bad feedback (1 or 2 stars) and angry messages
+  const handleAddSheikh = () => {
+    if (!newSheikh.name || !newSheikh.email || !newSheikh.pass) {
+      alert("الرجاء تعبئة جميع الحقول!");
+      return;
+    }
+    const updated = [...sheikhs, { ...newSheikh, email: newSheikh.email.toLowerCase().trim() }];
+    setSheikhs(updated);
+    localStorage.setItem('sheikhs_list', JSON.stringify(updated));
+    setNewSheikh({ name: '', email: '', pass: '', role: 'admin' });
+    alert("تم إضافة الحساب الجديد بنجاح!");
+  };
+
+  const handleDeleteSheikh = (email) => {
+    if (window.confirm("هل أنت متأكد من حذف هذا الحساب؟")) {
+      const updated = sheikhs.filter(s => s.email !== email);
+      setSheikhs(updated);
+      localStorage.setItem('sheikhs_list', JSON.stringify(updated));
+    }
+  };
+
   const criticalFeedbacks = [
-    ...(feedbacks || []).map(f => ({ ...f, type: `Product Review`, comment: f.comment, reviewer_name: f.reviewer_name, rating: f.rating, created_at: f.created_at })),
-    ...(messages || []).map(m => ({ ...m, type: 'Contact Form', comment: m.message, reviewer_name: m.name, rating: 1, created_at: m.created_at }))
+    ...(feedbacks || []).map(f => ({ ...f, type: `تقييم الطلاب`, comment: f.comment, reviewer_name: f.reviewer_name, rating: f.rating, created_at: f.created_at })),
+    ...(messages || []).map(m => ({ ...m, type: 'تواصل الأهالي', comment: m.message, reviewer_name: m.name, rating: 1, created_at: m.created_at }))
   ].filter(f => {
-    if (f.type === 'Product Review') return f.rating <= 3; // 3 stars or below
-    const badWords = ['bad', 'terrible', 'worst', 'awful', 'angry', 'complaint', 'ruined', 'disgusting', 'sick'];
+    if (f.type === 'تقييم الطلاب') return f.rating <= 3; // 3 stars or below
+    const badWords = ['bad', 'terrible', 'worst', 'awful', 'complaint', 'مشكلة', 'خطأ', 'سيء', 'ضعيف'];
     return badWords.some(word => f.comment?.toLowerCase().includes(word));
   }).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
@@ -73,7 +100,7 @@ const LeaderDashboard = () => {
   const formatDate = (dateString) => {
     if (!dateString) return '';
     const date = new Date(dateString);
-    return date.toLocaleString('en-GB', { 
+    return date.toLocaleString('ar-JO', { 
       day: '2-digit', month: 'short', year: 'numeric',
       hour: '2-digit', minute: '2-digit',
       timeZone: 'Asia/Amman'
@@ -83,30 +110,28 @@ const LeaderDashboard = () => {
   const exportPDF = async () => {
     try {
       if (logs.length === 0) {
-        alert("No activity logs available to export.");
+        alert("لا توجد سجلات نشاط للتصدير.");
         return;
       }
 
-      // Log the export action
       await axios.post('/api/log-action', { 
-        action: 'Export PDF', 
-        details: `Leader ${admin.name} exported the Team Activity Audit log to PDF.` 
+        action: 'تصدير سجلات الإدارة', 
+        details: `قام المشرف ${admin.name} بتصدير سجل نشاطات المشايخ بالكامل بصيغة PDF.` 
       });
       
       const doc = new jsPDF();
-      
       doc.setFontSize(22);
       doc.setTextColor(45, 41, 38);
-      doc.text('CaffAIne - Team Activity Audit', 14, 22);
+      doc.text('Mosque Management System - Team Activity Audit', 14, 22);
       
       doc.setFontSize(10);
       doc.setTextColor(100);
-      doc.text(`Generated on: ${new Date().toLocaleString('en-GB', { timeZone: 'Asia/Amman' })}`, 14, 32);
+      doc.text(`Generated on: ${new Date().toLocaleDateString('en-GB')}`, 14, 32);
       doc.text('Complete synchronization and transaction audit history.', 14, 38);
       
       const tableColumn = ["Timestamp", "Administrator", "Action", "Details"];
       const tableRows = filteredLogs.map(log => [
-        formatDate(log.created_at),
+        new Date(log.created_at).toLocaleString('en-GB'),
         log.admin_name || 'System',
         log.action,
         log.details
@@ -118,93 +143,81 @@ const LeaderDashboard = () => {
         startY: 45,
         theme: 'grid',
         headStyles: { 
-          fillColor: [196, 164, 132], 
+          fillColor: [24, 69, 59], 
           textColor: [255, 255, 255],
           fontSize: 10,
           fontStyle: 'bold'
-        },
-        styles: { 
-          fontSize: 8,
-          cellPadding: 3,
-          font: 'helvetica'
-        },
-        alternateRowStyles: {
-          fillColor: [250, 250, 250]
         }
       });
 
       const today = new Date().toISOString().split('T')[0];
-      doc.save(`CaffAIne_AuditLog_${today}.pdf`);
+      doc.save(`Mosque_AuditLog_${today}.pdf`);
     } catch (error) {
       alert("Error generating PDF: " + error.message);
     }
   };
 
   if (loading) {
-    return <div style={{ color: colors.latte, textAlign: 'center', marginTop: '100px', fontWeight: 'bold', letterSpacing: '2px' }}>PREPARING LEADERSHIP INTEL...</div>;
+    return <div style={{ color: colors.crema, textAlign: 'center', marginTop: '100px', fontWeight: 'bold', letterSpacing: '1px', fontFamily: 'Tajawal', fontSize: '1.2rem' }}>جاري تجهيز لوحة الإدارة العامة والرقابة...</div>;
   }
 
-  const headerTextStyle = { color: colors.latte, fontSize: '2.2rem', fontFamily: "'DM Serif Display', serif", fontWeight: 700 };
-  const headerBoxStyle = { display: 'inline-block', padding: '10px 18px', borderRadius: '12px', background: 'rgba(255,255,255,0.03)' };
-
   return (
-    <div style={{ paddingBottom: '80px', maxWidth: '1500px', margin: '0 auto' }}>
-      {/* Header Section - Replicating the exact style from the screenshot */}
-      <div style={{ marginBottom: '40px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+    <div style={{ paddingBottom: '80px', maxWidth: '1500px', margin: '0 auto', direction: 'rtl', fontFamily: "'Amiri', 'Tajawal', sans-serif" }}>
+      {/* Header Section */}
+      <div style={{ marginBottom: '40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
         <div>
-          <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: '2.8rem', color: colors.crema, lineHeight: 1, marginBottom: '20px' }}>
-            CaffAIne <span style={{ color: '#fff', fontStyle: 'italic' }}>Coffee</span>
-          </div>
-
-          <div style={{ 
-            background: 'rgba(196, 164, 132, 0.05)', 
-            border: '1px solid rgba(196, 164, 132, 0.2)', 
-            padding: '12px 25px', 
-            borderRadius: '18px', 
-            display: 'inline-flex', 
-            alignItems: 'center', 
-            gap: '15px',
-            marginBottom: '20px'
-          }}>
-            <ShieldAlert size={28} color={colors.crema} />
-            <span style={{ 
-              fontFamily: "'Inter', sans-serif", 
-              fontSize: '1.8rem', 
-              fontWeight: '900', 
-              color: '#fff', 
-              letterSpacing: '-0.5px' 
-            }}>
-              Leader Dashboard
-            </span>
-          </div>
-
-          <p style={{ margin: '5px 0 0 5px', color: 'rgba(255,255,255,0.4)', fontSize: '0.95rem', fontWeight: '500' }}>
-            CaffAIne | <span style={{ color: 'rgba(255,255,255,0.3)' }}>Audit Logs & Critical Performance Oversight</span>
+          <h1 style={{ fontFamily: "'Amiri', serif", fontSize: '2.5rem', color: colors.crema, margin: '0 0 6px 0' }}>
+            نشاطات المشايخ والمشرفين
+          </h1>
+          <p style={{ margin: '5px 0 0 0', color: 'rgba(255,255,255,0.4)', fontSize: '0.95rem' }}>
+            الرقابة الإشرافية الكونية | تتبع العمليات، إدارة الحسابات، وقنوات التواصل المباشر.
           </p>
         </div>
 
-        <button 
-          onClick={exportPDF}
-          style={{
-            backgroundColor: colors.crema, 
-            color: '#111', 
-            border: 'none', 
-            padding: '14px 28px', 
-            borderRadius: '14px', 
-            fontWeight: '900', 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '10px', 
-            cursor: 'pointer',
-            transition: '0.3s', 
-            boxShadow: '0 10px 20px rgba(196, 164, 132, 0.2)',
-            marginTop: '10px'
-          }}
-          onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-3px)'}
-          onMouseLeave={e => e.currentTarget.style.transform = 'none'}
-        >
-          <Download size={20} /> Export Audit PDF
-        </button>
+        <div style={{ display: 'flex', gap: '15px' }}>
+          <button 
+            onClick={() => setShowSheikhsModal(true)}
+            style={{
+              backgroundColor: 'rgba(196, 164, 132, 0.15)', 
+              color: 'var(--admin-accent)', 
+              border: '1px solid var(--admin-accent)', 
+              padding: '14px 28px', 
+              borderRadius: '14px', 
+              fontWeight: '900', 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '10px', 
+              cursor: 'pointer',
+              transition: '0.3s', 
+            }}
+            onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-3px)'}
+            onMouseLeave={e => e.currentTarget.style.transform = 'none'}
+          >
+            <UserPlus size={20} /> إدارة حسابات المشايخ
+          </button>
+
+          <button 
+            onClick={exportPDF}
+            style={{
+              backgroundColor: colors.crema, 
+              color: '#111', 
+              border: 'none', 
+              padding: '14px 28px', 
+              borderRadius: '14px', 
+              fontWeight: '900', 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '10px', 
+              cursor: 'pointer',
+              transition: '0.3s', 
+              boxShadow: '0 10px 20px rgba(196, 164, 132, 0.2)',
+            }}
+            onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-3px)'}
+            onMouseLeave={e => e.currentTarget.style.transform = 'none'}
+          >
+            <Download size={20} /> تصدير سجل الرقابة PDF
+          </button>
+        </div>
       </div>
 
       {/* Critical Feedback Section */}
@@ -213,10 +226,10 @@ const LeaderDashboard = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
              <div style={{ width: '8px', height: '30px', backgroundColor: '#ff4d4d', borderRadius: '4px' }}></div>
              <h3 style={{
-               color: '#fff', fontSize: '1.4rem', fontFamily: "'DM Serif Display', serif", margin: 0,
-               display: 'flex', alignItems: 'center', gap: '10px'
+               color: '#fff', fontSize: '1.4rem', fontFamily: "'Tajawal', serif", margin: 0,
+               display: 'flex', alignItems: 'center', gap: '10px', fontWeight: 'bold'
              }}>
-               <AlertTriangle size={24} color="#ff4d4d" /> Critical Feedback & Complaints
+               <AlertTriangle size={24} color="#ff4d4d" /> شكاوى وتنبيهات هامة من الأهالي والطلاب
              </h3>
           </div>
           
@@ -234,16 +247,16 @@ const LeaderDashboard = () => {
               onMouseLeave={(e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.borderColor = 'rgba(255, 77, 77, 0.2)'; }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px' }}>
-                  <span style={{ color: '#fff', fontWeight: 'bold', fontSize: '1.1rem' }}>{item.reviewer_name || 'Anonymous'}</span>
+                  <span style={{ color: '#fff', fontWeight: 'bold', fontSize: '1.1rem' }}>{item.reviewer_name || 'فاعل خير'}</span>
                   <span style={{ color: '#ff4d4d', fontWeight: '900', fontSize: '1rem' }}>{item.rating} ⭐</span>
                 </div>
                 <div style={{ color: colors.crema, fontSize: '0.75rem', marginBottom: '12px', textTransform: 'uppercase', fontWeight: '800', letterSpacing: '1px' }}>
                   {item.type}
                 </div>
                 <p style={{ color: '#bbb', fontSize: '0.95rem', margin: 0, fontStyle: 'italic', lineHeight: '1.6' }}>
-                  "{item.comment || 'No comment provided'}"
+                  "{item.comment || 'لا يوجد تفاصيل'}"
                 </p>
-                <div style={{ marginTop: '20px', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.75rem', color: '#666', textAlign: 'right' }}>
+                <div style={{ marginTop: '20px', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.75rem', color: '#666', textAlign: 'left' }}>
                   {formatDate(item.created_at)}
                 </div>
               </div>
@@ -254,17 +267,17 @@ const LeaderDashboard = () => {
 
       {/* Team Activity Section */}
       <div style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.01)',
+        backgroundColor: 'var(--admin-card)',
         borderRadius: '32px',
-        border: `1px solid rgba(255, 255, 255, 0.08)`,
-        padding: '20px',
+        border: `1px solid var(--admin-border)`,
+        padding: '30px',
         boxShadow: '0 30px 70px rgba(0,0,0,0.5)',
         zIndex: 1,
         position: 'relative'
       }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '35px', padding: '15px' }}>
-          <h3 style={{ margin: 0, color: colors.latte, fontSize: '1.6rem', fontFamily: "'DM Serif Display', serif", display: 'flex', alignItems: 'center', gap: '15px' }}>
-            <Activity size={24} color={colors.crema} /> Team Activity Log
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '35px', flexWrap: 'wrap', gap: '20px' }}>
+          <h3 style={{ margin: 0, color: colors.latte, fontSize: '1.6rem', fontFamily: "'Amiri', serif", display: 'flex', alignItems: 'center', gap: '15px' }}>
+            <Activity size={24} color={colors.crema} /> كشف نشاطات وعمليات المشايخ اليومية
           </h3>
           <div style={{ 
             display: 'flex', alignItems: 'center', gap: '15px', 
@@ -275,28 +288,28 @@ const LeaderDashboard = () => {
             <Search size={20} color="#666" />
             <input
               type="text"
-              placeholder="Search team activity..."
+              placeholder="البحث في العمليات..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ background: 'none', border: 'none', color: '#fff', outline: 'none', width: '300px', fontSize: '0.95rem' }}
+              style={{ background: 'none', border: 'none', color: '#fff', outline: 'none', width: '300px', fontSize: '0.95rem', textAlign: 'right' }}
             />
           </div>
         </div>
 
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', color: colors.latte, textAlign: 'left', tableLayout: 'fixed' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', color: colors.latte, textAlign: 'right' }}>
             <thead>
-              <tr style={{ backgroundColor: 'rgba(45, 41, 38, 0.8)' }}>
-                <th style={{ padding: '25px', width: '18%', color: colors.crema, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1.5px', fontWeight: '700' }}>
-                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Clock size={16} /> Timestamp</div>
+              <tr style={{ backgroundColor: 'rgba(255, 255, 255, 0.01)', borderBottom: '1px solid var(--admin-border)' }}>
+                <th style={{ padding: '20px', color: colors.crema, fontSize: '0.85rem', fontWeight: '700' }}>
+                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Clock size={16} /> التاريخ والوقت</div>
                 </th>
-                <th style={{ padding: '25px', width: '22%', color: colors.crema, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1.5px', fontWeight: '700' }}>
-                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><User size={16} /> Administrator</div>
+                <th style={{ padding: '20px', color: colors.crema, fontSize: '0.85rem', fontWeight: '700' }}>
+                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><User size={16} /> الشيخ / المسؤول</div>
                 </th>
-                <th style={{ padding: '25px', width: '25%', color: colors.crema, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1.5px', fontWeight: '700' }}>
-                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Activity size={16} /> Operation</div>
+                <th style={{ padding: '20px', color: colors.crema, fontSize: '0.85rem', fontWeight: '700' }}>
+                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Activity size={16} /> نوع العملية</div>
                 </th>
-                <th style={{ padding: '25px', width: '35%', color: colors.crema, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1.5px', fontWeight: '700' }}>Transaction Details</th>
+                <th style={{ padding: '20px', color: colors.crema, fontSize: '0.85rem', fontWeight: '700' }}>تفاصيل المعاملة</th>
               </tr>
             </thead>
             <tbody>
@@ -311,18 +324,17 @@ const LeaderDashboard = () => {
                       borderBottom: `1px solid ${colors.border}`, 
                       transition: '0.3s cubic-bezier(0.25, 0.8, 0.25, 1)', 
                       cursor: 'default',
-                      position: 'relative'
                     }}
                   >
                     <td style={{ 
-                      padding: '25px', 
+                      padding: '20px', 
                       color: hoveredRow === log.id ? colors.crema : '#888', 
                       fontSize: '0.85rem', fontWeight: '600',
                       transition: '0.3s'
                     }}>
                       {formatDate(log.created_at)}
                     </td>
-                    <td style={{ padding: '25px' }}>
+                    <td style={{ padding: '20px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                         <div style={{ 
                           width: '40px', height: '40px', borderRadius: '12px', 
@@ -333,12 +345,12 @@ const LeaderDashboard = () => {
                           {log.admin_name ? log.admin_name.charAt(0).toUpperCase() : 'A'}
                         </div>
                         <div>
-                          <div style={{ color: '#fff', fontWeight: '700', fontSize: '1rem' }}>{log.admin_name || 'System Admin'}</div>
+                          <div style={{ color: '#fff', fontWeight: '700', fontSize: '1rem' }}>{log.admin_name || 'المشرف العام'}</div>
                           <div style={{ color: '#666', fontSize: '0.75rem', marginTop: '2px' }}>{log.admin_email}</div>
                         </div>
                       </div>
                     </td>
-                    <td style={{ padding: '25px' }}>
+                    <td style={{ padding: '20px' }}>
                       <span style={{ 
                         backgroundColor: 'rgba(196, 164, 132, 0.1)', 
                         border: `1px solid ${hoveredRow === log.id ? colors.crema : 'rgba(196, 164, 132, 0.2)'}`,
@@ -353,7 +365,7 @@ const LeaderDashboard = () => {
                       </span>
                     </td>
                     <td style={{ 
-                      padding: '25px', 
+                      padding: '20px', 
                       color: hoveredRow === log.id ? '#fff' : '#aaa', 
                       fontSize: '0.95rem', lineHeight: '1.5',
                       transition: '0.3s'
@@ -365,7 +377,7 @@ const LeaderDashboard = () => {
               ) : (
                 <tr>
                   <td colSpan="4" style={{ padding: '60px', textAlign: 'center', color: '#555', fontSize: '1.1rem', fontStyle: 'italic' }}>
-                    No synchronization logs identified.
+                    لا توجد سجلات نشاط تذكر حالياً.
                   </td>
                 </tr>
               )}
@@ -373,6 +385,112 @@ const LeaderDashboard = () => {
           </table>
         </div>
       </div>
+
+      {/* Sheikhs Modal */}
+      {showSheikhsModal && (
+        <div style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)',
+          backdropFilter: 'blur(8px)', zIndex: 99999,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px'
+        }}>
+          <div style={{
+            background: 'var(--admin-card)', borderRadius: '24px', padding: '40px',
+            width: '100%', maxWidth: '650px', direction: 'rtl',
+            border: '1px solid var(--admin-border)', boxShadow: '0 30px 70px rgba(0,0,0,0.6)',
+            maxHeight: '90vh', overflowY: 'auto', fontFamily: "'Tajawal', sans-serif"
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+              <h2 style={{ fontFamily: "'Amiri', serif", color: 'var(--admin-accent)', margin: 0, fontSize: '1.8rem' }}>
+                إدارة وإضافة حسابات المشايخ والمعلمين
+              </h2>
+              <button onClick={() => setShowSheikhsModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#aaa', fontSize: '1.5rem' }}>
+                ✕
+              </button>
+            </div>
+
+            {/* Add Sheikh Form */}
+            <div style={{
+              backgroundColor: 'rgba(255,255,255,0.02)', padding: '25px', borderRadius: '18px',
+              border: '1px solid var(--admin-border)', marginBottom: '30px'
+            }}>
+              <h3 style={{ color: '#fff', fontSize: '1.1rem', margin: '0 0 15px 0', fontWeight: 'bold' }}>إضافة حساب شيخ / مشرف جديد</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                <div>
+                  <label style={{ display: 'block', color: 'var(--admin-accent)', marginBottom: '6px', fontSize: '0.85rem' }}>الاسم الكامل</label>
+                  <input
+                    type="text" placeholder="مثال: الشيخ حسن الجلودي"
+                    value={newSheikh.name} onChange={e => setNewSheikh(p => ({ ...p, name: e.target.value }))}
+                    style={{ width: '100%', padding: '10px 14px', border: '1px solid var(--admin-border)', borderRadius: '8px', fontSize: '0.9rem', backgroundColor: 'rgba(0,0,0,0.2)', color: '#fff', outline: 'none', boxSizing: 'border-box' }}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', color: 'var(--admin-accent)', marginBottom: '6px', fontSize: '0.85rem' }}>البريد الإلكتروني</label>
+                  <input
+                    type="email" placeholder="example@huzaifa-mosque.com"
+                    value={newSheikh.email} onChange={e => setNewSheikh(p => ({ ...p, email: e.target.value }))}
+                    style={{ width: '100%', padding: '10px 14px', border: '1px solid var(--admin-border)', borderRadius: '8px', fontSize: '0.9rem', backgroundColor: 'rgba(0,0,0,0.2)', color: '#fff', outline: 'none', boxSizing: 'border-box', textAlign: 'left' }}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', color: 'var(--admin-accent)', marginBottom: '6px', fontSize: '0.85rem' }}>كلمة المرور</label>
+                  <input
+                    type="password" placeholder="••••••••"
+                    value={newSheikh.pass} onChange={e => setNewSheikh(p => ({ ...p, pass: e.target.value }))}
+                    style={{ width: '100%', padding: '10px 14px', border: '1px solid var(--admin-border)', borderRadius: '8px', fontSize: '0.9rem', backgroundColor: 'rgba(0,0,0,0.2)', color: '#fff', outline: 'none', boxSizing: 'border-box' }}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', color: 'var(--admin-accent)', marginBottom: '6px', fontSize: '0.85rem' }}>صلاحية الحساب</label>
+                  <select
+                    value={newSheikh.role} onChange={e => setNewSheikh(p => ({ ...p, role: e.target.value }))}
+                    style={{ width: '100%', padding: '10px 14px', border: '1px solid var(--admin-border)', borderRadius: '8px', fontSize: '0.9rem', backgroundColor: '#1a1a1a', color: '#fff', outline: 'none', boxSizing: 'border-box', cursor: 'pointer' }}
+                  >
+                    <option value="admin">شيخ حلقة (صلاحيات محدودة)</option>
+                    <option value="super_admin">مشرف عام / سوبر أدمن</option>
+                  </select>
+                </div>
+              </div>
+              <button onClick={handleAddSheikh} style={{
+                marginTop: '20px', width: '100%', padding: '12px',
+                background: 'var(--admin-accent)', color: 'var(--admin-bg)',
+                border: 'none', borderRadius: '10px', cursor: 'pointer',
+                fontWeight: 'bold', fontSize: '0.95rem', transition: '0.3s'
+              }}>
+                إضافة الحساب واعتماده
+              </button>
+            </div>
+
+            {/* Dynamic Sheikhs List */}
+            <div>
+              <h3 style={{ color: '#fff', fontSize: '1.1rem', margin: '0 0 15px 0', fontWeight: 'bold' }}>الحسابات المضافة ديناميكياً</h3>
+              {sheikhs.length > 0 ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {sheikhs.map(s => (
+                    <div key={s.email} style={{
+                      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                      padding: '15px 20px', backgroundColor: 'rgba(255,255,255,0.01)',
+                      border: '1px solid var(--admin-border)', borderRadius: '12px'
+                    }}>
+                      <div>
+                        <div style={{ fontWeight: 'bold', color: '#fff' }}>{s.name}</div>
+                        <div style={{ fontSize: '0.8rem', color: '#888', marginTop: '2px' }}>{s.email} | {s.role === 'super_admin' ? 'مشرف عام' : 'شيخ حلقة'}</div>
+                      </div>
+                      <button onClick={() => handleDeleteSheikh(s.email)} style={{
+                        background: 'rgba(220,53,69,0.1)', border: 'none', color: '#ff4d4d',
+                        cursor: 'pointer', padding: '8px 12px', borderRadius: '8px', fontSize: '0.8rem'
+                      }}>
+                        حذف الحساب
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p style={{ color: '#666', fontStyle: 'italic', textAlign: 'center', padding: '20px 0' }}>لا يوجد حسابات مضافة مسبقاً.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
       
       <style>{`
         .premium-row {

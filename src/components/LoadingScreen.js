@@ -40,16 +40,17 @@ export default function LoadingScreen({ onComplete }) {
             textAnchor="middle"
             className={styles.drawText}
             style={{
-              fontFamily: "'DM Serif Display', serif",
+              fontFamily: "'Amiri', 'Tajawal', sans-serif",
               fontSize: '36px',
-              stroke: 'var(--espresso)',
+              fontWeight: 'bold',
+              stroke: 'var(--olive)',
               strokeWidth: '0.8',
               strokeDasharray: '1000',
               strokeDashoffset: '1000',
               fill: 'none'
             }}
           >
-            CaffAIne
+            مسجد
           </text>
           
           <text
@@ -58,24 +59,24 @@ export default function LoadingScreen({ onComplete }) {
             textAnchor="middle"
             className={styles.drawTextDelay}
             style={{
-              fontFamily: "'DM Serif Display', serif",
-              fontSize: '28px',
-              fontStyle: 'italic',
-              stroke: 'var(--olive)',
+              fontFamily: "'Amiri', 'Tajawal', sans-serif",
+              fontSize: '32px',
+              fontWeight: 'bold',
+              stroke: 'var(--gold)',
               strokeWidth: '0.7',
               strokeDasharray: '1000',
               strokeDashoffset: '1000',
               fill: 'none'
             }}
           >
-            Coffee
+            حذيفة بن اليمان
           </text>
         </svg>
 
-        <p className={styles.tagline}>Al-Salt · Est. 2026</p>
+        <p className={styles.tagline} style={{ fontFamily: 'Tajawal', fontSize: '1rem', letterSpacing: '0' }}>طبربور · عمان</p>
 
         <div className={styles.progressBar}>
-          <div className={styles.progressFill} />
+          <div className={styles.progressFill} style={{ backgroundColor: 'var(--gold)' }} />
         </div>
       </div>
     </div>

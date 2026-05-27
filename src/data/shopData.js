@@ -128,41 +128,42 @@ export const featuredItems = [
 ];
 
 export const shopInfo = {
-  name: "CaffAIne",
-  tagline: "The Future of Specialty Coffee",
-  address: "Gate of Science, Prince Abdullah bin Ghazi Faculty of Information Technology, Al-Balqa Applied University, Al-Salt",
-  city: "Al-Salt",
-  country: "Jordan",
-  email: "hello@caffainecoffee.com",
-  careersEmail: "careers@caffainecoffee.com",
-  instagram: "https://instagram.com/caffainecoffee",
-  instagramHandle: "@caffainecoffee",
-  mapsUrl: "https://maps.app.goo.gl/9u91NZFGSB13oEeK6",
+  name: "مسجد حذيفة بن اليمان",
+  tagline: "دار القرآن الكريم والأنشطة التربوية والرياضية",
+  address: "طبربور، عمان",
+  city: "عمان",
+  country: "الأردن",
+  email: "info@huzaifa-mosque.com",
+  careersEmail: "volunteer@huzaifa-mosque.com",
+  instagram: "https://www.instagram.com/ms_ebn_elyamman/",
+  instagramHandle: "@ms_ebn_elyamman",
+  facebook: "https://web.facebook.com/profile.php?id=100093678310272",
+  mapsUrl: "https://maps.app.goo.gl/vjXGZ3Gq68b8s7c6A",
 };
 
 export const openingHours = [
-  { day: "Monday – Friday", open: "07:30", close: "17:00" },
-  { day: "Saturday", open: "09:00", close: "18:00" },
-  { day: "Sunday", open: "10:00", close: "16:00" },
+  { day: "الأيام الاعتيادية", open: "04:00 م", close: "09:30 م" },
+  { day: "حلقات تحفيظ الفجر", open: "04:30 ص", close: "06:30 ص" },
+  { day: "يوم الجمعة المبارك", open: "11:30 ص", close: "09:30 م" },
 ];
 
 export const sophieKnowledge = {
-  greeting: "Hi there! ☕ I'm Sophie, CaffAIne's AI barista. How can I help you today?",
-  followUp: "I can help with our menu, opening hours, or anything about our AI-driven coffee experience!",
+  greeting: "السلام عليكم ورحمة الله وبركاته! 🕌 أنا مرشد، المساعد الذكي لمسجد حذيفة بن اليمان. كيف يمكنني مساعدتك اليوم؟",
+  followUp: "يمكنني إرشادك لأوقات الحلقات، الأنشطة والرحلات، أو كيفية التطوع والتبرع لدعم المسجد وحلقات القرآن الكريم!",
   quickReplies: [
-    "What's on the menu?",
-    "What are your opening hours?",
-    "Do you have vegan options?",
-    "What's your most popular drink?",
-    "Tell me about the Very Berry Pancakes",
+    "ما هي أوقات حلقات التحفيظ؟",
+    "كيف يمكنني التطوع أو التبرع؟",
+    "من هم مشايخ ومعلمو المسجد؟",
+    "ما هي الأنشطة والرحلات المتوفرة؟",
+    "أين يقع المسجد بالضبط؟",
   ],
 };
 
 export const galleryImages = [
-  { id: 1, src: "/images/interior-wide.png", alt: "CaffAIne Interior", size: "large" },
-  { id: 2, src: "/images/latte2.png", alt: "Specialty Latte Art", size: "small" },
-  { id: 3, src: "/images/pastries.png", alt: "Fresh Daily Pastries", size: "small" },
-  { id: 4, src: "/images/coffee-beans.png", alt: "Our Roasted Beans", size: "medium" },
-  { id: 5, src: "/images/barista.png", alt: "Expert Brewing", size: "small" },
-  { id: 6, src: "/images/door.png", alt: "Chill Terrace", size: "small" },
+  { id: 1, src: "/images/interior-wide.png", alt: "حلقات القرآن الكريم والدروس العلمية", size: "large" },
+  { id: 2, src: "/images/latte2.png", alt: "أشبالنا طلاب القرآن المتميزين", size: "small" },
+  { id: 3, src: "/images/pastries.png", alt: "الأنشطة والرحلات الترفيهية والمسابقات", size: "small" },
+  { id: 4, src: "/images/coffee-beans.png", alt: "حلقات حفظ القرآن النموذجية", size: "medium" },
+  { id: 5, src: "/images/barista.png", alt: "مسجد حذيفة بن اليمان بطبربور", size: "small" },
+  { id: 6, src: "/images/door.png", alt: "صيانة وتجهيزات بيت الله", size: "small" },
 ];
