@@ -125,6 +125,7 @@ export default function Gallery() {
               >
                 <video
                   src={`/video${n}.mp4`}
+                  poster="/images/logo.jpg"
                   controls
                   preload="metadata"
                   style={{ width: '100%', display: 'block', maxHeight: '420px', objectFit: 'cover' }}
