@@ -132,7 +132,6 @@ export default function Gallery() {
                     width: '100%',
                     height: 'auto',
                     display: 'block',
-                    maxHeight: '500px',
                     borderRadius: '8px',
                     backgroundColor: 'transparent'
                   }}
