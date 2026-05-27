@@ -129,10 +129,10 @@ export default function Gallery() {
                   preload="metadata"
                   style={{
                     width: '100%',
-                    aspectRatio: '16/9',
+                    aspectRatio: '1/1',
                     display: 'block',
                     maxHeight: '420px',
-                    objectFit: 'cover',
+                    objectFit: 'contain',
                     backgroundColor: '#000',
                     backgroundImage: `url(/images/gallery${n + 2}.jpg)`,
                     backgroundSize: 'cover',
@@ -140,6 +140,7 @@ export default function Gallery() {
                   }}
                   poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
                   playsInline
+                  onPlay={e => e.currentTarget.style.backgroundImage = 'none'}
                 />
               </div>
             ))}
