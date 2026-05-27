@@ -92,7 +92,7 @@ export default function Checkout({ onClose, onعودة }) {
       return itemName.includes(offerProd) || offerProd.includes(itemName) || offerProd === 'all';
     });
 
-    const isطالب حلقةOffer = offer.reason.toLowerCase().includes('student');
+    const isStudentOffer = offer.reason.toLowerCase().includes('student');
     const isEmployeeOffer = offer.reason.toLowerCase().includes('corporate') || offer.reason.toLowerCase().includes('employee') || offer.reason.toLowerCase().includes('faculty');
 
     if (!hasItem) {
@@ -100,7 +100,7 @@ export default function Checkout({ onClose, onعودة }) {
       return;
     }
 
-    if (isطالب حلقةOffer && customerType !== 'طالب حلقة') {
+    if (isStudentOffer && customerType !== 'طالب حلقة') {
       showOfferError('🎓 This offer is for students only — please select the "طالب حلقة" category.');
       return;
     }
