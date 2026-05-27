@@ -3,7 +3,7 @@ import { useCart } from '../context/CartContext';
 import styles from './Checkout.module.css';
 import { HeartHandshake, AlertTriangle } from 'lucide-react';
 
-export default function Checkout({ onClose, onBack }) {
+export default function Checkout({ onClose, onعودة }) {
   const { items, totalPrice, clearCart } = useCart();
   const [step, setStep] = useState('form');
   const [orderId, setOrderId] = useState(null);
@@ -92,7 +92,7 @@ export default function Checkout({ onClose, onBack }) {
       return itemName.includes(offerProd) || offerProd.includes(itemName) || offerProd === 'all';
     });
 
-    const isStudentOffer = offer.reason.toLowerCase().includes('student');
+    const isطالب حلقةOffer = offer.reason.toLowerCase().includes('student');
     const isEmployeeOffer = offer.reason.toLowerCase().includes('corporate') || offer.reason.toLowerCase().includes('employee') || offer.reason.toLowerCase().includes('faculty');
 
     if (!hasItem) {
@@ -100,8 +100,8 @@ export default function Checkout({ onClose, onBack }) {
       return;
     }
 
-    if (isStudentOffer && customerType !== 'Student') {
-      showOfferError('🎓 This offer is for students only — please select the "Student" category.');
+    if (isطالب حلقةOffer && customerType !== 'طالب حلقة') {
+      showOfferError('🎓 This offer is for students only — please select the "طالب حلقة" category.');
       return;
     }
 
@@ -126,9 +126,9 @@ export default function Checkout({ onClose, onBack }) {
     return acc;
   }, 0);
 
-  const subtotalAfterDiscount = totalPrice - discountAmount;
+  const subtotalAfterخصم (إن وجد) = totalPrice - discountAmount;
   const DELIVERY_FEE = 3.00;
-  const finalPrice = orderType === 'delivery' ? subtotalAfterDiscount + DELIVERY_FEE : subtotalAfterDiscount;
+  const finalPrice = orderType === 'delivery' ? subtotalAfterخصم (إن وجد) + DELIVERY_FEE : subtotalAfterخصم (إن وجد);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -175,7 +175,7 @@ export default function Checkout({ onClose, onBack }) {
   function formatCardNumber(v) {
     return v.replace(/\D/g, '').slice(0, 16).replace(/(.{4})/g, '$1 ').trim();
   }
-  function formatExpiry(v) {
+  function formatتاريخ الانتهاء(v) {
     const d = v.replace(/\D/g, '').slice(0, 4);
     if (d.length >= 3) return `${d.slice(0, 2)}/${d.slice(2)}`;
     return d;
@@ -184,7 +184,7 @@ export default function Checkout({ onClose, onBack }) {
   function handleChange(e) {
     let { name, value } = e.target;
     if (name === 'cardNumber') value = formatCardNumber(value);
-    if (name === 'expiry') value = formatExpiry(value);
+    if (name === 'expiry') value = formatتاريخ الانتهاء(value);
     if (name === 'cvc') value = value.replace(/\D/g, '').slice(0, 4);
     setForm(f => ({ ...f, [name]: value }));
     setErrors(err => ({ ...err, [name]: '' }));
@@ -193,13 +193,13 @@ export default function Checkout({ onClose, onBack }) {
   function validate() {
     const e = {};
     const safeName = (form.name || '').trim();
-    const safeEmail = (form.email || '').trim();
+    const safeالبريد الإلكتروني = (form.email || '').trim();
     const safePhone = (form.phone || '').trim();
 
     if (!safeName) e.name = 'Name is required';
 
-    // Email is optional
-    if (safeEmail && !safeEmail.includes('@')) {
+    // البريد الإلكتروني is optional
+    if (safeالبريد الإلكتروني && !safeالبريد الإلكتروني.includes('@')) {
       e.email = 'Invalid email format';
     }
 
@@ -210,7 +210,7 @@ export default function Checkout({ onClose, onBack }) {
 
     const rawCard = (form.cardNumber || '').replace(/\s/g, '');
     if (rawCard.length < 16) e.cardNumber = 'Enter 16 digits';
-    // Expiry Validation
+    // تاريخ الانتهاء Validation
     const expiryMatch = (form.expiry || '').match(/^(\d{2})\/(\d{2})$/);
     if (!expiryMatch) {
       e.expiry = 'Use MM/YY format';
@@ -227,11 +227,11 @@ export default function Checkout({ onClose, onBack }) {
         e.expiry = 'Invalid expiry year';
       }
     }
-    if ((form.cvc || '').length < 3) e.cvc = 'CVC required';
+    if ((form.cvc || '').length < 3) e.cvc = 'الرمز السري (CVC) required';
 
     if (orderType === 'delivery') {
       if (form.deliveryType === 'postcode' && !(form.postcode || '').trim()) {
-        e.postcode = 'Postcode is required';
+        e.postcode = 'الرمز البريدي is required';
       }
       if (form.deliveryType === 'location' && !(form.location || '').trim()) {
         e.location = 'Please share your location';
@@ -241,7 +241,7 @@ export default function Checkout({ onClose, onBack }) {
     return Object.keys(e).length === 0;
   }
 
-  async function saveOrderToBackend() {
+  async function saveOrderToعودةend() {
     try {
       const response = await fetch('/api/orders', {
         method: 'POST',
@@ -278,7 +278,7 @@ export default function Checkout({ onClose, onBack }) {
           }),
           order_type: orderType,
           delivery_address: orderType === 'delivery'
-            ? (form.deliveryType === 'postcode' ? `Postcode: ${form.postcode}` : `GPS: ${form.location}`)
+            ? (form.deliveryType === 'postcode' ? `الرمز البريدي: ${form.postcode}` : `GPS: ${form.location}`)
             : null,
           phone: form.phone.trim() // Always send phone
         }),
@@ -311,7 +311,7 @@ export default function Checkout({ onClose, onBack }) {
     setStep('processing');
 
     await new Promise(r => setTimeout(r, 1500));
-    const resultStatus = await saveOrderToBackend();
+    const resultStatus = await saveOrderToعودةend();
 
     if (resultStatus === 'success') {
       clearCart();
@@ -379,8 +379,8 @@ export default function Checkout({ onClose, onBack }) {
                     <i className="fas fa-check" style={{ color: '#fff', fontSize: '2.5rem' }} />
                   </div>
                 </div>
-                <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: '2.5rem', color: '#2c1810', margin: '20px 0 10px', fontWeight: '900' }}>Perfectly Ready!</h2>
-                <p style={{ color: '#666', fontSize: '1.1rem', marginBottom: '30px' }}>Your exquisite order is prepared and waiting at the counter.</p>
+                <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: '2.5rem', color: '#2c1810', margin: '20px 0 10px', fontWeight: '900' }}>تقبل الله طاعاتكم!</h2>
+                <p style={{ color: '#666', fontSize: '1.1rem', marginBottom: '30px' }}>نشكر لك مساهمتك الطيبة، جعلها الله في ميزان حسناتك.</p>
               </div>
             ) : (
               /* LUXURY COUNTDOWN CARD */
@@ -393,8 +393,8 @@ export default function Checkout({ onClose, onBack }) {
                 }}>
                   <i className="fas fa-magic" />
                 </div>
-                <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: '2.2rem', color: '#2c1810', marginBottom: '10px' }}>Order Placed!</h2>
-                <p style={{ color: '#888', marginBottom: '30px' }}>Your order <strong>#{orderId}</strong> is being prepared.</p>
+                <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: '2.2rem', color: '#2c1810', marginBottom: '10px' }}>تم تسجيل المساهمة!</h2>
+                <p style={{ color: '#888', marginBottom: '30px' }}>إيصال مساهمتك رقم <strong>#{orderId}</strong> في قيد المعالجة والإثبات.</p>
                 
                 <div style={{ 
                   background: '#fcf6ef', padding: '30px', borderRadius: '25px', 
@@ -404,7 +404,7 @@ export default function Checkout({ onClose, onBack }) {
                     {formatTime(timeRemaining)}
                   </div>
                   <div style={{ fontSize: '0.8rem', color: '#c4a484', fontWeight: '800', textTransform: 'uppercase', marginTop: '5px' }}>
-                    Estimated Prep Time
+                    الوقت المقدر
                   </div>
                 </div>
               </div>
@@ -412,7 +412,7 @@ export default function Checkout({ onClose, onBack }) {
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center', marginBottom: '30px', color: '#c4a484', fontSize: '0.9rem', fontWeight: 'bold' }}>
               <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: (orderStatus === 'ready' || orderStatus === 'completed') ? '#38ef7d' : '#f59e0b', animation: 'pulse 1.5s infinite' }} />
-              Live Status: <span style={{ color: '#2c1810' }}>{orderStatus.toUpperCase()}</span>
+              الحالة المباشرة: <span style={{ color: '#2c1810' }}>{orderStatus.toUpperCase()}</span>
             </div>
 
             <button className="btn btn-primary" onClick={onClose} style={{
@@ -421,7 +421,7 @@ export default function Checkout({ onClose, onBack }) {
               fontWeight: 'bold', fontSize: '1.1rem', cursor: 'pointer',
               boxShadow: '0 10px 25px rgba(44, 24, 16, 0.2)'
             }}>
-              Return to Menu
+              العودة للرئيسية
             </button>
           </div>
         </div>
@@ -475,7 +475,7 @@ export default function Checkout({ onClose, onBack }) {
             fontWeight: 'normal',
             letterSpacing: '0.5px'
           }}>
-            Selection Sold Out
+            اكتملت المساهمة
           </h2>
 
           <p style={{ 
@@ -486,7 +486,7 @@ export default function Checkout({ onClose, onBack }) {
             fontWeight: '300',
             color: '#f3ece5'
           }}>
-            Because we handcraft our brews and bake our pastries fresh daily to guarantee the finest experience, it seems an item in your order has <strong>just sold out</strong>.
+            يبدو أن الباب الذي اخترته قد تمت تغطيته بالكامل من فاعلي الخير، تقبل الله نيتك ونرجو اختيار باب آخر.
             <br />
             <span style={{ fontSize: '0.95rem', opacity: 0.8, display: 'block', marginTop: '10px' }}>
               (You added this item to your cart before it went out of stock. We sincerely apologize for any inconvenience caused.)
@@ -514,7 +514,7 @@ export default function Checkout({ onClose, onBack }) {
               alignItems: 'center',
               gap: '8px'
             }}>
-              <AlertTriangle size={16} /> INVENTORY DETAILS:
+              <AlertTriangle size={16} /> تفاصيل الإشعار:
             </p>
             <div style={{ 
               fontSize: '1rem', 
@@ -535,7 +535,7 @@ export default function Checkout({ onClose, onBack }) {
           <button 
             onClick={() => {
               setStep('form');
-              if (onBack) onBack(); // Go back to cart so they can edit it!
+              if (onعودة) onعودة(); // Go back to cart so they can edit it!
             }} 
             style={{
               width: '100%', 
@@ -553,7 +553,7 @@ export default function Checkout({ onClose, onBack }) {
             onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'}
             onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
           >
-            Adjust Cart & Try Again
+            تعديل السلة والمحاولة مجدداً
           </button>
         </div>
       </div>
@@ -568,14 +568,14 @@ export default function Checkout({ onClose, onBack }) {
             <div style={{ fontSize: '4rem', color: '#e74a3b', marginBottom: '20px' }}>
               <i className="fas fa-exclamation-circle" />
             </div>
-            <h2 style={{ fontFamily: 'serif', fontSize: '2rem', color: '#2c1810', marginBottom: '10px' }}>Oops! Payment Failed</h2>
-            <p style={{ color: '#666', marginBottom: '30px' }}>Something went wrong while processing your order. Please check your details and try again.</p>
+            <h2 style={{ fontFamily: 'serif', fontSize: '2rem', color: '#2c1810', marginBottom: '10px' }}>عذراً! لم تتم العملية</h2>
+            <p style={{ color: '#666', marginBottom: '30px' }}>حدث خطأ أثناء معالجة مساهمتكم. يرجى التحقق من صحة البيانات والمحاولة مجدداً.</p>
             <button
               className="btn btn-primary"
               onClick={() => setStep('form')}
               style={{ width: '100%', padding: '15px', borderRadius: '12px', background: '#2c1810', color: '#fff', border: 'none', fontWeight: 'bold', fontSize: '1.1rem', cursor: 'pointer' }}
             >
-              Try Again
+              حاول مجدداً
             </button>
           </div>
         </div>
@@ -588,7 +588,7 @@ export default function Checkout({ onClose, onBack }) {
       <div className={styles.overlay}><div className={styles.modal}>
         <div className={styles.processingScreen} style={{ textAlign: 'center', padding: '50px 20px' }}>
           <div className={styles.spinner} style={{ margin: '0 auto 20px' }} />
-          <p style={{ fontSize: '1.2rem', color: '#2c1810', fontWeight: 'bold' }}>Processing Payment...</p>
+          <p style={{ fontSize: '1.2rem', color: '#2c1810', fontWeight: 'bold' }}>جاري المعالجة والتأكيد...</p>
         </div>
       </div></div>
     );
@@ -598,15 +598,15 @@ export default function Checkout({ onClose, onBack }) {
     <div className={styles.overlay} onClick={onClose}>
       <div className={`${styles.modal} ${styles.mainModal}`} onClick={e => e.stopPropagation()}>
         <div className={styles.modalHead}>
-          <button className={styles.backBtn} onClick={onBack}><i className="fas fa-arrow-left" /> Back</button>
-          <h2 className={styles.modalTitle}>Checkout</h2>
+          <button className={styles.backBtn} onClick={onعودة}><i className="fas fa-arrow-left" /> عودة</button>
+          <h2 className={styles.modalTitle}>تأكيد التبرع والمساهمة</h2>
           <button className={styles.closeBtn} onClick={onClose}><i className="fas fa-times" /></button>
         </div>
 
         <div className={styles.modalBody} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {/* 1. Order Summary Section */}
+          {/* 1. ملخص المساهمة Section */}
           <div className={styles.orderSummary} style={{ marginBottom: '0', padding: '20px', backgroundColor: '#fcf6ef', borderRadius: '20px', border: '1px solid rgba(196, 164, 132, 0.1)' }}>
-            <div className={styles.summaryLabel} style={{ marginBottom: '15px', color: '#2c1810', fontWeight: '900' }}>Order Summary</div>
+            <div className={styles.summaryLabel} style={{ marginBottom: '15px', color: '#2c1810', fontWeight: '900' }}>ملخص المساهمة</div>
             {items.map(item => (
               <div key={item.id} className={styles.sumItem} style={{ marginBottom: '8px' }}>
                 <span style={{ color: '#555' }}>{item.name} × {item.qty}</span>
@@ -630,21 +630,21 @@ export default function Checkout({ onClose, onBack }) {
 
             {selectedOffer && (
               <div className={styles.sumItem} style={{ color: '#c4a484', fontWeight: 'bold', marginTop: '10px' }}>
-                <span>Discount ({selectedOffer.discount_percent}%)</span>
+                <span>خصم (إن وجد) ({selectedOffer.discount_percent}%)</span>
                 <span>-{formatPrice(discountAmount)}</span>
               </div>
             )}
 
             {orderType === 'delivery' && (
               <div className={styles.sumItem} style={{ marginTop: '5px' }}>
-                <span>Delivery Fee</span>
+                <span>رسوم تحويل</span>
                 <span>{formatPrice(DELIVERY_FEE)}</span>
               </div>
             )}
 
-            <div className={styles.sumTotal} style={{ marginTop: '15px', borderTop: '1px dashed #c4a484', paddingTop: '15px' }}>
-              <span style={{ fontWeight: 'bold', color: '#2c1810' }}>Total</span>
-              <span className={styles.sumTotalAmt} style={{ color: '#c4a484' }}>{formatPrice(finalPrice)}</span>
+            <div className={styles.sumالمجموع} style={{ marginTop: '15px', borderTop: '1px dashed #c4a484', paddingTop: '15px' }}>
+              <span style={{ fontWeight: 'bold', color: '#2c1810' }}>المجموع</span>
+              <span className={styles.sumالمجموعAmt} style={{ color: '#c4a484' }}>{formatPrice(finalPrice)}</span>
             </div>
           </div>
 
@@ -703,12 +703,12 @@ export default function Checkout({ onClose, onBack }) {
               {orderType === 'delivery' && (
                 <div style={{ marginTop: '25px', padding: '25px', backgroundColor: '#fff', borderRadius: '18px', border: '1px solid rgba(196,164,132,0.3)', boxShadow: '0 8px 30px rgba(0,0,0,0.04)', animation: 'fadeIn 0.4s ease' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                    <h4 style={{ margin: 0, color: '#2c1810', fontSize: '1rem', fontWeight: '800' }}>DELIVERY DETAILS</h4>
-                    <span style={{ fontSize: '0.7rem', color: '#c4a484', fontWeight: 'bold', background: 'rgba(196,164,132,0.1)', padding: '4px 10px', borderRadius: '20px' }}>REQUIRED</span>
+                    <h4 style={{ margin: 0, color: '#2c1810', fontSize: '1rem', fontWeight: '800' }}>التفاصيل الإضافية</h4>
+                    <span style={{ fontSize: '0.7rem', color: '#c4a484', fontWeight: 'bold', background: 'rgba(196,164,132,0.1)', padding: '4px 10px', borderRadius: '20px' }}>مطلوب</span>
                   </div>
 
 
-                  <label className={styles.label} style={{ color: '#2c1810', fontWeight: '700', fontSize: '0.9rem', marginBottom: '12px', display: 'block' }}>How should we find you?</label>
+                  <label className={styles.label} style={{ color: '#2c1810', fontWeight: '700', fontSize: '0.9rem', marginBottom: '12px', display: 'block' }}>كيف نصل إليك؟</label>
 
                   {/* Delivery Type Selector (Premium Segment Control) */}
                   <div style={{ display: 'flex', background: '#f8f9fa', padding: '5px', borderRadius: '12px', marginBottom: '20px' }}>
@@ -723,7 +723,7 @@ export default function Checkout({ onClose, onBack }) {
                         boxShadow: form.deliveryType === 'postcode' ? '0 4px 10px rgba(0,0,0,0.05)' : 'none'
                       }}
                     >
-                      Postcode
+                      الرمز البريدي
                     </button>
                     <button
                       type="button"
@@ -736,7 +736,7 @@ export default function Checkout({ onClose, onBack }) {
                         boxShadow: form.deliveryType === 'location' ? '0 4px 10px rgba(0,0,0,0.05)' : 'none'
                       }}
                     >
-                      Live Location
+                      الموقع المباشر
                     </button>
                   </div>
 
@@ -747,7 +747,7 @@ export default function Checkout({ onClose, onBack }) {
                         value={form.postcode}
                         onChange={handleChange}
                         className={styles.input}
-                        placeholder="Enter Postcode (e.g. B2 4HD)"
+                        placeholder="Enter الرمز البريدي (e.g. B2 4HD)"
                         style={{ borderColor: errors.postcode ? 'red' : '#eee' }}
                       />
                       {errors.postcode && <p className={styles.errorMsg} style={{ marginTop: '5px' }}>{errors.postcode}</p>}
@@ -774,7 +774,7 @@ export default function Checkout({ onClose, onBack }) {
                         }}
                       >
                         <i className="fas fa-map-marker-alt" style={{ color: '#c4a484' }} />
-                        {form.location || 'Share My GPS Location'}
+                        {form.location || 'مشاركة موقعي المباشر'}
                       </button>
                       {errors.location && <p className={styles.errorMsg} style={{ marginTop: '5px' }}>{errors.location}</p>}
                     </div>
@@ -785,7 +785,7 @@ export default function Checkout({ onClose, onBack }) {
 
             <div className={styles.formSection}>
               <div className={styles.field} style={{ position: 'relative' }}>
-                <label className={styles.label}>Full Name <span style={{ color: 'red' }}>*</span></label>
+                <label className={styles.label}>الاسم الكريم <span style={{ color: 'red' }}>*</span></label>
                 <input 
                   name="name" 
                   value={form.name} 
@@ -793,7 +793,7 @@ export default function Checkout({ onClose, onBack }) {
                   onFocus={() => setShowProfileDropdown(true)}
                   onBlur={() => setTimeout(() => setShowProfileDropdown(false), 200)}
                   className={styles.input} 
-                  placeholder="e.g. John Doe" 
+                  placeholder="الاسم الكامل" 
                   autoComplete="off"
                 />
                 {showProfileDropdown && savedProfiles.length > 0 && (
@@ -804,7 +804,7 @@ export default function Checkout({ onClose, onBack }) {
                     boxShadow: '0 10px 25px rgba(0,0,0,0.1)', zIndex: 10,
                     maxHeight: '220px', overflowY: 'auto'
                   }}>
-                    <div style={{ fontSize: '0.75rem', color: '#c4a484', fontWeight: 'bold', padding: '4px 8px 8px' }}>Saved Profiles</div>
+                    <div style={{ fontSize: '0.75rem', color: '#c4a484', fontWeight: 'bold', padding: '4px 8px 8px' }}>الملفات المحفوظة</div>
                     {savedProfiles.map((profile, idx) => (
                       <div key={idx}
                         onMouseDown={(e) => {
@@ -828,31 +828,31 @@ export default function Checkout({ onClose, onBack }) {
                 {errors.name && <p className={styles.errorMsg}>{errors.name}</p>}
               </div>
               <div className={styles.field}>
-                <label className={styles.label}>Phone Number <span style={{ color: 'red' }}>*</span></label>
-                <input name="phone" value={form.phone} onChange={handleChange} className={styles.input} placeholder="e.g. 07123 456789" />
+                <label className={styles.label}>رقم الهاتف للتواصل <span style={{ color: 'red' }}>*</span></label>
+                <input name="phone" value={form.phone} onChange={handleChange} className={styles.input} placeholder="مثال: 07XXXXXXXX" />
                 {errors.phone && <p className={styles.errorMsg}>{errors.phone}</p>}
               </div>
               <div className={styles.field}>
-                <label className={styles.label}>Email <span style={{ fontSize: '0.7rem', color: '#888' }}>(Optional - for offers)</span></label>
-                <input name="email" type="email" value={form.email} onChange={handleChange} className={styles.input} placeholder="john@email.com" />
+                <label className={styles.label}>البريد الإلكتروني <span style={{ fontSize: '0.7rem', color: '#888' }}>(اختياري لرسائل التأكيد)</span></label>
+                <input name="email" type="email" value={form.email} onChange={handleChange} className={styles.input} placeholder="example@domain.com" />
                 {errors.email && <p className={styles.errorMsg}>{errors.email}</p>}
               </div>
             </div>
 
             <div className={styles.formSection}>
               <div className={styles.field}>
-                <label className={styles.label}>Card number</label>
+                <label className={styles.label}>رقم البطاقة (للتبرع البنكي)</label>
                 <input name="cardNumber" value={form.cardNumber} onChange={handleChange} className={styles.input} placeholder="1234 5678 9012 3456" />
                 {errors.cardNumber && <p className={styles.errorMsg}>{errors.cardNumber}</p>}
               </div>
               <div className={styles.fieldRow}>
                 <div className={styles.field}>
-                  <label className={styles.label}>Expiry</label>
+                  <label className={styles.label}>تاريخ الانتهاء</label>
                   <input name="expiry" value={form.expiry} onChange={handleChange} className={styles.input} placeholder="MM / YY" />
                   {errors.expiry && <p className={styles.errorMsg}>{errors.expiry}</p>}
                 </div>
                 <div className={styles.field}>
-                  <label className={styles.label}>CVC</label>
+                  <label className={styles.label}>الرمز السري (CVC)</label>
                   <input name="cvc" value={form.cvc} onChange={handleChange} className={styles.input} placeholder="123" />
                 </div>
               </div>
@@ -860,22 +860,22 @@ export default function Checkout({ onClose, onBack }) {
 
             {/* Smart Offers Section */}
             <div className={styles.formSection} style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '16px', border: '1px solid #eee' }}>
-              <label className={styles.label} style={{ fontSize: '1.1rem', color: '#2c1810', marginBottom: '10px' }}>Select Customer Category</label>
+              <label className={styles.label} style={{ fontSize: '1.1rem', color: '#2c1810', marginBottom: '10px' }}>فئة المتبرع</label>
               <select
                 className={styles.input}
                 value={customerType}
                 onChange={e => { setCustomerType(e.target.value); setSelectedOffer(null); }}
                 style={{ backgroundColor: '#f9f9f9', cursor: 'pointer' }}
               >
-                <option value="General">General Customer</option>
-                <option value="Student">Student</option>
-                <option value="Employee">Staff / Employee</option>
+                <option value="General">فاعل خير عام</option>
+                <option value="طالب حلقة">طالب حلقة</option>
+                <option value="Employee">معلم / متطوع</option>
               </select>
 
               {offers.length > 0 && (
                 <div style={{ marginTop: '20px' }}>
                   <label className={styles.label} style={{ color: '#c4a484', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <i className="fas fa-tags" /> Available Offers For You!
+                    <i className="fas fa-tags" /> فرص مساهمة خاصة
                   </label>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '10px' }}>
                     {offers.map(offer => (
@@ -896,7 +896,7 @@ export default function Checkout({ onClose, onBack }) {
                       >
                         <div>
                           <div style={{ fontWeight: 'bold', color: '#2c1810', fontSize: '1.05rem' }}>{offer.reason}</div>
-                          <div style={{ fontSize: '0.85rem', color: '#666', marginTop: '4px' }}>Applies to {offer.product_name}</div>
+                          <div style={{ fontSize: '0.85rem', color: '#666', marginTop: '4px' }}>ينطبق على {offer.product_name}</div>
                         </div>
                         <div style={{ fontWeight: 'bold', color: '#c4a484', fontSize: '1.2rem', backgroundColor: '#fff', padding: '5px 10px', borderRadius: '8px', boxShadow: '0 2px 5px rgba(0,0,0,0.05)' }}>
                           {offer.discount_percent}% OFF
