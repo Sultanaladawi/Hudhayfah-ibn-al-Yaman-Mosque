@@ -125,9 +125,9 @@ export default function Gallery() {
               onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)';    e.currentTarget.style.boxShadow = '0 8px 30px rgba(0,0,0,0.1)'; }}
               >
                 <video
-                  src={`/video${n}.mp4#t=0.1`}
+                  src={`/video${n}.mp4#t=1`}
                   controls
-                  preload="metadata"
+                  preload="auto"
                   style={{
                     width: '100%',
                     height: 'auto',
