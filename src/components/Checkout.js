@@ -175,7 +175,7 @@ export default function Checkout({ onClose, onعودة }) {
   function formatCardNumber(v) {
     return v.replace(/\D/g, '').slice(0, 16).replace(/(.{4})/g, '$1 ').trim();
   }
-  function formatتاريخ الانتهاء(v) {
+  function formatExpiry(v) {
     const d = v.replace(/\D/g, '').slice(0, 4);
     if (d.length >= 3) return `${d.slice(0, 2)}/${d.slice(2)}`;
     return d;
@@ -184,7 +184,7 @@ export default function Checkout({ onClose, onعودة }) {
   function handleChange(e) {
     let { name, value } = e.target;
     if (name === 'cardNumber') value = formatCardNumber(value);
-    if (name === 'expiry') value = formatتاريخ الانتهاء(value);
+    if (name === 'expiry') value = formatExpiry(value);
     if (name === 'cvc') value = value.replace(/\D/g, '').slice(0, 4);
     setForm(f => ({ ...f, [name]: value }));
     setErrors(err => ({ ...err, [name]: '' }));
