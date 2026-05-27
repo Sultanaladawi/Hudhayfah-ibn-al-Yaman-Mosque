@@ -125,10 +125,20 @@ export default function Gallery() {
               >
                 <video
                   src={`/video${n}.mp4`}
-                  poster={`/images/gallery${n + 2}.jpg`}
                   controls
                   preload="metadata"
-                  style={{ width: '100%', display: 'block', maxHeight: '420px', objectFit: 'cover' }}
+                  style={{
+                    width: '100%',
+                    aspectRatio: '16/9',
+                    display: 'block',
+                    maxHeight: '420px',
+                    objectFit: 'cover',
+                    backgroundColor: '#000',
+                    backgroundImage: `url(/images/gallery${n + 2}.jpg)`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center'
+                  }}
+                  poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
                   playsInline
                 />
               </div>
