@@ -137,7 +137,7 @@ export default function Hero() {
         </h3>
         <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.15)' }}>
           <iframe
-            src="https://www.youtube.com/embed/ViIp_Ubpm0o?autoplay=0"
+            src="https://www.youtube.com/embed/ViIp_Ubpm0o?autoplay=1&mute=1"
             title="Makkah Live Stream"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
