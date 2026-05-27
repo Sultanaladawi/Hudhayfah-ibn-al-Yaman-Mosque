@@ -126,9 +126,9 @@ export default function Checkout({ onClose, onعودة }) {
     return acc;
   }, 0);
 
-  const subtotalAfterخصم (إن وجد) = totalPrice - discountAmount;
+  const subtotalAfterDiscount = totalPrice - discountAmount;
   const DELIVERY_FEE = 3.00;
-  const finalPrice = orderType === 'delivery' ? subtotalAfterخصم (إن وجد) + DELIVERY_FEE : subtotalAfterخصم (إن وجد);
+  const finalPrice = orderType === 'delivery' ? subtotalAfterDiscount + DELIVERY_FEE : subtotalAfterDiscount;
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -642,9 +642,9 @@ export default function Checkout({ onClose, onعودة }) {
               </div>
             )}
 
-            <div className={styles.sumالمجموع} style={{ marginTop: '15px', borderTop: '1px dashed #c4a484', paddingTop: '15px' }}>
+            <div className={styles.sumTotal} style={{ marginTop: '15px', borderTop: '1px dashed #c4a484', paddingTop: '15px' }}>
               <span style={{ fontWeight: 'bold', color: '#2c1810' }}>المجموع</span>
-              <span className={styles.sumالمجموعAmt} style={{ color: '#c4a484' }}>{formatPrice(finalPrice)}</span>
+              <span className={styles.sumTotalAmt} style={{ color: '#c4a484' }}>{formatPrice(finalPrice)}</span>
             </div>
           </div>
 
