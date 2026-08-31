@@ -303,19 +303,34 @@ export default function Navbar({ onCartOpen }) {
         </div>
 
         <div className={styles.inner} style={{flexDirection: 'row-reverse'}}>
-          <a href="#home" className={styles.logo} aria-label={`مسجد حذيفة بن اليمان`} style={{ textDecoration: 'none' }}>
-            <div style={{ 
-              fontFamily: "'Amiri', serif", 
-              fontSize: '1.8rem', 
-              color: 'var(--olive)', 
-              lineHeight: '1',
+          <a href="#home" className={styles.logo} aria-label="مسجد حذيفة بن اليمان" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '12px', whiteSpace: 'nowrap', flexShrink: 0 }}>
+            <div style={{
+              width: '46px',
+              height: '46px',
+              borderRadius: '50%',
+              overflow: 'hidden',
+              background: '#ffffff',
+              border: '2px solid var(--gold)',
+              boxShadow: '0 3px 12px rgba(0,0,0,0.4)',
               display: 'flex',
               alignItems: 'center',
-              gap: '12px'
+              justifyContent: 'center',
+              flexShrink: 0
             }}>
-              <img src="/images/logo.jpg" alt="شعار المسجد" style={{ height: '46px', width: '46px', objectFit: 'cover', borderRadius: '50%', border: '2px solid var(--gold)', boxShadow: '0 3px 10px rgba(0,0,0,0.35)', background: '#fff' }} />
-              <span style={{ color: scrolled ? 'var(--olive)' : '#FEF9F4', textShadow: scrolled ? 'none' : '0 2px 6px rgba(0,0,0,0.7)', transition: 'color 0.3s' }}>مسجد <span style={{ color: 'var(--gold)', fontWeight: 'bold' }}>حذيفة بن اليمان</span></span>
+              <img src="/images/logo.jpg" alt="شعار المسجد" style={{ width: '85%', height: '85%', objectFit: 'contain' }} />
             </div>
+            <span style={{ 
+              fontFamily: "'Amiri', serif", 
+              fontSize: '1.65rem', 
+              fontWeight: '700',
+              color: scrolled ? 'var(--olive)' : '#FEF9F4', 
+              textShadow: scrolled ? 'none' : '0 2px 8px rgba(0,0,0,0.85)', 
+              whiteSpace: 'nowrap',
+              display: 'inline-block',
+              lineHeight: '1.2'
+            }}>
+              مسجد <span style={{ color: 'var(--gold)', fontWeight: 'bold' }}>حذيفة بن اليمان</span>
+            </span>
           </a>
 
           <nav aria-label="Main navigation">

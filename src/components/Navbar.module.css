@@ -15,20 +15,23 @@
 }
 
 .inner {
-  max-width: 1160px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0.4rem 2rem; /* Reduced from 1.1rem to move words up */
+  padding: 0.4rem 1.8rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1.5rem;
+  white-space: nowrap;
 }
 
 .logo {
-  display: flex;
-  align-items: center;
-  gap: .75rem;
-  color: var(--espresso);
-  text-decoration: none;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
   transition: opacity var(--tr);
 }
 .logo:hover { opacity: 0.8; }
