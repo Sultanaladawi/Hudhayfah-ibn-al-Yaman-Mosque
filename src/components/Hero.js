@@ -122,7 +122,7 @@ export default function Hero() {
       <div style={{
         background: 'rgba(24, 69, 59, 0.45)',
         backdropFilter: 'blur(12px)',
-        border: '2px solid #C49B75',
+        border: '2px solid #C9A84C',
         borderRadius: '24px',
         padding: '25px',
         width: '100%',
@@ -132,7 +132,7 @@ export default function Hero() {
         textAlign: 'center',
         animation: 'glowPulse 2.5s infinite alternate'
       }}>
-        <h3 style={{ fontFamily: "'Amiri', serif", color: '#C49B75', fontSize: '1.6rem', margin: '0 0 20px 0', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+        <h3 style={{ fontFamily: "'Amiri', serif", color: '#C9A84C', fontSize: '1.6rem', margin: '0 0 20px 0', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
            🕋 البث المباشر لقناة القرآن الكريم (مكة المكرمة)
         </h3>
         <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.15)' }}>

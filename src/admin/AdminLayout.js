@@ -345,8 +345,8 @@ const AdminLayout = () => {
               }}
               onClick={() => { setNewOrderCount(0); navigate('/admin/donations'); }}
               >
-                <BellRing size={16} color="#c4a484" style={{ animation: 'bellRing 0.5s infinite alternate' }} />
-                <span style={{ color: '#c4a484', fontWeight: '900', fontSize: '0.8rem', letterSpacing: '0.5px' }}>
+                <BellRing size={16} color="#C9A84C" style={{ animation: 'bellRing 0.5s infinite alternate' }} />
+                <span style={{ color: '#C9A84C', fontWeight: '900', fontSize: '0.8rem', letterSpacing: '0.5px' }}>
                   {newOrderCount} تبرع جديد!
                 </span>
               </div>

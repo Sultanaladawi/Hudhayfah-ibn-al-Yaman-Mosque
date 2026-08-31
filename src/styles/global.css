@@ -1,83 +1,101 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Lora:ital@1&family=Caveat:wght@500;700&display=swap');
 
 :root {
-  /* ── Mosque VIP Palette ── */
-  --coffee:           #C49B75; /* Elegant Gold */
-  --coffee-light:     #DDB891;
-  --coffee-dark:      #9E7552;
-  --cappuccino:       #F4EDE6; /* Soft Sand */
-  --cappuccino-light: #FBF8F5;
-  --latte:            #FFFFFF;
-  --latte-soft:       #FDFDFD;
-  --tea:              #18453B; /* Deep Royal Green */
-  --tea-light:        #2C6D5F;
+  /* ══════════════════════════════════════════
+     🏛️  "رمال العقيق" — Mosque Premium Palette
+     Warm clay dark · Antique gold · Soft ivory
+  ══════════════════════════════════════════ */
+
+  /* Core Brand — Antique Gold */
+  --gold:             #C9A84C;
+  --gold-light:       #E6C97A;
+  --gold-dim:         #A0782E;
+  --gold-glow:        rgba(201, 168, 76, 0.18);
+  --gold-glow-strong: rgba(201, 168, 76, 0.35);
+
+  /* Backgrounds — Soft Ivory for light sections */
+  --cream:            #F7F3ED;
+  --cream-dark:       #EDE8E0;
+  --bg-base:          #F7F3ED;
+  --bg-surface:       #EDE8E0;
+  --bg-elevated:      #E0D8CD;
+  --bg-card:          #FAF7F3;
+  --bg-card-hover:    #F0EBE3;
+
+  /* Dark Brand — Warm Clay Earth */
+  --olive:            #3D2B1F;
+  --olive-light:      #5C3D2A;
+  --tea:              #3D2B1F;
+  --tea-light:        #5C3D2A;
+
+  /* Text */
+  --espresso:         #1C1917;
+  --espresso-mid:     #3D2B1F;
+  --espresso-dim:     #7A6352;
+  --text-primary:     #1C1917;
+  --text-secondary:   #3D2B1F;
+  --text-muted:       #7A6352;
+
+  /* Warm Brown Aliases */
+  --coffee:           #C9A84C;
+  --coffee-light:     #E6C97A;
+  --coffee-dark:      #A0782E;
+  --cappuccino:       #EDE8E0;
+  --cappuccino-light: #F7F3ED;
+  --latte:            #FAF7F3;
+  --latte-soft:       #FDFBF8;
   --cafe:             #B08A66;
-  --cream:            #FFFFFF; /* Pure White Background */
-  --cream-dark:       #F4F0EC;
-  --brown:            #C49B75; /* Re-mapped to Gold */
-  --brown-light:      #DDB891;
-  --olive:            #18453B; /* Re-mapped to Royal Green */
-  --olive-light:      #2C6D5F;
-  --espresso:         #1A1A1A; /* Deep Dark for Text */
-  --espresso-mid:     #404040;
-  --espresso-dim:     #737373;
-  --white:            #FFFFFF;
-  --gold:             #C49B75;
-  --gold-dim:         #A87B52;
-  --gold-light:       #E8CCAF;
-  --gold-glow:        rgba(196,155,117,0.15);
-  --shadow-sm:        rgba(0, 0, 0, .05);
-  --shadow-md:        rgba(0, 0, 0, .08);
-  --shadow-lg:        rgba(0, 0, 0, .15);
-  --shadow-gold:      0 8px 30px rgba(196,155,117,0.25);
-  --tr:               .3s cubic-bezier(.4, 0, .2, 1);
+  --brown:            #C9A84C;
+  --brown-light:      #E6C97A;
+  --white:            #FAF7F3;
 
-  /* ── Compatibility aliases (used by components) ── */
-  --bg-base:          #FFFFFF;
-  --bg-surface:       #FAFAFA;
-  --bg-elevated:      #F5F5F5;
-  --bg-card:          #FFFFFF;
-  --bg-card-hover:    #FAF8F5;
-  --text-primary:     #1A1A1A;
-  --text-secondary:   #404040;
-  --text-muted:       #737373;
-  --border:           rgba(0, 0, 0, 0.08);
-  --border-hover:     rgba(196, 155, 117, 0.4);
-  --divider:          rgba(0, 0, 0, 0.06);
+  /* Borders & Dividers */
+  --border:           rgba(61, 43, 31, 0.12);
+  --border-hover:     rgba(201, 168, 76, 0.5);
+  --divider:          rgba(61, 43, 31, 0.08);
 
-  /* ── Admin Panel (Mosque VIP Theme) ── */
-  --admin-bg:     #F8FAFC;
-  --admin-card:   #FFFFFF;
-  --admin-accent: #C49B75; /* Elegant Gold */
-  --admin-text:   #1E293B;
-  --admin-border: #E2E8F0;
-  --admin-sidebar-bg: #FFFFFF; /* Pure White to blend with logo */
-  --admin-sidebar-text: #18453B; /* Royal Green for text */
+  /* Shadows */
+  --shadow-sm:        rgba(28, 25, 23, .06);
+  --shadow-md:        rgba(28, 25, 23, .12);
+  --shadow-lg:        rgba(28, 25, 23, .22);
+  --shadow-gold:      0 8px 30px rgba(201, 168, 76, 0.28);
+
+  /* Transition */
+  --tr: .3s cubic-bezier(.4, 0, .2, 1);
+
+  /* ── Admin Panel ── */
+  --admin-bg:           #F7F3ED;
+  --admin-card:         #FAF7F3;
+  --admin-accent:       #C9A84C;
+  --admin-text:         #1C1917;
+  --admin-border:       rgba(61, 43, 31, 0.14);
+  --admin-sidebar-bg:   #1C1917;
+  --admin-sidebar-text: #E6C97A;
 }
 
-/* ── Dark Mode ── */
+/* ── Dark Mode — رمال العقيق ── */
 @media (prefers-color-scheme: dark) {
   :root {
-    --cream:            #121212;
-    --cream-dark:       #1A1A1A;
-    --white:            #1E1E1E;
-    --espresso:         #F5F5F5;
-    --espresso-mid:     #D4D4D4;
-    --espresso-dim:     #A3A3A3;
-    --shadow-sm:        rgba(0,0,0,.30);
-    --shadow-md:        rgba(0,0,0,.50);
-    --shadow-lg:        rgba(0,0,0,.70);
-    --brown:            #C49B75;
-    --brown-light:      #E8CCAF;
-    --bg-base:          #0A0A0A;
-    --bg-surface:       #141414;
-    --bg-elevated:      #1F1F1F;
-    --bg-card:          #1A1A1A;
-    --text-primary:     #F5F5F5;
-    --text-secondary:   #D4D4D4;
-    --text-muted:       #A3A3A3;
-    --border:           rgba(255,255,255,0.1);
-    --divider:          rgba(255,255,255,0.06);
+    --cream:            #1C1917;
+    --cream-dark:       #251E19;
+    --white:            #2C231C;
+    --espresso:         #F7F3ED;
+    --espresso-mid:     #EDE8E0;
+    --espresso-dim:     #B8A898;
+    --shadow-sm:        rgba(0, 0, 0, .35);
+    --shadow-md:        rgba(0, 0, 0, .55);
+    --shadow-lg:        rgba(0, 0, 0, .75);
+    --brown:            #C9A84C;
+    --brown-light:      #E6C97A;
+    --bg-base:          #1C1917;
+    --bg-surface:       #251E19;
+    --bg-elevated:      #30231A;
+    --bg-card:          #251E19;
+    --text-primary:     #F7F3ED;
+    --text-secondary:   #EDE8E0;
+    --text-muted:       #B8A898;
+    --border:           rgba(201, 168, 76, 0.15);
+    --divider:          rgba(201, 168, 76, 0.08);
   }
 }
 
@@ -122,8 +140,8 @@ body {
   font-family: 'DM Sans', sans-serif;
   background-color: var(--cream);
   background-image:
-    radial-gradient(ellipse 70% 50% at 10% 0%,   rgba(74,155,168,0.06) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(107,79,58,0.04)  0%, transparent 60%);
+    radial-gradient(ellipse 70% 50% at 10% 0%,   rgba(201, 168, 76, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(61, 43, 31, 0.05)   0%, transparent 60%);
   color: var(--espresso);
   overflow-x: hidden;
   line-height: 1.6;
@@ -185,7 +203,7 @@ body::before {
   left: 0;
   height: 2px;
   width: 0%;
-  background: linear-gradient(90deg, var(--olive), var(--olive-light));
+  background: linear-gradient(90deg, var(--gold-dim), var(--gold), var(--gold-light));
   z-index: 9999;
   transition: width 0.1s linear;
   pointer-events: none;

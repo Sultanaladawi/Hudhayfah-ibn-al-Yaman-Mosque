@@ -47,7 +47,7 @@ export default function Menu() {
   return (
     <section id="menu" style={{
       padding: '100px 0',
-      background: 'linear-gradient(180deg, #f7f5f2 0%, #ffffff 100%)',
+      background: 'linear-gradient(180deg, #EDE8E0 0%, #F7F3ED 100%)',
       direction: 'rtl',
     }}>
       <div className="section-wrap">
