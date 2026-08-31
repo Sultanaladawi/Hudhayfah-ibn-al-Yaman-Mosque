@@ -132,7 +132,7 @@ export default function Dashboard() {
             setActivities([
               { icon: CheckCircle, color: '#27ae60', text: 'الشيخ أسامة أضاف طالباً جديداً لمجموعة حلقة الفجر', time: 'منذ 10 دقائق' },
               { icon: Clock,       color: '#e67e22', text: 'تم تسجيل غياب لـ 3 طلاب في حلقة العصر — الشيخ همام', time: 'منذ 45 دقيقة' },
-              { icon: Star,        color: '#C49B75', text: 'تبرع جديد بقيمة 50 دينار لصالح حلقات تحفيظ القرآن الكريم', time: 'منذ ساعتين' },
+              
               { icon: TrendingUp,  color: '#18453B', text: 'اكتمل حفظ جزء عم للطالب عمر سعيد — حلقة الفجر', time: 'أمس' },
             ]);
           }
@@ -141,7 +141,7 @@ export default function Dashboard() {
           setActivities([
             { icon: CheckCircle, color: '#27ae60', text: 'الشيخ أسامة أضاف طالباً جديداً لمجموعة حلقة الفجر', time: 'منذ 10 دقائق' },
             { icon: Clock,       color: '#e67e22', text: 'تم تسجيل غياب لـ 3 طلاب في حلقة العصر — الشيخ همام', time: 'منذ 45 دقيقة' },
-            { icon: Star,        color: '#C49B75', text: 'تبرع جديد بقيمة 50 دينار لصالح حلقات تحفيظ القرآن الكريم', time: 'منذ ساعتين' },
+            
             { icon: TrendingUp,  color: '#18453B', text: 'اكتمل حفظ جزء عم للطالب عمر سعيد — حلقة الفجر', time: 'أمس' },
           ]);
         }
@@ -185,10 +185,10 @@ export default function Dashboard() {
       path: '/admin/volunteers',
     },
     {
-      title: 'إجمالي التبرعات والصدقات',
-      value: `${parseFloat(stats.donationsTotal).toFixed(2)} JOD`,
-      change: stats.donationsToday > 0 ? `+${stats.donationsToday} JOD تبرعات اليوم` : 'دعم صيانة وحلقات المسجد',
-      icon: ShoppingCart,
+      title: 'حلقات القرآن الكريم والأنشطة',
+      value: '8 حلقات نشطة',
+      change: 'متابعة أسبوعية مستمرة',
+      icon: BookOpen,
       color: '#e67e22',
       lightColor: 'rgba(230,126,34,0.1)',
       path: '/admin/donations',

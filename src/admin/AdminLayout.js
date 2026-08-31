@@ -206,7 +206,6 @@ const AdminLayout = () => {
     { path: '/admin/dashboard', name: 'الرئيسية', icon: <LayoutGrid size={18} /> },
     { path: '/admin/students', name: 'شؤون الطلاب', icon: <User size={18} /> },
     { path: '/admin/circles', name: 'حلقات التحفيظ', icon: <Box size={18} /> },
-    { path: '/admin/donations', name: 'التبرعات والصدقات', icon: <ShoppingCart size={18} />, badge: newOrderCount },
     { path: '/admin/activities', name: 'الأنشطة والفعاليات', icon: <Briefcase size={18} /> },
     { path: '/admin/volunteers', name: 'طلبات التطوع', icon: <FileText size={18} /> },
     { path: '/admin/offers', name: 'لوحة التكريم والشرف', icon: <Sparkles size={18} /> },

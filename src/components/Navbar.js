@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { shopInfo } from '../data/shopData';
-import { useCart } from '../context/CartContext';
 import styles from './Navbar.module.css';
 
 // Inline SVG Icons — no CDN dependency
@@ -35,9 +34,6 @@ const LINKS = [
 export default function Navbar({ onCartOpen }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const { totalItems } = useCart();
-  const [bounce, setBounce] = useState(false);
-
   const [playing, setPlaying] = useState(false);
   const audioRef = useRef(null);
 
@@ -344,18 +340,7 @@ export default function Navbar({ onCartOpen }) {
           </nav>
 
           <div className={styles.navRight}>
-            <button
-              className={`${styles.cartBtn} ${scrolled ? styles.cartBtnScrolled : ''}`}
-              onClick={onCartOpen}
-              aria-label={`التبرعات`}
-            >
-              <BagIcon />
-              {totalItems > 0 && (
-                <span className={`${styles.cartBadge} ${bounce ? styles.cartBadgeBounce : ''}`}>
-                  {totalItems > 99 ? '99+' : totalItems}
-                </span>
-              )}
-            </button>
+            
 
             <button
               className={`${styles.burger} ${open ? styles.open : ''}`}
@@ -379,14 +364,7 @@ export default function Navbar({ onCartOpen }) {
               {label}
             </a>
           ))}
-          <button
-            className={styles.mobileCartLink}
-            onClick={() => { setOpen(false); onCartOpen(); }}
-          >
-            <BagIcon />
-            سلة التبرعات
-            {totalItems > 0 && <span className={styles.mobileBadge}>{totalItems}</span>}
-          </button>
+          
         </nav>
         <a href={shopInfo.instagram} className={styles.mobileInsta} target="_blank" rel="noopener noreferrer">
           <InstaIcon /> {shopInfo.instagramHandle}

@@ -230,7 +230,7 @@ export default function Analytics() {
               الإحصائيات والتحليلات
             </h1>
             <p style={{ color: C.muted, margin: 0, fontSize: '0.88rem' }}>
-              إحصائيات التبرعات والنشاطات الشهرية
+              إحصائيات حلقات التحفيظ والأنشطة الشهرية
             </p>
           </div>
         </div>
@@ -283,21 +283,21 @@ export default function Analytics() {
       {/* ── KPI Cards ── */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '18px', marginBottom: '28px' }}>
         <StatCard
-          title="إجمالي التبرعات"
+          title="إجمالي الطلاب المسجلين"
           value={`${parseFloat(stats?.totalSales || 0).toFixed(0)} د.أ`}
           sub={`${MONTHS_AR[month - 1]} ${year}`}
           icon={TrendingUp}
           color={C.green}
         />
         <StatCard
-          title="عدد التبرعات"
+          title="عدد الحلقات النموذجية"
           value={stats?.totalOrders || 0}
           sub="عملية تبرع"
           icon={BookOpen}
           color={C.gold}
         />
         <StatCard
-          title="متوسط قيمة التبرع"
+          title="نسبة الالتزام والحفظ"
           value={`${parseFloat(stats?.avgOrderValue || 0).toFixed(2)} د.أ`}
           sub="لكل تبرع"
           icon={Star}

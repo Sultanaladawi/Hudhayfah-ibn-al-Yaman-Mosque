@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import './styles/global.css';
 
-import { CartProvider }   from './context/CartContext';
 import { StoreProvider, useStore } from './context/StoreContext';
 import Navbar             from './components/Navbar';
 import Hero               from './components/Hero';
@@ -13,9 +12,6 @@ import Careers            from './components/Careers';
 import Contact            from './components/Contact';
 import Footer             from './components/Footer';
 import Chatbot            from './components/Chatbot';
-import Cart               from './components/Cart';
-import Checkout           from './components/Checkout';
-
 import LoadingScreen      from './components/LoadingScreen';
 
 import { AdminProvider }  from './admin/AdminContext';
@@ -23,7 +19,6 @@ import AdminRoute         from './admin/AdminRoute';
 import AdminLogin         from './admin/AdminLogin';
 import AdminLayout        from './admin/AdminLayout';
 import Dashboard          from './admin/pages/Dashboard';
-import Donations          from './admin/pages/Donations';
 import Circles            from './admin/pages/Circles';
 import Analytics          from './admin/pages/Analytics';
 import Students           from './admin/pages/Students';
@@ -39,8 +34,6 @@ let LenisClass = null;
 try { LenisClass = require('@studio-freight/lenis').default; } catch (_) {}
 
 function PublicSite() {
-  const [cartOpen, setCartOpen] = useState(false);
-  const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const { isStoreOpen } = useStore();
 
@@ -74,7 +67,7 @@ function PublicSite() {
       <div id="cursor-dot" ref={dotRef} />
       <div id="cursor-ring" ref={ringRef} />
       
-      <Navbar onCartOpen={() => { setCartOpen(true); setCheckoutOpen(false); }} />
+      <Navbar />
       
       <main>
         <Hero />
@@ -150,10 +143,10 @@ export default function App() {
     <BrowserRouter>
       <StoreProvider>
         <AdminProvider>
-          <CartProvider>
+          
             <Routes>
               <Route path="/" element={<PublicSite />} />
-              <Route path="/checkout" element={<Checkout />} />
+              
 
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route
@@ -166,7 +159,7 @@ export default function App() {
               >
                 <Route index element={<Navigate to="dashboard" replace />} />
                 <Route path="dashboard"    element={<Dashboard />} />
-                <Route path="donations"    element={<Donations />} />
+                
                 <Route path="circles"      element={<Circles />} />
                 <Route path="analytics"    element={<Analytics />} />
                 <Route path="students"     element={<Students />} />
@@ -181,7 +174,7 @@ export default function App() {
 
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
-          </CartProvider>
+          
         </AdminProvider>
       </StoreProvider>
     </BrowserRouter>
