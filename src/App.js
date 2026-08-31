@@ -88,7 +88,7 @@ function PublicSite() {
       {!isStoreOpen && (
         <div style={{
           position: 'fixed', inset: 0, zIndex: 9999,
-          backgroundColor: 'rgba(28, 25, 23, 0.97)', // Deep Islamic green tone
+          backgroundColor: 'rgba(30, 20, 9, 0.97)', // Deep Islamic green tone
           backdropFilter: 'blur(15px)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           color: '#ffffff', textAlign: 'center', padding: '30px',
