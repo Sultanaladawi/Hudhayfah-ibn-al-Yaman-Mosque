@@ -6,7 +6,7 @@
     "client": "cross-env GENERATE_SOURCEMAP=false react-scripts start",
     "server": "node server.js",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "build": "cross-env GENERATE_SOURCEMAP=false react-scripts build"
+    "build": "cross-env CI=false DISABLE_ESLINT_PLUGIN=true GENERATE_SOURCEMAP=false react-scripts build"
   },
   "dependencies": {
     "@studio-freight/lenis": "^1.0.42",

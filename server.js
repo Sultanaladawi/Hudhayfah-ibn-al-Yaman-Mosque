@@ -178,28 +178,22 @@ app.get('/api/fix-db-times', async (req, res) => {
   }
 });
 
-const dbHost = process.env.DB_HOST || 'localhost';
+const dbHost = process.env.DB_HOST || 'gateway01.eu-central-1.prod.aws.tidbcloud.com';
 const pool = mysql.createPool({
   host: dbHost,
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || process.env.DB_PASS || '',
-  database: process.env.DB_NAME || 'graduation_project',
-  port: process.env.DB_PORT || 3306,
+  user: process.env.DB_USER || '3Tzv3f22f9k6ymW.root',
+  password: process.env.DB_PASSWORD || process.env.DB_PASS || 'tO1bLyzwJ2h3lHqS',
+  database: process.env.DB_NAME || 'hudhayfah_mosque',
+  port: parseInt(process.env.DB_PORT || '4000', 10),
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
   dateStrings: true,
-  ssl: (dbHost !== 'localhost' && dbHost !== '127.0.0.1') ? { rejectUnauthorized: false } : false
+  ssl: (dbHost !== 'localhost' && dbHost !== '127.0.0.1') ? { minVersion: 'TLSv1.2', rejectUnauthorized: true } : false
 });
 
-// Force all MySQL connections to use Jordan Time (Asia/Amman = UTC+3)
 pool.on('connection', (connection) => {
-  connection.query("SET time_zone = 'Asia/Amman'", (err) => {
-    if (err) {
-      // Fallback in case Azure/MySQL lacks the timezone dictionary
-      connection.query("SET time_zone = '+03:00'");
-    }
-  });
+  connection.query("SET time_zone = '+03:00'", () => {});
 });
 
 const db = pool;
