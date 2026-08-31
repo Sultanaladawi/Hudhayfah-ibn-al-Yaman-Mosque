@@ -43,14 +43,14 @@
 .navLinks { display: flex; align-items: center; gap: 2rem; list-style: none; padding: 0; margin: 0; }
 
 .navLink {
-  font-size: .82rem;
-  font-weight: 600;
-  color: var(--espresso-mid);
-  letter-spacing: .06em;
-  text-transform: uppercase;
+  font-size: .95rem;
+  font-weight: 700;
+  color: #FEF9F4;
+  letter-spacing: .04em;
   position: relative;
-  transition: color var(--tr);
+  transition: color var(--tr), text-shadow var(--tr);
   text-decoration: none;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.7);
 }
 
 .navLink::after {
@@ -230,3 +230,5 @@
   .cartBtn { width: 36px; height: 36px; }
   .mobileLink, .mobileCartLink { font-size: 2rem; }
 }
+
+.scrolled .navLink { color: var(--espresso) !important; text-shadow: none !important; }

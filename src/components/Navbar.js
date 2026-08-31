@@ -313,8 +313,8 @@ export default function Navbar({ onCartOpen }) {
               alignItems: 'center',
               gap: '12px'
             }}>
-              <img src="/images/logo.jpg" alt="شعار المسجد" style={{ height: '50px', objectFit: 'contain' }} />
-              مسجد <span style={{ color: 'var(--gold)', fontWeight: 'bold' }}>حذيفة بن اليمان</span>
+              <img src="/images/logo.jpg" alt="شعار المسجد" style={{ height: '46px', width: '46px', objectFit: 'cover', borderRadius: '50%', border: '2px solid var(--gold)', boxShadow: '0 3px 10px rgba(0,0,0,0.35)', background: '#fff' }} />
+              <span style={{ color: scrolled ? 'var(--olive)' : '#FEF9F4', textShadow: scrolled ? 'none' : '0 2px 6px rgba(0,0,0,0.7)', transition: 'color 0.3s' }}>مسجد <span style={{ color: 'var(--gold)', fontWeight: 'bold' }}>حذيفة بن اليمان</span></span>
             </div>
           </a>
 
