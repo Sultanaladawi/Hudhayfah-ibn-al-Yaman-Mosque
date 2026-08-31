@@ -28,14 +28,14 @@ export default function Cart({ onClose, onCheckout }) {
             </button>
           </div>
           <div className={styles.emptyState} style={{ direction: 'rtl' }}>
-            <div className={styles.emptyIcon} style={{ backgroundColor: 'rgba(24, 69, 59, 0.1)' }}>
-              <i className="fas fa-hand-holding-heart" style={{ color: '#18453B', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.05))' }} />
+            <div className={styles.emptyIcon} style={{ backgroundColor: 'rgba(61, 43, 31, 0.10)' }}>
+              <i className="fas fa-hand-holding-heart" style={{ color: '#3D2B1F', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.05))' }} />
             </div>
             <p className={styles.emptyTitle} style={{ fontFamily: 'Tajawal' }}>السلة فارغة</p>
             <p className={styles.emptyDesc} style={{ fontFamily: 'Tajawal' }}>يبدو أنك لم تختر أي مساهمة أو باب من أبواب الخير بعد.</p>
             <button
               className={styles.checkoutBtn}
-              style={{ background: '#18453B', maxWidth: '250px', fontFamily: 'Tajawal' }}
+              style={{ background: '#3D2B1F', maxWidth: '250px', fontFamily: 'Tajawal' }}
               onClick={() => {
                 onClose();
                 setTimeout(() => {
@@ -105,14 +105,14 @@ export default function Cart({ onClose, onCheckout }) {
           </div>
           <div className={styles.summaryRow} style={{ fontFamily: 'Tajawal' }}>
             <span>رسوم المعاملة</span>
-            <span style={{ color: '#27ae60' }}>مجانية (مغطاة بالكامل)</span>
+            <span style={{ color: '#B8860B' }}>مجانية (مغطاة بالكامل)</span>
           </div>
           <div className={`${styles.summaryRow} ${styles.totalRow}`} style={{ fontFamily: 'Tajawal' }}>
             <span>المجموع الكلي للمساهمات</span>
             <span>{formatPrice(totalPrice)}</span>
           </div>
 
-          <button className={styles.checkoutBtn} onClick={onCheckout} style={{ background: '#18453B', fontFamily: 'Tajawal' }}>
+          <button className={styles.checkoutBtn} onClick={onCheckout} style={{ background: '#3D2B1F', fontFamily: 'Tajawal' }}>
             <i className="fas fa-shield-alt" style={{ marginLeft: '8px' }} />
             <span>تأكيد التبرع والمتابعة</span>
             <span style={{ background: 'rgba(255,255,255,0.15)', padding: '4px 12px', borderRadius: '8px', fontSize: '1rem', marginRight: 'auto', marginLeft: 0 }}>{formatPrice(totalPrice)}</span>

@@ -92,7 +92,7 @@ export default function Dashboard() {
               const actionLower = String(log.action || '').toLowerCase();
               if (actionLower.includes('طالب') || actionLower.includes('student')) {
                 icon = Users;
-                color = '#27ae60';
+                color = '#B8860B';
               } else if (actionLower.includes('حلقة') || actionLower.includes('circle')) {
                 icon = BookOpen;
                 color = '#C49B75';
@@ -130,7 +130,7 @@ export default function Dashboard() {
           } else {
             // Default activity fallback if no logs
             setActivities([
-              { icon: CheckCircle, color: '#27ae60', text: 'الشيخ أسامة أضاف طالباً جديداً لمجموعة حلقة الفجر', time: 'منذ 10 دقائق' },
+              { icon: CheckCircle, color: '#B8860B', text: 'الشيخ أسامة أضاف طالباً جديداً لمجموعة حلقة الفجر', time: 'منذ 10 دقائق' },
               { icon: Clock,       color: '#e67e22', text: 'تم تسجيل غياب لـ 3 طلاب في حلقة العصر — الشيخ همام', time: 'منذ 45 دقيقة' },
               
               { icon: TrendingUp,  color: '#3D2B1F', text: 'اكتمل حفظ جزء عم للطالب عمر سعيد — حلقة الفجر', time: 'أمس' },
@@ -139,7 +139,7 @@ export default function Dashboard() {
         } catch(e) {
           // Fallback on error
           setActivities([
-            { icon: CheckCircle, color: '#27ae60', text: 'الشيخ أسامة أضاف طالباً جديداً لمجموعة حلقة الفجر', time: 'منذ 10 دقائق' },
+            { icon: CheckCircle, color: '#B8860B', text: 'الشيخ أسامة أضاف طالباً جديداً لمجموعة حلقة الفجر', time: 'منذ 10 دقائق' },
             { icon: Clock,       color: '#e67e22', text: 'تم تسجيل غياب لـ 3 طلاب في حلقة العصر — الشيخ همام', time: 'منذ 45 دقيقة' },
             
             { icon: TrendingUp,  color: '#3D2B1F', text: 'اكتمل حفظ جزء عم للطالب عمر سعيد — حلقة الفجر', time: 'أمس' },

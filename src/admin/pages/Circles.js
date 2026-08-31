@@ -9,7 +9,7 @@ const DEFAULT_CLASSES = [
   { id: 3, name: 'حلقة الظهر', teacher: 'الشيخ حسن الجلودي', students: 25, time: 'بعد الظهر — 1:00 م', level: 'جميع المستويات', color: '#2980b9' },
   { id: 4, name: 'حلقة العصر', teacher: 'الشيخ همام النجار', students: 30, time: 'بعد العصر — 4:30 م', level: 'متقدم', color: '#8e44ad' },
   { id: 5, name: 'حلقة المغرب', teacher: 'الشيخ أسامة الجلودي', students: 28, time: 'بعد المغرب — 8:00 م', level: 'مبتدئ ومتوسط', color: '#e67e22' },
-  { id: 6, name: 'حلقة العشاء', teacher: 'الشيخ حسن الجلودي', students: 20, time: 'بعد العشاء — 9:30 م', level: 'الأشبال', color: '#27ae60' },
+  { id: 6, name: 'حلقة العشاء', teacher: 'الشيخ حسن الجلودي', students: 20, time: 'بعد العشاء — 9:30 م', level: 'الأشبال', color: '#B8860B' },
 ];
 
 export default function Circles() {
@@ -80,7 +80,7 @@ export default function Circles() {
       time: form.time,
       level: form.level || 'جميع المستويات',
       students: 0,
-      color: ['#3D2B1F', '#C49B75', '#2980b9', '#8e44ad', '#e67e22', '#27ae60'][classes.length % 6]
+      color: ['#3D2B1F', '#C49B75', '#2980b9', '#8e44ad', '#e67e22', '#B8860B'][classes.length % 6]
     };
 
     const updated = [...classes, newCircle];

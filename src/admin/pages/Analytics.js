@@ -301,7 +301,7 @@ export default function Analytics() {
           value={`${parseFloat(stats?.avgOrderValue || 0).toFixed(2)} د.أ`}
           sub="لكل تبرع"
           icon={Star}
-          color="#27ae60"
+          color="#B8860B"
         />
         <StatCard
           title="المنتجات النشطة"

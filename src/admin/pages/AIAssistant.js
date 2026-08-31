@@ -369,7 +369,7 @@ const AIAssistant = () => {
 
                     {/* Bubble */}
                     <div style={{
-                      backgroundColor: isUser ? 'rgba(255, 255, 255, 0.05)' : 'rgba(24, 69, 59, 0.65)',
+                      backgroundColor: isUser ? 'rgba(255, 255, 255, 0.05)' : 'rgba(61, 43, 31, 0.65)',
                       color: isUser ? '#e2e8f0' : '#fff',
                       padding: '16px 20px',
                       borderRadius: isUser ? '20px 20px 20px 4px' : '20px 20px 4px 20px',
@@ -434,7 +434,7 @@ const AIAssistant = () => {
                     <span>مساعد الشيخ الذكي يقرأ قاعدة البيانات...</span>
                   </div>
                   <div style={{
-                    backgroundColor: 'rgba(24, 69, 59, 0.4)',
+                    backgroundColor: 'rgba(61, 43, 31, 0.40)',
                     padding: '16px 25px',
                     borderRadius: '20px 20px 4px 20px',
                     border: '1px solid rgba(196,155,117,0.15)',
@@ -566,7 +566,7 @@ const AIAssistant = () => {
                   >
                     <span style={{ 
                       fontSize: '0.72rem', 
-                      backgroundColor: 'rgba(24, 69, 59, 0.6)', 
+                      backgroundColor: 'rgba(61, 43, 31, 0.60)', 
                       color: 'var(--admin-accent)', 
                       padding: '2px 8px', 
                       borderRadius: '8px',
@@ -583,7 +583,7 @@ const AIAssistant = () => {
 
             {/* Instruction Notice */}
             <div style={{
-              background: 'linear-gradient(135deg, rgba(24, 69, 59, 0.3) 0%, rgba(18, 48, 38, 0.1) 100%)',
+              background: 'linear-gradient(135deg, rgba(61, 43, 31, 0.30) 0%, rgba(61, 43, 31, 0.08) 100%)',
               border: '1px solid rgba(196,155,117,0.1)',
               borderRadius: '24px',
               padding: '24px',

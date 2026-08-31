@@ -189,7 +189,7 @@ export default function Messages() {
         {[
           { label: 'إجمالي الرسائل', value: messages.length, icon: Mail, color: COLORS.green },
           { label: 'غير مقروءة', value: unreadCount, icon: EyeOff, color: '#e67e22' },
-          { label: 'مقروءة', value: messages.length - unreadCount, icon: MailOpen, color: '#27ae60' },
+          { label: 'مقروءة', value: messages.length - unreadCount, icon: MailOpen, color: '#B8860B' },
         ].map((stat, i) => (
           <div key={i} style={{
             background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: '16px',

@@ -120,7 +120,7 @@ export default function Hero() {
     {/* Live Stream Section (moved outside Hero) */}
     <section style={{ backgroundColor: '#1C1917', padding: '60px 20px', width: '100%', display: 'flex', justifyContent: 'center' }}>
       <div style={{
-        background: 'rgba(24, 69, 59, 0.45)',
+        background: 'rgba(61, 43, 31, 0.45)',
         backdropFilter: 'blur(12px)',
         border: '2px solid #C9A84C',
         borderRadius: '24px',

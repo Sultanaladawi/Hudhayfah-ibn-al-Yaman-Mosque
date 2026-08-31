@@ -652,20 +652,20 @@ export default function Checkout({ onClose, onعودة }) {
 
             {/* Order Type Selection */}
             <div className={styles.formSection} style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '20px', border: '1px solid #eee', marginBottom: '25px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)', direction: 'rtl' }}>
-              <label className={styles.label} style={{ fontSize: '1.25rem', color: '#18453B', marginBottom: '20px', display: 'block', fontWeight: '800', fontFamily: "'Amiri', 'Tajawal', sans-serif", textAlign: 'center' }}>تحديد باب المساهمة والخير:</label>
+              <label className={styles.label} style={{ fontSize: '1.25rem', color: '#3D2B1F', marginBottom: '20px', display: 'block', fontWeight: '800', fontFamily: "'Amiri', 'Tajawal', sans-serif", textAlign: 'center' }}>تحديد باب المساهمة والخير:</label>
               <div className={styles.orderTypeGrid} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '15px' }}>
                 <div
                   onClick={() => setOrderType('general')}
                   style={{
                     padding: '20px 10px', textAlign: 'center', borderRadius: '16px', cursor: 'pointer', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    border: orderType === 'general' ? '2px solid #18453B' : '2px solid transparent',
-                    backgroundColor: orderType === 'general' ? 'rgba(24,69,59,0.08)' : '#f8f9fa',
-                    boxShadow: orderType === 'general' ? '0 10px 25px rgba(24,69,59,0.15)' : 'none',
+                    border: orderType === 'general' ? '2px solid #3D2B1F' : '2px solid transparent',
+                    backgroundColor: orderType === 'general' ? 'rgba(61,43,31,0.08)' : '#f8f9fa',
+                    boxShadow: orderType === 'general' ? '0 10px 25px rgba(61,43,31,0.15)' : 'none',
                     transform: orderType === 'general' ? 'translateY(-4px)' : 'translateY(0)'
                   }}
                 >
-                  <i className="fas fa-hand-holding-heart" style={{ fontSize: '2rem', color: orderType === 'general' ? '#18453B' : '#a0a0a0', marginBottom: '12px', transition: '0.3s' }} />
-                  <div style={{ fontWeight: '800', color: orderType === 'general' ? '#18453B' : '#777', fontSize: '1rem', fontFamily: 'Tajawal' }}>صدقة عامة</div>
+                  <i className="fas fa-hand-holding-heart" style={{ fontSize: '2rem', color: orderType === 'general' ? '#3D2B1F' : '#a0a0a0', marginBottom: '12px', transition: '0.3s' }} />
+                  <div style={{ fontWeight: '800', color: orderType === 'general' ? '#3D2B1F' : '#777', fontSize: '1rem', fontFamily: 'Tajawal' }}>صدقة عامة</div>
                   <div style={{ fontSize: '0.75rem', color: '#999', marginTop: '6px', fontWeight: '500', fontFamily: 'Tajawal' }}>أبواب الصدقات العامة</div>
                 </div>
 
@@ -673,14 +673,14 @@ export default function Checkout({ onClose, onعودة }) {
                   onClick={() => setOrderType('quran')}
                   style={{
                     padding: '20px 10px', textAlign: 'center', borderRadius: '16px', cursor: 'pointer', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    border: orderType === 'quran' ? '2px solid #18453B' : '2px solid transparent',
-                    backgroundColor: orderType === 'quran' ? 'rgba(24,69,59,0.08)' : '#f8f9fa',
-                    boxShadow: orderType === 'quran' ? '0 10px 25px rgba(24,69,59,0.15)' : 'none',
+                    border: orderType === 'quran' ? '2px solid #3D2B1F' : '2px solid transparent',
+                    backgroundColor: orderType === 'quran' ? 'rgba(61,43,31,0.08)' : '#f8f9fa',
+                    boxShadow: orderType === 'quran' ? '0 10px 25px rgba(61,43,31,0.15)' : 'none',
                     transform: orderType === 'quran' ? 'translateY(-4px)' : 'translateY(0)'
                   }}
                 >
-                  <i className="fas fa-book-open" style={{ fontSize: '2rem', color: orderType === 'quran' ? '#18453B' : '#a0a0a0', marginBottom: '12px', transition: '0.3s' }} />
-                  <div style={{ fontWeight: '800', color: orderType === 'quran' ? '#18453B' : '#777', fontSize: '1rem', fontFamily: 'Tajawal' }}>كفالة الحلقات</div>
+                  <i className="fas fa-book-open" style={{ fontSize: '2rem', color: orderType === 'quran' ? '#3D2B1F' : '#a0a0a0', marginBottom: '12px', transition: '0.3s' }} />
+                  <div style={{ fontWeight: '800', color: orderType === 'quran' ? '#3D2B1F' : '#777', fontSize: '1rem', fontFamily: 'Tajawal' }}>كفالة الحلقات</div>
                   <div style={{ fontSize: '0.75rem', color: '#999', marginTop: '6px', fontWeight: '500', fontFamily: 'Tajawal' }}>طلاب ومعلمو القرآن</div>
                 </div>
 
@@ -688,14 +688,14 @@ export default function Checkout({ onClose, onعودة }) {
                   onClick={() => setOrderType('maintenance')}
                   style={{
                     padding: '20px 10px', textAlign: 'center', borderRadius: '16px', cursor: 'pointer', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    border: orderType === 'maintenance' ? '2px solid #18453B' : '2px solid transparent',
-                    backgroundColor: orderType === 'maintenance' ? 'rgba(24,69,59,0.08)' : '#f8f9fa',
-                    boxShadow: orderType === 'maintenance' ? '0 10px 25px rgba(24,69,59,0.15)' : 'none',
+                    border: orderType === 'maintenance' ? '2px solid #3D2B1F' : '2px solid transparent',
+                    backgroundColor: orderType === 'maintenance' ? 'rgba(61,43,31,0.08)' : '#f8f9fa',
+                    boxShadow: orderType === 'maintenance' ? '0 10px 25px rgba(61,43,31,0.15)' : 'none',
                     transform: orderType === 'maintenance' ? 'translateY(-4px)' : 'translateY(0)'
                   }}
                 >
-                  <i className="fas fa-tools" style={{ fontSize: '2rem', color: orderType === 'maintenance' ? '#18453B' : '#a0a0a0', marginBottom: '12px', transition: '0.3s' }} />
-                  <div style={{ fontWeight: '800', color: orderType === 'maintenance' ? '#18453B' : '#777', fontSize: '1rem', fontFamily: 'Tajawal' }}>صيانة وإعمار</div>
+                  <i className="fas fa-tools" style={{ fontSize: '2rem', color: orderType === 'maintenance' ? '#3D2B1F' : '#a0a0a0', marginBottom: '12px', transition: '0.3s' }} />
+                  <div style={{ fontWeight: '800', color: orderType === 'maintenance' ? '#3D2B1F' : '#777', fontSize: '1rem', fontFamily: 'Tajawal' }}>صيانة وإعمار</div>
                   <div style={{ fontSize: '0.75rem', color: '#999', marginTop: '6px', fontWeight: '500', fontFamily: 'Tajawal' }}>خدمة وتجهيز بيت الله</div>
                 </div>
               </div>

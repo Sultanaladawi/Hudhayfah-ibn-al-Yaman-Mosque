@@ -316,7 +316,7 @@ export default function Activities() {
               )}
 
               <div style={{ display: 'flex', gap: '20px', alignItems: 'center', marginBottom: '25px' }}>
-                <div style={{ background: 'rgba(24, 69, 59, 0.15)', padding: '18px', borderRadius: '20px', border: '1px solid rgba(196, 164, 132, 0.1)' }}>
+                <div style={{ background: 'rgba(61, 43, 31, 0.15)', padding: '18px', borderRadius: '20px', border: '1px solid rgba(196, 164, 132, 0.1)' }}>
                   <Calendar color="var(--admin-accent)" size={28} />
                 </div>
                 <div style={{ paddingLeft: '50px' }}>

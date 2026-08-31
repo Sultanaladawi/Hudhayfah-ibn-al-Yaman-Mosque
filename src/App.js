@@ -109,7 +109,7 @@ function PublicSite() {
             </p>
             <div style={{ 
               padding: '25px', border: '1px solid rgba(196, 155, 117, 0.4)', 
-              borderRadius: '20px', backgroundColor: 'rgba(24, 69, 59, 0.25)',
+              borderRadius: '20px', backgroundColor: 'rgba(61, 43, 31, 0.25)',
               boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
             }}>
               <p style={{ fontWeight: '900', textTransform: 'uppercase', fontSize: '0.95rem', letterSpacing: '1px', marginBottom: '15px', color: '#C9A84C' }}>
