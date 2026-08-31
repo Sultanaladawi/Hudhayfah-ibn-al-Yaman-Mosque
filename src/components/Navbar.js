@@ -31,7 +31,7 @@ const LINKS = [
   { label: 'تواصل معنا', href: '#contact' },
 ];
 
-export default function Navbar({ onCartOpen }) {
+export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [playing, setPlaying] = useState(false);

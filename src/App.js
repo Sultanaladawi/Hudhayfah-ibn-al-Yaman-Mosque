@@ -81,18 +81,8 @@ function PublicSite() {
       <Footer />
       <Chatbot />
 
-      {cartOpen && (
-        <Cart 
-          onClose={() => setCartOpen(false)} 
-          onCheckout={() => { setCartOpen(false); setCheckoutOpen(true); }} 
-        />
-      )}
-      {checkoutOpen && (
-        <Checkout 
-          onClose={() => { setCartOpen(false); setCheckoutOpen(false); }} 
-          onBack={() => { setCheckoutOpen(false); setCartOpen(true); }} 
-        />
-      )}
+
+
 
       {/* Global Closed Overlay */}
       {!isStoreOpen && (
