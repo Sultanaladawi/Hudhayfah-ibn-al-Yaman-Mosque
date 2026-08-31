@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 
 const COLORS = {
-  green: '#18453B',
+  green: '#3D2B1F',
   gold: '#C49B75',
   bg: 'var(--admin-bg)',
   card: 'var(--admin-card)',
@@ -137,7 +137,7 @@ export default function Messages() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
             <div style={{
               width: '48px', height: '48px', borderRadius: '14px',
-              background: `linear-gradient(135deg, ${COLORS.green}, #2C6D5F)`,
+              background: `linear-gradient(135deg, ${COLORS.green}, #5C3D2A)`,
               display: 'flex', alignItems: 'center', justifyContent: 'center'
             }}>
               <Mail size={22} color="#fff" />
@@ -290,7 +290,7 @@ export default function Messages() {
                   {/* Avatar */}
                   <div style={{
                     width: '42px', height: '42px', borderRadius: '12px', flexShrink: 0,
-                    background: `linear-gradient(135deg, ${COLORS.green}, #2C6D5F)`,
+                    background: `linear-gradient(135deg, ${COLORS.green}, #5C3D2A)`,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     color: '#fff', fontWeight: '800', fontSize: '1rem'
                   }}>
@@ -359,7 +359,7 @@ export default function Messages() {
             }}>
               <div style={{
                 width: '52px', height: '52px', borderRadius: '14px',
-                background: `linear-gradient(135deg, ${COLORS.green}, #2C6D5F)`,
+                background: `linear-gradient(135deg, ${COLORS.green}, #5C3D2A)`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 color: '#fff', fontWeight: '800', fontSize: '1.3rem', flexShrink: 0
               }}>
@@ -403,7 +403,7 @@ export default function Messages() {
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
                 width: '100%', padding: '13px', borderRadius: '12px', cursor: 'pointer',
-                background: `linear-gradient(135deg, ${COLORS.green}, #2C6D5F)`,
+                background: `linear-gradient(135deg, ${COLORS.green}, #5C3D2A)`,
                 color: '#fff', fontFamily: "'Tajawal', sans-serif",
                 fontWeight: '800', fontSize: '0.95rem', textDecoration: 'none',
                 marginBottom: '12px', boxSizing: 'border-box', textAlign: 'center',

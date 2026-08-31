@@ -6,8 +6,8 @@ import {
 } from 'lucide-react';
 
 const C = {
-  green: '#18453B',
-  greenLight: '#2C6D5F',
+  green: '#3D2B1F',
+  greenLight: '#5C3D2A',
   gold: '#C49B75',
   goldLight: '#E8CCAF',
   bg: 'var(--admin-bg)',
@@ -66,7 +66,7 @@ function BarChart({ data = [], color = C.green, label = '' }) {
 function DonutChart({ data = [], size = 160 }) {
   if (!data.length) return <div style={{ textAlign: 'center', padding: '30px', color: C.muted, fontSize: '0.85rem' }}>لا توجد بيانات</div>;
 
-  const PALETTE = [C.green, C.gold, '#27ae60', '#e67e22', '#3498db', '#9b59b6', '#e74c3c'];
+  const PALETTE = [C.green, C.gold, '#8B6914', '#e67e22', '#3498db', '#9b59b6', '#e74c3c'];
   const total = data.reduce((s, d) => s + (d.count || 0), 0);
   const r = 50, cx = 60, cy = 60, strokeW = 18;
   const circ = 2 * Math.PI * r;
@@ -133,7 +133,7 @@ function StatCard({ title, value, sub, icon: Icon, color = C.green, trend }) {
           <Icon size={22} color={color} />
         </div>
         {trend !== undefined && (
-          <span style={{ fontSize: '0.75rem', fontWeight: '700', color: trend >= 0 ? '#27ae60' : '#e74c3c', background: trend >= 0 ? '#edfdf5' : '#fff5f5', padding: '4px 10px', borderRadius: '20px' }}>
+          <span style={{ fontSize: '0.75rem', fontWeight: '700', color: trend >= 0 ? '#8B6914' : '#e74c3c', background: trend >= 0 ? '#edfdf5' : '#fff5f5', padding: '4px 10px', borderRadius: '20px' }}>
             {trend >= 0 ? '▲' : '▼'} {Math.abs(trend)}%
           </span>
         )}
@@ -360,7 +360,7 @@ export default function Analytics() {
         padding: '26px', boxShadow: '0 2px 12px rgba(0,0,0,0.04)'
       }}>
         <h2 style={{ margin: '0 0 22px 0', fontSize: '1.1rem', color: C.text, fontWeight: '800', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span style={{ width: '4px', height: '20px', background: '#27ae60', borderRadius: '4px', display: 'inline-block' }} />
+          <span style={{ width: '4px', height: '20px', background: '#8B6914', borderRadius: '4px', display: 'inline-block' }} />
           الأكثر طلباً هذا الشهر
         </h2>
 

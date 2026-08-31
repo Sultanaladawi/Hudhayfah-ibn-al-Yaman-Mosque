@@ -4,7 +4,7 @@ import { Plus, Users, Clock, BookOpen, X, Check, ShieldAlert } from 'lucide-reac
 import axios from 'axios';
 
 const DEFAULT_CLASSES = [
-  { id: 1, name: 'حلقة الفجر', teacher: 'الشيخ أسامة الجلودي', students: 22, time: 'بعد الفجر — 5:30 ص', level: 'متوسط وحافظ', color: '#18453B' },
+  { id: 1, name: 'حلقة الفجر', teacher: 'الشيخ أسامة الجلودي', students: 22, time: 'بعد الفجر — 5:30 ص', level: 'متوسط وحافظ', color: '#3D2B1F' },
   { id: 2, name: 'حلقة الضحى', teacher: 'الشيخ همام النجار', students: 18, time: '9:00 ص — 11:00 ص', level: 'مبتدئ', color: '#C49B75' },
   { id: 3, name: 'حلقة الظهر', teacher: 'الشيخ حسن الجلودي', students: 25, time: 'بعد الظهر — 1:00 م', level: 'جميع المستويات', color: '#2980b9' },
   { id: 4, name: 'حلقة العصر', teacher: 'الشيخ همام النجار', students: 30, time: 'بعد العصر — 4:30 م', level: 'متقدم', color: '#8e44ad' },
@@ -80,7 +80,7 @@ export default function Circles() {
       time: form.time,
       level: form.level || 'جميع المستويات',
       students: 0,
-      color: ['#18453B', '#C49B75', '#2980b9', '#8e44ad', '#e67e22', '#27ae60'][classes.length % 6]
+      color: ['#3D2B1F', '#C49B75', '#2980b9', '#8e44ad', '#e67e22', '#27ae60'][classes.length % 6]
     };
 
     const updated = [...classes, newCircle];

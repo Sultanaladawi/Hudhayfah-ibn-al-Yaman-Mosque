@@ -261,7 +261,7 @@ export default function Chatbot() {
               style={{
                 background: listening
                   ? 'linear-gradient(135deg, #ff4d4d, #cc0000)'
-                  : 'linear-gradient(135deg, #18453B, #11322b)',
+                  : 'linear-gradient(135deg, #1C1917, #2A1F16)',
                 animation: listening ? 'micPulse 1.2s infinite' : 'none',
               }}
             >
