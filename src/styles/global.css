@@ -2,25 +2,25 @@
 
 :root {
   /* ══════════════════════════════════════════
-     🏛️  "الصدف الملكي" — Mosque Premium Palette
-     Pearl white · Antique gold · Warm ivory
+     🏛️  "كريم الأندلس" — Mosque Premium Palette
+     Andalusian cream · Royal gold · Warm sand
   ══════════════════════════════════════════ */
 
   /* Core Brand — Antique Gold */
-  --gold:             #C9A84C;
-  --gold-light:       #E6C97A;
-  --gold-dim:         #A0782E;
-  --gold-glow:        rgba(201, 168, 76, 0.18);
-  --gold-glow-strong: rgba(201, 168, 76, 0.35);
+  --gold:             #D4AF37;
+  --gold-light:       #EDD073;
+  --gold-dim:         #A07D20;
+  --gold-glow:        rgba(212, 175, 55, 0.18);
+  --gold-glow-strong: rgba(212, 175, 55, 0.35);
 
   /* Backgrounds — Pearl White */
-  --cream:            #FEFCF8;
-  --cream-dark:       #F5EDD8;
-  --bg-base:          #FEFCF8;
-  --bg-surface:       #F5EDD8;
-  --bg-elevated:      #EEE3C8;
-  --bg-card:          #FFFDF9;
-  --bg-card-hover:    #FBF5E8;
+  --cream:            #FBF6EE;
+  --cream-dark:       #F2E8D5;
+  --bg-base:          #FBF6EE;
+  --bg-surface:       #F2E8D5;
+  --bg-elevated:      #E8D9B8;
+  --bg-card:          #FDF8F0;
+  --bg-card-hover:    #F7EDD8;
 
   /* Dark Brand — Rich Espresso Brown */
   --olive:            #2D1F0E;
@@ -37,43 +37,43 @@
   --text-muted:       #6B4F35;
 
   /* Warm Brown Aliases */
-  --coffee:           #C9A84C;
-  --coffee-light:     #E6C97A;
-  --coffee-dark:      #A0782E;
-  --cappuccino:       #F5EDD8;
-  --cappuccino-light: #FEFCF8;
-  --latte:            #FFFDF9;
-  --latte-soft:       #FFFEF9;
+  --coffee:           #D4AF37;
+  --coffee-light:     #EDD073;
+  --coffee-dark:      #A07D20;
+  --cappuccino:       #F2E8D5;
+  --cappuccino-light: #FBF6EE;
+  --latte:            #FDF8F0;
+  --latte-soft:       #FEF9F0;
   --cafe:             #8B6914;
-  --brown:            #C9A84C;
-  --brown-light:      #E6C97A;
-  --white:            #FFFDF9;
+  --brown:            #D4AF37;
+  --brown-light:      #EDD073;
+  --white:            #FDF8F0;
 
   /* Borders & Dividers */
   --border:           rgba(139, 105, 20, 0.15);
-  --border-hover:     rgba(201, 168, 76, 0.55);
+  --border-hover:     rgba(212, 175, 55, 0.55);
   --divider:          rgba(139, 105, 20, 0.08);
 
   /* Shadows */
   --shadow-sm:        rgba(30, 20, 9, .06);
   --shadow-md:        rgba(30, 20, 9, .11);
   --shadow-lg:        rgba(30, 20, 9, .20);
-  --shadow-gold:      0 8px 30px rgba(201, 168, 76, 0.28);
+  --shadow-gold:      0 8px 30px rgba(212, 175, 55, 0.28);
 
   /* Transition */
   --tr: .3s cubic-bezier(.4, 0, .2, 1);
 
   /* ── Admin Panel ── */
-  --admin-bg:           #FEFCF8;
-  --admin-card:         #FFFDF9;
-  --admin-accent:       #C9A84C;
+  --admin-bg:           #FBF6EE;
+  --admin-card:         #FDF8F0;
+  --admin-accent:       #D4AF37;
   --admin-text:         #1E1409;
   --admin-border:       rgba(139, 105, 20, 0.15);
   --admin-sidebar-bg:   #1E1409;
   --admin-sidebar-text: #E6C97A;
 }
 
-/* ── Dark Mode — الصدف الملكي ── */
+/* ── Dark Mode — كريم الأندلس ── */
 @media (prefers-color-scheme: dark) {
   :root {
     --cream:            #1A1108;
@@ -85,8 +85,8 @@
     --shadow-sm:        rgba(0, 0, 0, .35);
     --shadow-md:        rgba(0, 0, 0, .55);
     --shadow-lg:        rgba(0, 0, 0, .75);
-    --brown:            #C9A84C;
-    --brown-light:      #E6C97A;
+    --brown:            #D4AF37;
+    --brown-light:      #EDD073;
     --bg-base:          #1A1108;
     --bg-surface:       #231709;
     --bg-elevated:      #2E1E0A;
@@ -94,8 +94,8 @@
     --text-primary:     #FBF8F3;
     --text-secondary:   #F0E8D8;
     --text-muted:       #C4A87A;
-    --border:           rgba(201, 168, 76, 0.15);
-    --divider:          rgba(201, 168, 76, 0.08);
+    --border:           rgba(212, 175, 55, 0.15);
+    --divider:          rgba(212, 175, 55, 0.08);
   }
 }
 

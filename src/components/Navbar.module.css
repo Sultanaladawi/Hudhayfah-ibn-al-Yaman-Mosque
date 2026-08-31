@@ -7,7 +7,7 @@
 }
 
 .scrolled {
-  background: rgba(254, 252, 248, 0.96);
+  background: rgba(251, 246, 238, 0.96);
   backdrop-filter: blur(28px) saturate(185%);
   -webkit-backdrop-filter: blur(28px) saturate(185%);
   border-color: rgba(61, 43, 31, 0.12);
