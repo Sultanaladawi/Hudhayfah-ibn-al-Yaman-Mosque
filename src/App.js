@@ -95,13 +95,13 @@ function PublicSite() {
           fontFamily: "'Tajawal', sans-serif"
         }}>
           <div style={{ maxWidth: '500px' }}>
-            <div style={{ color: '#C9A84C', marginBottom: '25px', opacity: 1, display: 'flex', justifyContent: 'center' }}>
+            <div style={{ color: '#D4AF37', marginBottom: '25px', opacity: 1, display: 'flex', justifyContent: 'center' }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10"></circle>
                 <polyline points="12 6 12 12 16 14"></polyline>
               </svg>
             </div>
-            <h2 style={{ fontFamily: "'Amiri', serif", fontSize: '2.5rem', marginBottom: '15px', color: '#C9A84C' }}>
+            <h2 style={{ fontFamily: "'Amiri', serif", fontSize: '2.5rem', marginBottom: '15px', color: '#D4AF37' }}>
               منصة مسجد حذيفة بن اليمان
             </h2>
             <p style={{ fontSize: '1.1rem', lineHeight: '1.7', opacity: 0.95, marginBottom: '40px', fontWeight: '300' }}>
@@ -109,10 +109,10 @@ function PublicSite() {
             </p>
             <div style={{ 
               padding: '25px', border: '1px solid rgba(196, 155, 117, 0.4)', 
-              borderRadius: '20px', backgroundColor: 'rgba(61, 43, 31, 0.25)',
+              borderRadius: '20px', backgroundColor: 'rgba(45, 31, 14, 0.20)',
               boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
             }}>
-              <p style={{ fontWeight: '900', textTransform: 'uppercase', fontSize: '0.95rem', letterSpacing: '1px', marginBottom: '15px', color: '#C9A84C' }}>
+              <p style={{ fontWeight: '900', textTransform: 'uppercase', fontSize: '0.95rem', letterSpacing: '1px', marginBottom: '15px', color: '#D4AF37' }}>
                 أوقات الحلقات والزيارات الرسمية
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '1rem', direction: 'rtl' }}>

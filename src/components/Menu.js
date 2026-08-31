@@ -7,8 +7,8 @@ const ACTIVITIES = [
     icon: 'fas fa-quran',
     title: 'حلقات تحفيظ القرآن الكريم',
     desc: 'حلقات يومية بعد صلاة العصر والمغرب لجميع المستويات السنية، بإشراف نخبة من المشايخ المتخصصين.',
-    color: '#3D2B1F',
-    bg: 'rgba(61,43,31,0.07)',
+    color: '#2D1F0E',
+    bg: 'rgba(139,105,20,0.07)',
     image: '/images/gallery1.jpg',
   },
   {
@@ -47,7 +47,7 @@ export default function Menu() {
   return (
     <section id="menu" style={{
       padding: '100px 0',
-      background: 'linear-gradient(180deg, #EDE8E0 0%, #F7F3ED 100%)',
+      background: 'linear-gradient(180deg, #F2E8D5 0%, #FBF6EE 100%)',
       direction: 'rtl',
     }}>
       <div className="section-wrap">

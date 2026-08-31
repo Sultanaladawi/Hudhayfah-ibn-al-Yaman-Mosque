@@ -87,7 +87,7 @@ export default function Dashboard() {
             const mappedLogs = logsRes.data.slice(0, 5).map((log, idx) => {
               // Map action to Lucide icons
               let icon = Clock;
-              let color = '#3D2B1F';
+              let color = '#2D1F0E';
               
               const actionLower = String(log.action || '').toLowerCase();
               if (actionLower.includes('طالب') || actionLower.includes('student')) {
@@ -104,7 +104,7 @@ export default function Dashboard() {
                 color = '#e74c3c';
               } else if (actionLower.includes('login') || actionLower.includes('دخول')) {
                 icon = CheckCircle;
-                color = '#3D2B1F';
+                color = '#2D1F0E';
               }
 
               // format time
@@ -133,7 +133,7 @@ export default function Dashboard() {
               { icon: CheckCircle, color: '#B8860B', text: 'الشيخ أسامة أضاف طالباً جديداً لمجموعة حلقة الفجر', time: 'منذ 10 دقائق' },
               { icon: Clock,       color: '#e67e22', text: 'تم تسجيل غياب لـ 3 طلاب في حلقة العصر — الشيخ همام', time: 'منذ 45 دقيقة' },
               
-              { icon: TrendingUp,  color: '#3D2B1F', text: 'اكتمل حفظ جزء عم للطالب عمر سعيد — حلقة الفجر', time: 'أمس' },
+              { icon: TrendingUp,  color: '#2D1F0E', text: 'اكتمل حفظ جزء عم للطالب عمر سعيد — حلقة الفجر', time: 'أمس' },
             ]);
           }
         } catch(e) {
@@ -142,7 +142,7 @@ export default function Dashboard() {
             { icon: CheckCircle, color: '#B8860B', text: 'الشيخ أسامة أضاف طالباً جديداً لمجموعة حلقة الفجر', time: 'منذ 10 دقائق' },
             { icon: Clock,       color: '#e67e22', text: 'تم تسجيل غياب لـ 3 طلاب في حلقة العصر — الشيخ همام', time: 'منذ 45 دقيقة' },
             
-            { icon: TrendingUp,  color: '#3D2B1F', text: 'اكتمل حفظ جزء عم للطالب عمر سعيد — حلقة الفجر', time: 'أمس' },
+            { icon: TrendingUp,  color: '#2D1F0E', text: 'اكتمل حفظ جزء عم للطالب عمر سعيد — حلقة الفجر', time: 'أمس' },
           ]);
         }
 
@@ -162,8 +162,8 @@ export default function Dashboard() {
       value: `${stats.studentsCount} طالب`,
       change: 'مسجلين في حلقات المسجد',
       icon: Users,
-      color: '#3D2B1F',
-      lightColor: 'rgba(61,43,31,0.1)',
+      color: '#2D1F0E',
+      lightColor: 'rgba(139,105,20,0.10)',
       path: '/admin/students',
     },
     {
@@ -200,13 +200,13 @@ export default function Dashboard() {
 
       {/* ── Welcome Header ── */}
       <div style={{
-        background: 'linear-gradient(135deg, #3D2B1F 0%, #4A3020 100%)',
+        background: 'linear-gradient(135deg, #2D1F0E 0%, #4A3520 100%)',
         borderRadius: '20px',
         padding: '35px 40px',
         marginBottom: '35px',
         position: 'relative',
         overflow: 'hidden',
-        boxShadow: '0 8px 30px rgba(61,43,31,0.2)',
+        boxShadow: '0 8px 30px rgba(139,105,20,0.12)',
       }}>
         <div style={{
           position: 'absolute', left: '-40px', top: '-40px',

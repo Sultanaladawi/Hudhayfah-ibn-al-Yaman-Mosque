@@ -6,8 +6,8 @@ import {
 } from 'lucide-react';
 
 const C = {
-  green: '#3D2B1F',
-  greenLight: '#5C3D2A',
+  green: '#2D1F0E',
+  greenLight: '#4A3520',
   gold: '#C49B75',
   goldLight: '#E8CCAF',
   bg: 'var(--admin-bg)',

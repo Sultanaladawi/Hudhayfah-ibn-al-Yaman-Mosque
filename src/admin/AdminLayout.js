@@ -271,7 +271,7 @@ const AdminLayout = () => {
                   display: 'flex', alignItems: 'center', gap: '14px', padding: '15px 25px',
                   color: isActive ? 'var(--admin-accent)' : 'var(--admin-sidebar-text)',
                   textDecoration: 'none',
-                  backgroundColor: isActive ? 'rgba(61, 43, 31, 0.08)' : 'transparent',
+                  backgroundColor: isActive ? 'rgba(139, 105, 20, 0.08)' : 'transparent',
                   borderLeft: isActive ? '4px solid var(--admin-accent)' : '4px solid transparent',
                   fontSize: '0.9rem',
                   fontWeight: isActive ? '700' : '500',

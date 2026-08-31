@@ -118,11 +118,11 @@ export default function Hero() {
     </section>
 
     {/* Live Stream Section (moved outside Hero) */}
-    <section style={{ backgroundColor: '#1C1917', padding: '60px 20px', width: '100%', display: 'flex', justifyContent: 'center' }}>
+    <section style={{ backgroundColor: '#1E1409', padding: '60px 20px', width: '100%', display: 'flex', justifyContent: 'center' }}>
       <div style={{
-        background: 'rgba(61, 43, 31, 0.45)',
+        background: 'rgba(45, 31, 14, 0.40)',
         backdropFilter: 'blur(12px)',
-        border: '2px solid #C9A84C',
+        border: '2px solid #D4AF37',
         borderRadius: '24px',
         padding: '25px',
         width: '100%',
@@ -132,7 +132,7 @@ export default function Hero() {
         textAlign: 'center',
         animation: 'glowPulse 2.5s infinite alternate'
       }}>
-        <h3 style={{ fontFamily: "'Amiri', serif", color: '#C9A84C', fontSize: '1.6rem', margin: '0 0 20px 0', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+        <h3 style={{ fontFamily: "'Amiri', serif", color: '#D4AF37', fontSize: '1.6rem', margin: '0 0 20px 0', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
            🕋 البث المباشر لقناة القرآن الكريم (مكة المكرمة)
         </h3>
         <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.15)' }}>

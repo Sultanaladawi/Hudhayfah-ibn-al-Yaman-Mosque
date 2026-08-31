@@ -9,7 +9,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background-color: #1C1917;
+  background-color: #1E1409;
   font-family: 'Tajawal', sans-serif;
   box-sizing: border-box;
 }
@@ -50,10 +50,10 @@
   align-items: center;
   gap: 10px;
   padding: 10px 22px;
-  background: rgba(28, 25, 23, 0.72);
+  background: rgba(30, 20, 9, 0.72);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1.5px solid #C9A84C;
+  border: 1.5px solid #D4AF37;
   border-radius: 30px;
   color: #FEF9F4;
   font-size: 0.92rem;
@@ -93,7 +93,7 @@
   backdrop-filter: blur(10px);
   border: 1.5px solid rgba(201, 168, 76, 0.55);
   border-radius: 40px;
-  color: #F7F3ED;
+  color: #FBF6EE;
   font-size: 0.82rem;
   font-weight: 700;
   margin-bottom: 16px;
@@ -105,7 +105,7 @@
   height: 26px;
   border-radius: 50%;
   object-fit: cover;
-  border: 1.5px solid #C9A84C;
+  border: 1.5px solid #D4AF37;
 }
 
 .headline {
@@ -119,8 +119,8 @@
 }
 
 .gold {
-  color: #C9A84C;
-  background: linear-gradient(135deg, #F7F3ED 0%, #C9A84C 50%, #906c46 100%);
+  color: #D4AF37;
+  background: linear-gradient(135deg, #FBF6EE 0%, #D4AF37 50%, #A07D20 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 2px 10px rgba(196, 164, 132, 0.3));
@@ -149,8 +149,8 @@
   align-items: center;
   gap: 10px;
   padding: 15px 32px;
-  background: linear-gradient(135deg, #C9A84C, #a47c4f);
-  color: #1C1917;
+  background: linear-gradient(135deg, #D4AF37, #a47c4f);
+  color: #1E1409;
   border: none;
   border-radius: 14px;
   font-size: 0.95rem;
@@ -183,8 +183,8 @@
 
 .btnOutline:hover {
   background: rgba(255, 255, 255, 0.1);
-  border-color: #C9A84C;
-  color: #F7F3ED;
+  border-color: #D4AF37;
+  color: #FBF6EE;
   transform: translateY(-3px);
 }
 
@@ -217,7 +217,7 @@
 .statValue {
   font-size: 1.85rem;
   font-weight: 900;
-  color: #C9A84C;
+  color: #D4AF37;
   margin-bottom: 6px;
   text-shadow: 0 2px 8px rgba(196, 164, 132, 0.2);
 }
@@ -225,7 +225,7 @@
 .statValue {
   font-size: 1.85rem;
   font-weight: 900;
-  color: #C9A84C;
+  color: #D4AF37;
   margin-bottom: 6px;
   text-shadow: 0 2px 8px rgba(196, 164, 132, 0.2);
 }
