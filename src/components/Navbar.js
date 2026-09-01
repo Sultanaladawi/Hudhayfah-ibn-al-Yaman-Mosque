@@ -242,8 +242,8 @@ export default function Navbar() {
         
         {/* Student Achievements / Honors Marquee Banner */}
         <div style={{
-          background: 'linear-gradient(95deg, #FBF6EE 0%, #F2E8D5 50%, #FBF6EE 100%)', // Premium royal Islamic emerald green
-          color: '#FEF9F4',
+          background: 'linear-gradient(95deg, #EEE3C8 0%, #E8D9B8 50%, #EEE3C8 100%)',
+          color: '#2D1F0E',
           paddingTop: '6px',
           paddingBottom: '6px', 
           textAlign: 'center',
@@ -270,8 +270,8 @@ export default function Navbar() {
               <span key={ach.id} style={{ margin: '0 35px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
                 <span className="emojiIcon" style={{ fontSize: '1.15rem' }}>{ach.icon}</span>
                 <span style={{ color: 'var(--gold)', fontWeight: 'bold' }}>{ach.name}</span>
-                <span style={{ color: '#E8D5C8', margin: '0 4px' }}>&mdash;</span>
-                <span style={{ color: '#FEF9F4' }}>{ach.reason}</span>
+                <span style={{ color: '#6B4F35', margin: '0 4px' }}>&mdash;</span>
+                <span style={{ color: '#4A3520' }}>{ach.reason}</span>
                 {ach.grade && ach.grade > 0 && (
                   <span style={{ 
                     color: 'var(--gold)', 
@@ -280,7 +280,7 @@ export default function Navbar() {
                     borderRadius: '12px', 
                     fontSize: '0.75rem',
                     marginLeft: '8px',
-                    backgroundColor: 'rgba(200, 156, 116, 0.1)'
+                    backgroundColor: 'rgba(212, 175, 55, 0.12)'
                   }}>
                     بتقدير {ach.grade}%
                   </span>
@@ -381,7 +381,7 @@ export default function Navbar() {
           width: '65px',
           height: '65px',
           borderRadius: '50%',
-          backgroundColor: 'var(--bg-surface)',
+          backgroundColor: '#1E1409',
           border: '2px solid #D4AF37',
           color: '#D4AF37',
           display: 'flex',
