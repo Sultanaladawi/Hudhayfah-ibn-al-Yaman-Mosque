@@ -1,6 +1,6 @@
 .careers {
   padding: 100px 0;
-  background-color: #f5f1ed;
+  background-color: #FBF6EE;
   min-height: 800px;
 }
 
@@ -12,7 +12,7 @@
 .mainTitle {
   font-size: 5rem;
   font-family: serif;
-  color: #2c1810;
+  color: #2D1F0E;
   margin: 0;
 }
 
@@ -31,12 +31,12 @@
 .applyingFor {
   font-size: 1.8rem;
   font-family: serif;
-  color: #2c1810;
+  color: #2D1F0E;
   margin-bottom: 2rem;
 }
 
 .applyingFor span {
-  color: #2c1810;
+  color: #2D1F0E;
   opacity: 0.8;
 }
 
@@ -56,16 +56,16 @@
   font-size: 1.1rem;
   outline: none;
   transition: all 0.3s;
-  color: #2c1810;
+  color: #2D1F0E;
 }
 
 .inputField::placeholder, .textAreaField::placeholder {
-  color: #aaa;
+  color: rgba(139,105,20,0.45);
 }
 
 .inputField:focus, .textAreaField:focus {
   background-color: rgba(255,255,255,0.8);
-  border-color: #c4a484;
+  border-color: #D4AF37;
 }
 
 .textAreaField {
@@ -81,7 +81,7 @@
 
 .submitBtn {
   flex: 1.5;
-  background-color: #61493c;
+  background-color: #6B4F35;
   color: #fff;
   border: none;
   padding: 20px 30px;
@@ -94,13 +94,13 @@
 }
 
 .submitBtn:hover {
-  background-color: #2c1810;
+  background-color: #2D1F0E;
 }
 
 .cancelBtn {
   flex: 1;
-  background-color: #f1ede8;
-  color: #2c1810;
+  background-color: #F2E8D5;
+  color: #2D1F0E;
   border: none;
   padding: 20px 30px;
   border-radius: 50px;
@@ -112,7 +112,7 @@
 }
 
 .cancelBtn:hover {
-  background-color: #e8e2db;
+  background-color: #F2E8D5;
 }
 
 .errorMsg {
@@ -133,7 +133,7 @@
 .rolesLabel {
   font-weight: 800;
   font-size: 1rem;
-  color: #c4a484;
+  color: #D4AF37;
   letter-spacing: 2px;
   margin-bottom: 30px;
 }
@@ -158,18 +158,18 @@
 
 .activeCard {
   background-color: #fff;
-  border: 1px solid #c4a484;
+  border: 1px solid #D4AF37;
 }
 
 .roleIcon {
   width: 60px;
   height: 60px;
-  background-color: #f5f1ed;
+  background-color: #FBF6EE;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #61493c;
+  color: #6B4F35;
   font-size: 1.4rem;
 }
 
@@ -180,24 +180,24 @@
 .roleTitle {
   font-weight: 800;
   font-size: 1.4rem;
-  color: #2c1810;
+  color: #2D1F0E;
   margin-bottom: 5px;
 }
 
 .roleType {
-  color: #888;
+  color: rgba(139,105,20,0.5);
   font-weight: 600;
   font-size: 1rem;
 }
 
 .roleArrow {
-  color: #ccc;
+  color: rgba(139,105,20,0.3);
   font-size: 1.2rem;
   transition: color 0.3s;
 }
 
 .roleCard:hover .roleArrow {
-  color: #61493c;
+  color: #6B4F35;
 }
 
 /* Intro Text */
@@ -208,7 +208,7 @@
 .intro {
   font-size: 1.6rem;
   line-height: 1.6;
-  color: #2c1810;
+  color: #2D1F0E;
   margin-bottom: 40px;
   opacity: 0.9;
 }

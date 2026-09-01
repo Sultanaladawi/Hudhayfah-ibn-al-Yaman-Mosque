@@ -268,7 +268,7 @@ const LeaderDashboard = () => {
                 <p style={{ color: '#bbb', fontSize: '0.95rem', margin: 0, fontStyle: 'italic', lineHeight: '1.6' }}>
                   "{item.comment || 'لا يوجد تفاصيل'}"
                 </p>
-                <div style={{ marginTop: '20px', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.75rem', color: '#666', textAlign: 'left' }}>
+                <div style={{ marginTop: '20px', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'left' }}>
                   {formatDate(item.created_at)}
                 </div>
               </div>
@@ -297,7 +297,7 @@ const LeaderDashboard = () => {
             borderRadius: '16px', border: `1px solid rgba(196, 164, 132, 0.15)`,
             transition: '0.3s'
           }}>
-            <Search size={20} color="#666" />
+            <Search size={20} color="var(--text-muted)" />
             <input
               type="text"
               placeholder="البحث في العمليات..."
@@ -358,7 +358,7 @@ const LeaderDashboard = () => {
                         </div>
                         <div>
                           <div style={{ color: '#fff', fontWeight: '700', fontSize: '1rem' }}>{log.admin_name || 'المشرف العام'}</div>
-                          <div style={{ color: '#666', fontSize: '0.75rem', marginTop: '2px' }}>{log.admin_email}</div>
+                          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', marginTop: '2px' }}>{log.admin_email}</div>
                         </div>
                       </div>
                     </td>
@@ -497,7 +497,7 @@ const LeaderDashboard = () => {
                   ))}
                 </div>
               ) : (
-                <p style={{ color: '#666', fontStyle: 'italic', textAlign: 'center', padding: '20px 0' }}>لا يوجد حسابات مضافة مسبقاً.</p>
+                <p style={{ color: 'var(--text-muted)', fontStyle: 'italic', textAlign: 'center', padding: '20px 0' }}>لا يوجد حسابات مضافة مسبقاً.</p>
               )}
             </div>
           </div>

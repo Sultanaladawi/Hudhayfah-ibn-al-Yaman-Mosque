@@ -14,7 +14,7 @@ const DEFAULT_STUDENTS = [
 const STATUS_STYLE = {
   'منتظم':        { bg: 'rgba(201,168,76,0.12)',  color: '#B8860B' },
   'غياب متكرر':  { bg: 'rgba(231,76,60,0.12)',  color: '#e74c3c' },
-  'جديد':         { bg: 'rgba(196,155,117,0.15)', color: '#C49B75' },
+  'جديد':         { bg: 'rgba(196,155,117,0.15)', color: '#D4AF37' },
 };
 
 export default function Students() {
@@ -355,9 +355,9 @@ export default function Students() {
                         border: 'none', cursor: 'pointer', outline: 'none'
                       }}
                     >
-                      <option value="منتظم" style={{ backgroundColor: '#1a1a1a', color: '#B8860B' }}>منتظم</option>
-                      <option value="غياب متكرر" style={{ backgroundColor: '#1a1a1a', color: '#e74c3c' }}>غياب متكرر</option>
-                      <option value="جديد" style={{ backgroundColor: '#1a1a1a', color: '#C49B75' }}>جديد</option>
+                      <option value="منتظم" style={{ backgroundColor: '#FDF8F0', color: '#A07D20' }}>منتظم</option>
+                      <option value="غياب متكرر" style={{ backgroundColor: '#FDF8F0', color: '#e74c3c' }}>غياب متكرر</option>
+                      <option value="جديد" style={{ backgroundColor: '#FDF8F0', color: '#D4AF37' }}>جديد</option>
                     </select>
                   </td>
                   <td style={{ padding: '16px 20px' }}>

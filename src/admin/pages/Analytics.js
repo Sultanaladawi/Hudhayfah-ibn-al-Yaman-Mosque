@@ -8,7 +8,7 @@ import {
 const C = {
   green: '#2D1F0E',
   greenLight: '#4A3520',
-  gold: '#C49B75',
+  gold: '#D4AF37',
   goldLight: '#E8CCAF',
   bg: 'var(--admin-bg)',
   card: 'var(--admin-card)',

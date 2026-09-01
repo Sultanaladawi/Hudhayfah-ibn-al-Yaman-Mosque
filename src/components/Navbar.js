@@ -305,7 +305,7 @@ export default function Navbar() {
               height: '46px',
               borderRadius: '50%',
               overflow: 'hidden',
-              background: '#ffffff',
+              background: '#FBF6EE',
               border: '2px solid var(--gold)',
               boxShadow: '0 3px 12px rgba(0,0,0,0.4)',
               display: 'flex',

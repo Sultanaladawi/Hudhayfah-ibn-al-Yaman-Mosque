@@ -16,7 +16,7 @@ const ACTIVITIES = [
     icon: 'fas fa-futbol',
     title: 'الأنشطة الرياضية',
     desc: 'دوري كرة قدم داخلي أسبوعي، وأنشطة رياضية متنوعة لتنمية الروح التنافسية وتعزيز الصحة.',
-    color: '#C49B75',
+    color: '#D4AF37',
     bg: 'rgba(196,155,117,0.07)',
     image: '/images/gallery2.jpg',
   },

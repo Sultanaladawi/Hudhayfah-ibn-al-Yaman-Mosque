@@ -265,7 +265,7 @@ export default function Activities() {
                 <div style={{ flex: 1 }}>
                   <label style={{ color: 'var(--admin-accent)', fontSize: '0.85rem', display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>تصنيف الفعالية</label>
                   <select 
-                    style={{ ...inputStyle, backgroundColor: '#1a1a1a', cursor: 'pointer' }} 
+                    style={{ ...inputStyle, backgroundColor: '#FDF8F0', cursor: 'pointer' }} 
                     value={formData.type} 
                     onChange={e => setFormData({...formData, type: e.target.value})}
                   >

@@ -50,12 +50,12 @@
 .drawerTitle {
   font-family: 'DM Serif Display', serif;
   font-size: 2rem;
-  color: #2c1810;
+  color: #2D1F0E;
   margin: 0;
 }
 
 .itemCount {
-  color: #c4a484;
+  color: #D4AF37;
   font-weight: 800;
   font-size: 0.9rem;
   text-transform: uppercase;
@@ -63,7 +63,7 @@
 }
 
 .closeBtn {
-  background: #fcf6ef;
+  background: #FDF8F0;
   border: none;
   width: 40px;
   height: 40px;
@@ -72,12 +72,12 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #2c1810;
+  color: #2D1F0E;
   transition: all 0.3s ease;
 }
 
 .closeBtn:hover {
-  background: #2c1810;
+  background: #2D1F0E;
   color: #fff;
   transform: rotate(90deg);
 }
@@ -108,13 +108,13 @@
 
 .itemName {
   font-weight: 800;
-  color: #2c1810;
+  color: #2D1F0E;
   font-size: 1.1rem;
   margin-bottom: 5px;
 }
 
 .itemUnit {
-  color: #888;
+  color: rgba(139,105,20,0.5);
   font-size: 0.85rem;
 }
 
@@ -129,7 +129,7 @@
   display: flex;
   align-items: center;
   gap: 15px;
-  background: #fcf6ef;
+  background: #FDF8F0;
   padding: 5px 15px;
   border-radius: 50px;
 }
@@ -138,26 +138,26 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: #2c1810;
+  color: #2D1F0E;
   font-size: 0.9rem;
   padding: 5px;
   transition: color 0.2s;
 }
 
 .qtyBtn:hover {
-  color: #c4a484;
+  color: #D4AF37;
 }
 
 .qty {
   font-weight: 900;
-  color: #2c1810;
+  color: #2D1F0E;
   min-width: 20px;
   text-align: center;
 }
 
 .itemSubtotal {
   font-weight: 900;
-  color: #2c1810;
+  color: #2D1F0E;
   font-size: 1.1rem;
 }
 
@@ -188,7 +188,7 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 12px;
-  color: #666;
+  color: #6B4F35;
   font-weight: 600;
 }
 
@@ -196,7 +196,7 @@
   margin-top: 15px;
   padding-top: 15px;
   border-top: 1px dashed rgba(196, 164, 132, 0.3);
-  color: #2c1810;
+  color: #2D1F0E;
   font-size: 1.5rem;
   font-weight: 900;
 }
@@ -205,7 +205,7 @@
   width: 100%;
   height: 65px;
   margin-top: 25px;
-  background: linear-gradient(135deg, #2c1810, #5a3500);
+  background: linear-gradient(135deg, #2D1F0E, #4A3520);
   border: none;
   border-radius: 20px;
   color: #fff;
@@ -231,7 +231,7 @@
   margin-top: 15px;
   background: none;
   border: none;
-  color: #888;
+  color: rgba(139,105,20,0.5);
   font-size: 0.85rem;
   font-weight: 600;
   text-decoration: underline;
@@ -250,7 +250,7 @@
 
 .emptyIcon {
   font-size: 4rem;
-  color: #fcf6ef;
+  color: #FDF8F0;
   margin-bottom: 20px;
   animation: float 3s ease-in-out infinite;
 }
@@ -263,19 +263,19 @@
 .emptyTitle {
   font-family: 'serif';
   font-size: 1.8rem;
-  color: #2c1810;
+  color: #2D1F0E;
   margin-bottom: 10px;
 }
 
 .emptyDesc {
-  color: #888;
+  color: rgba(139,105,20,0.5);
   margin-bottom: 30px;
 }
 
 .orderNote {
   margin-top: 20px;
   font-size: 0.8rem;
-  color: #c4a484;
+  color: #D4AF37;
   text-align: center;
   font-weight: 700;
 }

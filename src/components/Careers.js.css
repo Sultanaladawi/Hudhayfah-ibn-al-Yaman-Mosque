@@ -1,6 +1,6 @@
 .careers {
   padding: 100px 0;
-  background-color: var(--crema-light, #f5f1ed);
+  background-color: var(--crema-light, #FBF6EE);
 }
 
 .header {
@@ -67,7 +67,7 @@
   padding: 15px 20px;
   border-radius: 12px;
   border: 1px solid rgba(0,0,0,0.05);
-  background-color: #f9f9f9;
+  background-color: #FDF8F0;
   font-family: inherit;
   font-size: 1rem;
   outline: none;
@@ -124,7 +124,7 @@
 .roleIcon {
   width: 50px;
   height: 50px;
-  background-color: var(--crema-light, #f5f1ed);
+  background-color: var(--crema-light, #FBF6EE);
   border-radius: 15px;
   display: flex;
   align-items: center;
@@ -142,7 +142,7 @@
 
 .roleType {
   font-size: 0.85rem;
-  color: #777;
+  color: #6B4F35;
   font-weight: 600;
 }
 
@@ -150,7 +150,7 @@
   margin-left: auto;
   background: none;
   border: none;
-  color: #ccc;
+  color: rgba(139,105,20,0.3);
   font-size: 1.1rem;
   transition: color 0.3s;
 }

@@ -13,7 +13,7 @@ export default function AdminRoute({ children }) {
         justifyContent: 'center', 
         alignItems: 'center', 
         height: '100vh', 
-        background: '#120a05', 
+        background: '#1E1409', 
         color: '#c9a96e',      
         fontFamily: 'inherit'
       }}>

@@ -15,7 +15,7 @@ export default function AdminLogin() {
 
   const colors = {
     espresso: '#070504',
-    latte: '#c4a484',
+    latte: '#D4AF37',
     crema: '#e6d5c3',
     border: 'rgba(196, 164, 132, 0.15)',
     danger: '#ff4d4d',
@@ -122,7 +122,7 @@ export default function AdminLogin() {
         }
 
         .login-btn {
-          background: linear-gradient(135deg, #c4a484 0%, #8c6a56 100%);
+          background: linear-gradient(135deg, #D4AF37 0%, #8c6a56 100%);
           color: #070504;
           border: none;
           border-radius: 15px;

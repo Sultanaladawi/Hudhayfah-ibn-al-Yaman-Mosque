@@ -7,7 +7,7 @@ import {
 
 const COLORS = {
   green: '#2D1F0E',
-  gold: '#C49B75',
+  gold: '#D4AF37',
   bg: 'var(--admin-bg)',
   card: 'var(--admin-card)',
   border: 'var(--admin-border)',

@@ -91,7 +91,7 @@ function PublicSite() {
           backgroundColor: 'rgba(30, 20, 9, 0.97)', // Deep Islamic green tone
           backdropFilter: 'blur(15px)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: '#ffffff', textAlign: 'center', padding: '30px',
+          color: '#FBF6EE', textAlign: 'center', padding: '30px',
           fontFamily: "'Tajawal', sans-serif"
         }}>
           <div style={{ maxWidth: '500px' }}>

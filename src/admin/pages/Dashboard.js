@@ -95,7 +95,7 @@ export default function Dashboard() {
                 color = '#B8860B';
               } else if (actionLower.includes('حلقة') || actionLower.includes('circle')) {
                 icon = BookOpen;
-                color = '#C49B75';
+                color = '#D4AF37';
               } else if (actionLower.includes('تبرع') || actionLower.includes('donation') || actionLower.includes('order')) {
                 icon = ShoppingCart;
                 color = '#e67e22';
@@ -171,7 +171,7 @@ export default function Dashboard() {
       value: `${stats.circlesCount} حلقات`,
       change: 'نشطة وفعالة حالياً',
       icon: BookOpen,
-      color: '#C49B75',
+      color: '#D4AF37',
       lightColor: 'rgba(196,155,117,0.1)',
       path: '/admin/circles',
     },
@@ -242,7 +242,7 @@ export default function Dashboard() {
           borderRadius: '30px', padding: '8px 18px',
         }}>
           <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#38ef7d', animation: 'pulse 2s infinite' }} />
-          <span style={{ color: '#C49B75', fontSize: '0.85rem', fontWeight: '600' }}>النظام متصل وآمن</span>
+          <span style={{ color: '#D4AF37', fontSize: '0.85rem', fontWeight: '600' }}>النظام متصل وآمن</span>
         </div>
       </div>
 
@@ -313,7 +313,7 @@ export default function Dashboard() {
           margin: '0 0 24px 0',
           display: 'flex', alignItems: 'center', gap: '10px',
         }}>
-          <span style={{ width: '4px', height: '22px', background: '#C49B75', borderRadius: '4px', display: 'inline-block' }} />
+          <span style={{ width: '4px', height: '22px', background: '#D4AF37', borderRadius: '4px', display: 'inline-block' }} />
           آخر نشاطات وحركات النظام الإداري
         </h2>
 

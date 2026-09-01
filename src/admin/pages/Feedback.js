@@ -95,7 +95,7 @@ const Feedback = () => {
     bean: 'var(--admin-card)',
     crema: 'var(--admin-accent)',
     border: 'var(--admin-border)',
-    text: '#ffffff',
+    text: '#FBF6EE',
     muted: '#aaaaaa'
   };
 
@@ -121,8 +121,8 @@ const Feedback = () => {
           <Star 
             key={star} 
             size={16} 
-            fill={star <= rating ? '#FFD700' : 'transparent'} 
-            color={star <= rating ? '#FFD700' : colors.muted} 
+            fill={star <= rating ? '#D4AF37' : 'transparent'} 
+            color={star <= rating ? '#D4AF37' : colors.muted} 
           />
         ))}
       </div>

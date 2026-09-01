@@ -231,8 +231,8 @@
 }
 
 .item:hover .addBtnSmall {
-  background: #2c1810;
-  border-color: #2c1810;
+  background: #2D1F0E;
+  border-color: #2D1F0E;
   color: #fff;
   transform: scale(1.1) rotate(90deg);
 }
@@ -438,7 +438,7 @@
   width: 32px;
   height: 32px;
   font-size: 1.2rem;
-  color: #2c1810;
+  color: #2D1F0E;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -524,7 +524,7 @@
 
 .addonSection h4,
 .feedbackSectionCompact h4 {
-  color: #2c1810;
+  color: #2D1F0E;
   margin: 0 0 12px 0;
   font-size: 0.9rem;
   text-transform: uppercase;
@@ -588,12 +588,12 @@
 }
 
 .starActive {
-  color: #FFD700 !important;
+  color: #D4AF37 !important;
   cursor: pointer;
 }
 
 .starInactive {
-  color: #ccc !important;
+  color: rgba(139,105,20,0.3) !important;
   cursor: pointer;
 }
 
@@ -607,7 +607,7 @@
 }
 
 .submitReviewBtnCompact {
-  background-color: #c4a484;
+  background-color: #D4AF37;
   color: #fff;
   border: none;
   width: 40px;

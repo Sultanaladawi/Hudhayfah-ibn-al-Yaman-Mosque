@@ -23,7 +23,7 @@ const Offers = () => {
     bg: 'var(--admin-bg)',
     card: 'var(--admin-card)',
     accent: 'var(--admin-accent)',
-    text: '#ffffff',
+    text: '#FBF6EE',
     border: 'var(--admin-border)',
     input: 'rgba(255,255,255,0.04)'
   };

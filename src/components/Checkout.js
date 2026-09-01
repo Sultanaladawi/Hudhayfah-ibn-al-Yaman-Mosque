@@ -379,7 +379,7 @@ export default function Checkout({ onClose, onعودة }) {
                     <i className="fas fa-check" style={{ color: '#fff', fontSize: '2.5rem' }} />
                   </div>
                 </div>
-                <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: '2.5rem', color: '#2c1810', margin: '20px 0 10px', fontWeight: '900' }}>تقبل الله طاعاتكم!</h2>
+                <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: '2.5rem', color: '#2D1F0E', margin: '20px 0 10px', fontWeight: '900' }}>تقبل الله طاعاتكم!</h2>
                 <p style={{ color: '#666', fontSize: '1.1rem', marginBottom: '30px' }}>نشكر لك مساهمتك الطيبة، جعلها الله في ميزان حسناتك.</p>
               </div>
             ) : (
@@ -393,31 +393,31 @@ export default function Checkout({ onClose, onعودة }) {
                 }}>
                   <i className="fas fa-magic" />
                 </div>
-                <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: '2.2rem', color: '#2c1810', marginBottom: '10px' }}>تم تسجيل المساهمة!</h2>
+                <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: '2.2rem', color: '#2D1F0E', marginBottom: '10px' }}>تم تسجيل المساهمة!</h2>
                 <p style={{ color: '#888', marginBottom: '30px' }}>إيصال مساهمتك رقم <strong>#{orderId}</strong> في قيد المعالجة والإثبات.</p>
                 
                 <div style={{ 
                   background: '#fcf6ef', padding: '30px', borderRadius: '25px', 
                   border: '1px solid rgba(196, 164, 132, 0.2)', marginBottom: '20px'
                 }}>
-                  <div style={{ fontSize: '3rem', fontWeight: '900', color: '#2c1810', letterSpacing: '-1px' }}>
+                  <div style={{ fontSize: '3rem', fontWeight: '900', color: '#2D1F0E', letterSpacing: '-1px' }}>
                     {formatTime(timeRemaining)}
                   </div>
-                  <div style={{ fontSize: '0.8rem', color: '#c4a484', fontWeight: '800', textTransform: 'uppercase', marginTop: '5px' }}>
+                  <div style={{ fontSize: '0.8rem', color: '#D4AF37', fontWeight: '800', textTransform: 'uppercase', marginTop: '5px' }}>
                     الوقت المقدر
                   </div>
                 </div>
               </div>
             )}
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center', marginBottom: '30px', color: '#c4a484', fontSize: '0.9rem', fontWeight: 'bold' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center', marginBottom: '30px', color: '#D4AF37', fontSize: '0.9rem', fontWeight: 'bold' }}>
               <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: (orderStatus === 'ready' || orderStatus === 'completed') ? '#38ef7d' : '#f59e0b', animation: 'pulse 1.5s infinite' }} />
-              الحالة المباشرة: <span style={{ color: '#2c1810' }}>{orderStatus.toUpperCase()}</span>
+              الحالة المباشرة: <span style={{ color: '#2D1F0E' }}>{orderStatus.toUpperCase()}</span>
             </div>
 
             <button className="btn btn-primary" onClick={onClose} style={{
               width: '100%', padding: '20px', borderRadius: '18px',
-              background: 'linear-gradient(135deg, #2c1810, #5a3500)', color: '#fff', border: 'none',
+              background: 'linear-gradient(135deg, #2D1F0E, #5a3500)', color: '#fff', border: 'none',
               fontWeight: 'bold', fontSize: '1.1rem', cursor: 'pointer',
               boxShadow: '0 10px 25px rgba(44, 24, 16, 0.2)'
             }}>
@@ -443,14 +443,14 @@ export default function Checkout({ onClose, onعودة }) {
           {/* Elegant Shimmering Bar */}
           <div style={{
             height: '4px',
-            background: 'linear-gradient(90deg, #c4a484, #5a3500, #c4a484)',
+            background: 'linear-gradient(90deg, #D4AF37, #5a3500, #D4AF37)',
             borderRadius: '2px',
             marginBottom: '30px'
           }} />
 
           {/* Animated Gold HeartHandshake */}
           <div style={{ 
-            color: '#c4a484', 
+            color: '#D4AF37', 
             marginBottom: '25px', 
             display: 'flex', 
             justifyContent: 'center',
@@ -509,7 +509,7 @@ export default function Checkout({ onClose, onعودة }) {
               fontSize: '0.85rem', 
               letterSpacing: '2px', 
               marginBottom: '12px', 
-              color: '#c4a484',
+              color: '#D4AF37',
               display: 'flex',
               alignItems: 'center',
               gap: '8px'
@@ -525,7 +525,7 @@ export default function Checkout({ onClose, onعودة }) {
               background: 'rgba(0,0,0,0.2)',
               padding: '12px 15px',
               borderRadius: '12px',
-              borderLeft: '4px solid #c4a484'
+              borderLeft: '4px solid #D4AF37'
             }}>
               {outOfStockError || 'We apologize, but the requested item is currently unavailable.'}
             </div>
@@ -541,7 +541,7 @@ export default function Checkout({ onClose, onعودة }) {
               width: '100%', 
               padding: '18px', 
               borderRadius: '18px',
-              background: 'linear-gradient(135deg, #c4a484, #8b6c4c)', 
+              background: 'linear-gradient(135deg, #D4AF37, #8b6c4c)', 
               color: '#0a0604', 
               border: 'none',
               fontWeight: '900', 
@@ -568,12 +568,12 @@ export default function Checkout({ onClose, onعودة }) {
             <div style={{ fontSize: '4rem', color: '#e74a3b', marginBottom: '20px' }}>
               <i className="fas fa-exclamation-circle" />
             </div>
-            <h2 style={{ fontFamily: 'serif', fontSize: '2rem', color: '#2c1810', marginBottom: '10px' }}>عذراً! لم تتم العملية</h2>
+            <h2 style={{ fontFamily: 'serif', fontSize: '2rem', color: '#2D1F0E', marginBottom: '10px' }}>عذراً! لم تتم العملية</h2>
             <p style={{ color: '#666', marginBottom: '30px' }}>حدث خطأ أثناء معالجة مساهمتكم. يرجى التحقق من صحة البيانات والمحاولة مجدداً.</p>
             <button
               className="btn btn-primary"
               onClick={() => setStep('form')}
-              style={{ width: '100%', padding: '15px', borderRadius: '12px', background: '#2c1810', color: '#fff', border: 'none', fontWeight: 'bold', fontSize: '1.1rem', cursor: 'pointer' }}
+              style={{ width: '100%', padding: '15px', borderRadius: '12px', background: '#2D1F0E', color: '#fff', border: 'none', fontWeight: 'bold', fontSize: '1.1rem', cursor: 'pointer' }}
             >
               حاول مجدداً
             </button>
@@ -588,7 +588,7 @@ export default function Checkout({ onClose, onعودة }) {
       <div className={styles.overlay}><div className={styles.modal}>
         <div className={styles.processingScreen} style={{ textAlign: 'center', padding: '50px 20px' }}>
           <div className={styles.spinner} style={{ margin: '0 auto 20px' }} />
-          <p style={{ fontSize: '1.2rem', color: '#2c1810', fontWeight: 'bold' }}>جاري المعالجة والتأكيد...</p>
+          <p style={{ fontSize: '1.2rem', color: '#2D1F0E', fontWeight: 'bold' }}>جاري المعالجة والتأكيد...</p>
         </div>
       </div></div>
     );
@@ -606,7 +606,7 @@ export default function Checkout({ onClose, onعودة }) {
         <div className={styles.modalBody} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {/* 1. ملخص المساهمة Section */}
           <div className={styles.orderSummary} style={{ marginBottom: '0', padding: '20px', backgroundColor: '#fcf6ef', borderRadius: '20px', border: '1px solid rgba(196, 164, 132, 0.1)' }}>
-            <div className={styles.summaryLabel} style={{ marginBottom: '15px', color: '#2c1810', fontWeight: '900' }}>ملخص المساهمة</div>
+            <div className={styles.summaryLabel} style={{ marginBottom: '15px', color: '#2D1F0E', fontWeight: '900' }}>ملخص المساهمة</div>
             {items.map(item => (
               <div key={item.id} className={styles.sumItem} style={{ marginBottom: '8px' }}>
                 <span style={{ color: '#555' }}>{item.name} × {item.qty}</span>
@@ -620,16 +620,16 @@ export default function Checkout({ onClose, onعودة }) {
               borderRadius: '12px', border: '1px solid rgba(196, 164, 132, 0.2)',
               display: 'flex', justifyContent: 'space-between', alignItems: 'center'
             }}>
-              <div style={{ fontSize: '0.75rem', fontWeight: '800', color: '#c4a484', textTransform: 'uppercase' }}>
+              <div style={{ fontSize: '0.75rem', fontWeight: '800', color: '#D4AF37', textTransform: 'uppercase' }}>
                 <i className="fas fa-clock" style={{ marginRight: '6px' }} /> Est. Prep Time
               </div>
-              <div style={{ fontSize: '1.1rem', fontWeight: '900', color: '#2c1810' }}>
+              <div style={{ fontSize: '1.1rem', fontWeight: '900', color: '#2D1F0E' }}>
                 {formatTime(timeRemaining)}
               </div>
             </div>
 
             {selectedOffer && (
-              <div className={styles.sumItem} style={{ color: '#c4a484', fontWeight: 'bold', marginTop: '10px' }}>
+              <div className={styles.sumItem} style={{ color: '#D4AF37', fontWeight: 'bold', marginTop: '10px' }}>
                 <span>خصم (إن وجد) ({selectedOffer.discount_percent}%)</span>
                 <span>-{formatPrice(discountAmount)}</span>
               </div>
@@ -642,9 +642,9 @@ export default function Checkout({ onClose, onعودة }) {
               </div>
             )}
 
-            <div className={styles.sumTotal} style={{ marginTop: '15px', borderTop: '1px dashed #c4a484', paddingTop: '15px' }}>
-              <span style={{ fontWeight: 'bold', color: '#2c1810' }}>المجموع</span>
-              <span className={styles.sumTotalAmt} style={{ color: '#c4a484' }}>{formatPrice(finalPrice)}</span>
+            <div className={styles.sumTotal} style={{ marginTop: '15px', borderTop: '1px dashed #D4AF37', paddingTop: '15px' }}>
+              <span style={{ fontWeight: 'bold', color: '#2D1F0E' }}>المجموع</span>
+              <span className={styles.sumTotalAmt} style={{ color: '#D4AF37' }}>{formatPrice(finalPrice)}</span>
             </div>
           </div>
 
@@ -703,12 +703,12 @@ export default function Checkout({ onClose, onعودة }) {
               {orderType === 'delivery' && (
                 <div style={{ marginTop: '25px', padding: '25px', backgroundColor: '#fff', borderRadius: '18px', border: '1px solid rgba(196,164,132,0.3)', boxShadow: '0 8px 30px rgba(0,0,0,0.04)', animation: 'fadeIn 0.4s ease' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                    <h4 style={{ margin: 0, color: '#2c1810', fontSize: '1rem', fontWeight: '800' }}>التفاصيل الإضافية</h4>
-                    <span style={{ fontSize: '0.7rem', color: '#c4a484', fontWeight: 'bold', background: 'rgba(196,164,132,0.1)', padding: '4px 10px', borderRadius: '20px' }}>مطلوب</span>
+                    <h4 style={{ margin: 0, color: '#2D1F0E', fontSize: '1rem', fontWeight: '800' }}>التفاصيل الإضافية</h4>
+                    <span style={{ fontSize: '0.7rem', color: '#D4AF37', fontWeight: 'bold', background: 'rgba(196,164,132,0.1)', padding: '4px 10px', borderRadius: '20px' }}>مطلوب</span>
                   </div>
 
 
-                  <label className={styles.label} style={{ color: '#2c1810', fontWeight: '700', fontSize: '0.9rem', marginBottom: '12px', display: 'block' }}>كيف نصل إليك؟</label>
+                  <label className={styles.label} style={{ color: '#2D1F0E', fontWeight: '700', fontSize: '0.9rem', marginBottom: '12px', display: 'block' }}>كيف نصل إليك؟</label>
 
                   {/* Delivery Type Selector (Premium Segment Control) */}
                   <div style={{ display: 'flex', background: '#f8f9fa', padding: '5px', borderRadius: '12px', marginBottom: '20px' }}>
@@ -718,7 +718,7 @@ export default function Checkout({ onClose, onعودة }) {
                       style={{
                         flex: 1, padding: '10px', border: 'none', borderRadius: '8px', cursor: 'pointer', transition: '0.3s',
                         backgroundColor: form.deliveryType === 'postcode' ? '#fff' : 'transparent',
-                        color: form.deliveryType === 'postcode' ? '#2c1810' : '#888',
+                        color: form.deliveryType === 'postcode' ? '#2D1F0E' : '#888',
                         fontWeight: '700', fontSize: '0.85rem',
                         boxShadow: form.deliveryType === 'postcode' ? '0 4px 10px rgba(0,0,0,0.05)' : 'none'
                       }}
@@ -731,7 +731,7 @@ export default function Checkout({ onClose, onعودة }) {
                       style={{
                         flex: 1, padding: '10px', border: 'none', borderRadius: '8px', cursor: 'pointer', transition: '0.3s',
                         backgroundColor: form.deliveryType === 'location' ? '#fff' : 'transparent',
-                        color: form.deliveryType === 'location' ? '#2c1810' : '#888',
+                        color: form.deliveryType === 'location' ? '#2D1F0E' : '#888',
                         fontWeight: '700', fontSize: '0.85rem',
                         boxShadow: form.deliveryType === 'location' ? '0 4px 10px rgba(0,0,0,0.05)' : 'none'
                       }}
@@ -768,12 +768,12 @@ export default function Checkout({ onClose, onعودة }) {
                           }
                         }}
                         style={{
-                          width: '100%', padding: '15px', borderRadius: '12px', border: '1px dashed #c4a484',
-                          background: 'rgba(196,164,132,0.05)', color: '#2c1810', cursor: 'pointer',
+                          width: '100%', padding: '15px', borderRadius: '12px', border: '1px dashed #D4AF37',
+                          background: 'rgba(196,164,132,0.05)', color: '#2D1F0E', cursor: 'pointer',
                           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontWeight: '700'
                         }}
                       >
-                        <i className="fas fa-map-marker-alt" style={{ color: '#c4a484' }} />
+                        <i className="fas fa-map-marker-alt" style={{ color: '#D4AF37' }} />
                         {form.location || 'مشاركة موقعي المباشر'}
                       </button>
                       {errors.location && <p className={styles.errorMsg} style={{ marginTop: '5px' }}>{errors.location}</p>}
@@ -804,7 +804,7 @@ export default function Checkout({ onClose, onعودة }) {
                     boxShadow: '0 10px 25px rgba(0,0,0,0.1)', zIndex: 10,
                     maxHeight: '220px', overflowY: 'auto'
                   }}>
-                    <div style={{ fontSize: '0.75rem', color: '#c4a484', fontWeight: 'bold', padding: '4px 8px 8px' }}>الملفات المحفوظة</div>
+                    <div style={{ fontSize: '0.75rem', color: '#D4AF37', fontWeight: 'bold', padding: '4px 8px 8px' }}>الملفات المحفوظة</div>
                     {savedProfiles.map((profile, idx) => (
                       <div key={idx}
                         onMouseDown={(e) => {
@@ -819,7 +819,7 @@ export default function Checkout({ onClose, onعودة }) {
                         onMouseEnter={e => e.currentTarget.style.background = 'rgba(196,164,132,0.1)'}
                         onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                       >
-                        <div style={{ color: '#2c1810', fontWeight: 'bold', fontSize: '0.9rem' }}>{profile.name}</div>
+                        <div style={{ color: '#2D1F0E', fontWeight: 'bold', fontSize: '0.9rem' }}>{profile.name}</div>
                         <div style={{ fontSize: '0.78rem', color: '#666' }}>{profile.phone}{profile.email ? ` • ${profile.email}` : ''}</div>
                       </div>
                     ))}
@@ -860,12 +860,12 @@ export default function Checkout({ onClose, onعودة }) {
 
             {/* Smart Offers Section */}
             <div className={styles.formSection} style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '16px', border: '1px solid #eee' }}>
-              <label className={styles.label} style={{ fontSize: '1.1rem', color: '#2c1810', marginBottom: '10px' }}>فئة المتبرع</label>
+              <label className={styles.label} style={{ fontSize: '1.1rem', color: '#2D1F0E', marginBottom: '10px' }}>فئة المتبرع</label>
               <select
                 className={styles.input}
                 value={customerType}
                 onChange={e => { setCustomerType(e.target.value); setSelectedOffer(null); }}
-                style={{ backgroundColor: '#f9f9f9', cursor: 'pointer' }}
+                style={{ backgroundColor: '#FDF8F0', cursor: 'pointer' }}
               >
                 <option value="General">فاعل خير عام</option>
                 <option value="طالب حلقة">طالب حلقة</option>
@@ -874,7 +874,7 @@ export default function Checkout({ onClose, onعودة }) {
 
               {offers.length > 0 && (
                 <div style={{ marginTop: '20px' }}>
-                  <label className={styles.label} style={{ color: '#c4a484', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <label className={styles.label} style={{ color: '#D4AF37', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <i className="fas fa-tags" /> فرص مساهمة خاصة
                   </label>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '10px' }}>
@@ -884,7 +884,7 @@ export default function Checkout({ onClose, onعودة }) {
                         onClick={() => handleOfferClick(offer)}
                         style={{
                           padding: '15px',
-                          border: selectedOffer?.id === offer.id ? '2px solid #c4a484' : '1px solid #e0e0e0',
+                          border: selectedOffer?.id === offer.id ? '2px solid #D4AF37' : '1px solid #e0e0e0',
                           borderRadius: '12px',
                           cursor: 'pointer',
                           backgroundColor: selectedOffer?.id === offer.id ? 'rgba(196,164,132,0.1)' : '#fdfdfd',
@@ -895,10 +895,10 @@ export default function Checkout({ onClose, onعودة }) {
                         }}
                       >
                         <div>
-                          <div style={{ fontWeight: 'bold', color: '#2c1810', fontSize: '1.05rem' }}>{offer.reason}</div>
+                          <div style={{ fontWeight: 'bold', color: '#2D1F0E', fontSize: '1.05rem' }}>{offer.reason}</div>
                           <div style={{ fontSize: '0.85rem', color: '#666', marginTop: '4px' }}>ينطبق على {offer.product_name}</div>
                         </div>
-                        <div style={{ fontWeight: 'bold', color: '#c4a484', fontSize: '1.2rem', backgroundColor: '#fff', padding: '5px 10px', borderRadius: '8px', boxShadow: '0 2px 5px rgba(0,0,0,0.05)' }}>
+                        <div style={{ fontWeight: 'bold', color: '#D4AF37', fontSize: '1.2rem', backgroundColor: '#fff', padding: '5px 10px', borderRadius: '8px', boxShadow: '0 2px 5px rgba(0,0,0,0.05)' }}>
                           {offer.discount_percent}% OFF
                         </div>
                       </div>
@@ -949,7 +949,7 @@ export default function Checkout({ onClose, onعودة }) {
                           <div style={{
                             fontFamily: "'DM Serif Display', serif",
                             fontSize: '1.05rem',
-                            color: '#2c1810',
+                            color: '#2D1F0E',
                             fontWeight: '700',
                             marginBottom: '8px',
                             lineHeight: 1.3
@@ -991,13 +991,13 @@ export default function Checkout({ onClose, onعودة }) {
 
             {/* General Store Feedback Section Moved Here */}
             <div style={{ backgroundColor: 'rgba(196,164,132,0.1)', padding: '20px', borderRadius: '16px', marginBottom: '20px', border: '1px solid rgba(196,164,132,0.3)' }}>
-              <h4 style={{ margin: '0 0 10px 0', color: '#2c1810', fontFamily: 'serif', fontSize: '1.2rem' }}>How was your experience?</h4>
+              <h4 style={{ margin: '0 0 10px 0', color: '#2D1F0E', fontFamily: 'serif', fontSize: '1.2rem' }}>How was your experience?</h4>
               <div style={{ display: 'flex', gap: '8px', fontSize: '1.5rem', marginBottom: '15px' }}>
                 {[1, 2, 3, 4, 5].map(star => (
                   <i
                     key={star}
                     className={`fas fa-star`}
-                    style={{ color: star <= storeRating ? '#FFD700' : '#ccc', cursor: 'pointer', transition: '0.2s' }}
+                    style={{ color: star <= storeRating ? '#D4AF37' : '#ccc', cursor: 'pointer', transition: '0.2s' }}
                     onClick={() => setStoreRating(star)}
                   />
                 ))}
@@ -1015,7 +1015,7 @@ export default function Checkout({ onClose, onعودة }) {
               className={`btn btn-primary ${styles.payBtn}`} 
               disabled={step === 'processing'}
               style={{
-                background: step === 'processing' ? '#ccc' : 'linear-gradient(135deg, #2c1810, #5a3500)',
+                background: step === 'processing' ? '#ccc' : 'linear-gradient(135deg, #2D1F0E, #5a3500)',
                 padding: '20px',
                 borderRadius: '15px',
                 fontSize: '1.2rem',
@@ -1052,7 +1052,7 @@ export default function Checkout({ onClose, onعودة }) {
                 <i className="fas fa-shield-alt" style={{ color: '#4facfe' }} /> ENCRYPTED
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.75rem', fontWeight: 'bold', color: '#666' }}>
-                <i className="fas fa-check-circle" style={{ color: '#c4a484' }} /> VERIFIED
+                <i className="fas fa-check-circle" style={{ color: '#D4AF37' }} /> VERIFIED
               </div>
             </div>
           </form>
