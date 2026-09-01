@@ -80,18 +80,18 @@
 .pillar { text-align: center; }
 .pillarIcon {
   width: 52px; height: 52px;
-  background: var(--tea-light);
+  background: #F2E8D5;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 1rem;
-  color: var(--coffee-dark);
+  color: var(--gold-dim);
   font-size: 1.2rem;
-  border: 1px solid var(--border);
+  border: 1.5px solid rgba(212, 175, 55, 0.35);
   transition: background var(--tr), color var(--tr), border-color var(--tr);
 }
-.pillar:hover .pillarIcon { background: var(--coffee-dark); color: #fff; border-color: var(--coffee-dark); }
+.pillar:hover .pillarIcon { background: var(--gold); color: #FBF6EE; border-color: var(--gold); }
 .pillarTitle { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--espresso); margin-bottom: .5rem; }
 .pillarDesc  { font-size: .83rem; color: var(--espresso-mid); line-height: 1.65; }
 
