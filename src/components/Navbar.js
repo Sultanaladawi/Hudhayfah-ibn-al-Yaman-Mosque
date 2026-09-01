@@ -242,7 +242,7 @@ export default function Navbar() {
         
         {/* Student Achievements / Honors Marquee Banner */}
         <div style={{
-          background: 'linear-gradient(95deg, #1E1409 0%, #2A1A08 50%, #1E1409 100%)', // Premium royal Islamic emerald green
+          background: 'linear-gradient(95deg, #FBF6EE 0%, #F2E8D5 50%, #FBF6EE 100%)', // Premium royal Islamic emerald green
           color: '#FEF9F4',
           paddingTop: '6px',
           paddingBottom: '6px', 
@@ -381,7 +381,7 @@ export default function Navbar() {
           width: '65px',
           height: '65px',
           borderRadius: '50%',
-          backgroundColor: '#1E1409',
+          backgroundColor: 'var(--bg-surface)',
           border: '2px solid #D4AF37',
           color: '#D4AF37',
           display: 'flex',

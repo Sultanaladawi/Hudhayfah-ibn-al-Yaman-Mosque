@@ -35,7 +35,7 @@ export default function Cart({ onClose, onCheckout }) {
             <p className={styles.emptyDesc} style={{ fontFamily: 'Tajawal' }}>يبدو أنك لم تختر أي مساهمة أو باب من أبواب الخير بعد.</p>
             <button
               className={styles.checkoutBtn}
-              style={{ background: '#2D1F0E', maxWidth: '250px', fontFamily: 'Tajawal' }}
+              style={{ background: 'var(--bg-surface)', maxWidth: '250px', fontFamily: 'Tajawal' }}
               onClick={() => {
                 onClose();
                 setTimeout(() => {
@@ -112,7 +112,7 @@ export default function Cart({ onClose, onCheckout }) {
             <span>{formatPrice(totalPrice)}</span>
           </div>
 
-          <button className={styles.checkoutBtn} onClick={onCheckout} style={{ background: '#2D1F0E', fontFamily: 'Tajawal' }}>
+          <button className={styles.checkoutBtn} onClick={onCheckout} style={{ background: 'var(--bg-surface)', fontFamily: 'Tajawal' }}>
             <i className="fas fa-shield-alt" style={{ marginLeft: '8px' }} />
             <span>تأكيد التبرع والمتابعة</span>
             <span style={{ background: 'rgba(255,255,255,0.15)', padding: '4px 12px', borderRadius: '8px', fontSize: '1rem', marginRight: 'auto', marginLeft: 0 }}>{formatPrice(totalPrice)}</span>

@@ -42,7 +42,7 @@ thead tr {
 th, td {
   padding: 18px 24px;
   text-align: left;
-  border-bottom: 1px solid #2D1F0E;
+  border-bottom: 1px solid var(--border);
 }
 
 tbody tr:hover {
@@ -64,13 +64,13 @@ button, input, textarea {
 }
 
 ::-webkit-scrollbar-track {
-  background: #1E1409;
+  background: var(--bg-elevated);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2D1F0E;
+  background: var(--gold-dim);
   border-radius: 10px;
-  border: 1px solid #1E1409;
+  border: 1px solid var(--border);
 }
 
 ::-webkit-scrollbar-thumb:hover {

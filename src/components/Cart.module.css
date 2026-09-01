@@ -50,7 +50,7 @@
 .drawerTitle {
   font-family: 'DM Serif Display', serif;
   font-size: 2rem;
-  color: #2D1F0E;
+  color: var(--text-primary);
   margin: 0;
 }
 
@@ -72,12 +72,12 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #2D1F0E;
+  color: var(--text-primary);
   transition: all 0.3s ease;
 }
 
 .closeBtn:hover {
-  background: #2D1F0E;
+  background: var(--gold-dim);
   color: #fff;
   transform: rotate(90deg);
 }
@@ -108,7 +108,7 @@
 
 .itemName {
   font-weight: 800;
-  color: #2D1F0E;
+  color: var(--text-primary);
   font-size: 1.1rem;
   margin-bottom: 5px;
 }
@@ -138,7 +138,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: #2D1F0E;
+  color: var(--text-primary);
   font-size: 0.9rem;
   padding: 5px;
   transition: color 0.2s;
@@ -150,14 +150,14 @@
 
 .qty {
   font-weight: 900;
-  color: #2D1F0E;
+  color: var(--text-primary);
   min-width: 20px;
   text-align: center;
 }
 
 .itemSubtotal {
   font-weight: 900;
-  color: #2D1F0E;
+  color: var(--text-primary);
   font-size: 1.1rem;
 }
 
@@ -196,7 +196,7 @@
   margin-top: 15px;
   padding-top: 15px;
   border-top: 1px dashed rgba(196, 164, 132, 0.3);
-  color: #2D1F0E;
+  color: var(--text-primary);
   font-size: 1.5rem;
   font-weight: 900;
 }
@@ -263,7 +263,7 @@
 .emptyTitle {
   font-family: 'serif';
   font-size: 1.8rem;
-  color: #2D1F0E;
+  color: var(--text-primary);
   margin-bottom: 10px;
 }
 

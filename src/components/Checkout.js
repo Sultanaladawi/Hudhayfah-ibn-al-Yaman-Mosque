@@ -573,7 +573,7 @@ export default function Checkout({ onClose, onعودة }) {
             <button
               className="btn btn-primary"
               onClick={() => setStep('form')}
-              style={{ width: '100%', padding: '15px', borderRadius: '12px', background: '#2D1F0E', color: '#fff', border: 'none', fontWeight: 'bold', fontSize: '1.1rem', cursor: 'pointer' }}
+              style={{ width: '100%', padding: '15px', borderRadius: '12px', background: 'var(--bg-surface)', color: '#fff', border: 'none', fontWeight: 'bold', fontSize: '1.1rem', cursor: 'pointer' }}
             >
               حاول مجدداً
             </button>
