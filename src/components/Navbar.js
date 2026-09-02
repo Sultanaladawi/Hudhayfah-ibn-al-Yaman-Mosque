@@ -381,14 +381,14 @@ export default function Navbar() {
           width: '65px',
           height: '65px',
           borderRadius: '50%',
-          backgroundColor: '#1E1409',
+          backgroundColor: '#FBF6EE',
           border: '2px solid #D4AF37',
-          color: '#D4AF37',
+          color: '#B8860B',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           cursor: 'pointer',
-          boxShadow: playing ? '0 0 25px #D4AF37' : '0 10px 25px rgba(0,0,0,0.5)',
+          boxShadow: playing ? '0 0 25px rgba(212,175,55,0.5)' : '0 10px 25px rgba(139,105,20,0.25)',
           transition: 'all 0.4s ease',
           animation: playing ? 'crescentPulse 2s infinite' : 'none',
           outline: 'none'
@@ -399,7 +399,7 @@ export default function Navbar() {
           <span style={{ fontSize: '1.6rem', lineHeight: '1', animation: playing ? 'spinSpin 5s linear infinite' : 'none' }}>
             🌙
           </span>
-          <span style={{ fontSize: '0.65rem', fontWeight: 'bold', marginTop: '2px', color: '#FEF9F4', fontFamily: 'Tajawal' }}>
+          <span style={{ fontSize: '0.65rem', fontWeight: 'bold', marginTop: '2px', color: '#2D1F0E', fontFamily: 'Tajawal' }}>
             {playing ? "توقف" : "تكبيرات"}
           </span>
         </div>
