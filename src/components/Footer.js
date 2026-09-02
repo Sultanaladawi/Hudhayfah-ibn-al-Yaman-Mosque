@@ -1,13 +1,19 @@
-import { shopInfo, openingHours } from '../data/shopData';
+import { shopInfo } from '../data/shopData';
 import styles from './Footer.module.css';
 
 const QUICK = [
-  { label: 'الرئيسية',    href: '#home' },
-  { label: 'الأنشطة والفعاليات',    href: '#menu' },
-  { label: 'معرض الصور', href: '#gallery' },
-  { label: 'عن المسجد',   href: '#about' },
-  { label: 'العمل التطوعي', href: '#careers' },
-  { label: 'تواصل معنا', href: '#contact' },
+  { label: 'الرئيسية',          href: '#home' },
+  { label: 'الأنشطة والفعاليات', href: '#menu' },
+  { label: 'معرض الصور',        href: '#gallery' },
+  { label: 'عن المسجد',          href: '#about' },
+  { label: 'العمل التطوعي',      href: '#careers' },
+  { label: 'تواصل معنا',         href: '#contact' },
+];
+
+const HOURS = [
+  { label: 'الصلوات الخمس',     time: 'يومياً مع الجماعة' },
+  { label: 'حلقات القرآن الكريم', time: 'بعد العصر والفجر' },
+  { label: 'الأنشطة التربوية',   time: 'نهاية الأسبوع' },
 ];
 
 const InstagramIcon = () => (
@@ -22,69 +28,92 @@ const FacebookIcon = () => (
   </svg>
 );
 
-const MapPinIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{marginLeft:'6px',flexShrink:0,verticalAlign:'middle'}}>
-    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-  </svg>
-);
+/* ── Shared text styles ── */
+const DARK   = '#2D1F0E';   // headings, name
+const BODY   = '#4A3018';   // body text & links
+const GOLD   = '#B8860B';   // accent / times / hover
+const BORDER = 'rgba(184,134,11,0.30)';
 
-const EnvelopeIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{marginLeft:'6px',flexShrink:0,verticalAlign:'middle'}}>
-    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-  </svg>
-);
+const sectionTitle = {
+  color: DARK,
+  fontFamily: "'Amiri', serif",
+  fontSize: '1.2rem',
+  fontWeight: '700',
+  marginBottom: '18px',
+  paddingBottom: '10px',
+  borderBottom: `1.5px solid ${BORDER}`,
+};
 
 export default function Footer() {
   return (
-    <footer className={styles.footer} style={{ direction: 'rtl', fontFamily: "'Amiri', 'Tajawal', sans-serif" }}>
+    <footer className={styles.footer}
+      style={{ direction: 'rtl', fontFamily: "'Tajawal', 'Amiri', sans-serif" }}>
+
       <div className={styles.inner}>
+
+        {/* ── Brand ── */}
         <div className={styles.brand}>
-          <a href="#home" className={styles.logo} aria-label={shopInfo.name} style={{ display: 'flex', alignItems: 'center', gap: '15px', textDecoration: 'none', marginBottom: '20px' }}>
-            <span style={{ fontSize: '2.5rem' }}>🕌</span>
+          <a href="#home" style={{ display: 'flex', alignItems: 'center', gap: '14px', textDecoration: 'none', marginBottom: '18px' }}>
+            <span style={{ fontSize: '2.4rem' }}>🕌</span>
             <div>
-              <div className={styles.logoName} style={{ fontFamily: "'Amiri', serif", fontSize: '1.6rem', color: '#fff', fontWeight: 'bold' }}>{shopInfo.name}</div>
-              <div className={styles.logoCity} style={{ color: 'var(--admin-accent)', fontSize: '0.85rem' }}>{shopInfo.city}، {shopInfo.country}</div>
+              <div style={{ fontFamily: "'Amiri', serif", fontSize: '1.55rem', color: DARK, fontWeight: 'bold', lineHeight: 1.2 }}>
+                {shopInfo.name}
+              </div>
+              <div style={{ color: GOLD, fontSize: '0.82rem', marginTop: '3px' }}>
+                {shopInfo.city}، {shopInfo.country}
+              </div>
             </div>
           </a>
-          <p className={styles.brandDesc} style={{ color: '#aaa', fontSize: '0.95rem', lineHeight: '1.7', margin: '0 0 25px 0' }}>
+          <p style={{ color: BODY, fontSize: '0.93rem', lineHeight: 1.75, margin: '0 0 22px 0', maxWidth: '320px' }}>
             الصفحة الرسمية لمسجد حذيفة بن اليمان في الأردن - طبربور. دار القرآن الكريم والأنشطة التربوية والرياضية لشباب وأشبال المسجد. لا توجد أي صحبة في الدنيا تدوم كصحبة المسجد.
           </p>
-          <div className={styles.socialGroup} style={{ display: 'flex', gap: '15px' }}>
-            <a href={shopInfo.facebook} target="_blank" rel="noopener noreferrer" className={styles.socialIcon} aria-label="Facebook" style={{ color: 'var(--admin-accent)', transition: '0.3s' }}>
-              <FacebookIcon />
-            </a>
-            <a href={shopInfo.instagram} target="_blank" rel="noopener noreferrer" className={styles.socialIcon} aria-label="Instagram" style={{ color: 'var(--admin-accent)', transition: '0.3s' }}>
-              <InstagramIcon />
-            </a>
+          <div style={{ display: 'flex', gap: '12px' }}>
+            {[
+              { href: shopInfo.facebook,  label: 'Facebook',  Icon: FacebookIcon  },
+              { href: shopInfo.instagram, label: 'Instagram', Icon: InstagramIcon },
+            ].map(({ href, label, Icon }) => (
+              <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
+                style={{
+                  width: 40, height: 40, borderRadius: 10, display: 'flex',
+                  alignItems: 'center', justifyContent: 'center',
+                  background: 'rgba(184,134,11,0.12)',
+                  border: `1px solid ${BORDER}`,
+                  color: GOLD, textDecoration: 'none', transition: 'all 0.3s',
+                }}
+                onMouseOver={e => { e.currentTarget.style.background = GOLD; e.currentTarget.style.color = '#FBF6EE'; }}
+                onMouseOut={e  => { e.currentTarget.style.background = 'rgba(184,134,11,0.12)'; e.currentTarget.style.color = GOLD; }}
+              >
+                <Icon />
+              </a>
+            ))}
           </div>
         </div>
 
+        {/* ── Hours ── */}
         <div className={styles.col}>
-          <h4 style={{ color: 'var(--admin-accent)', marginBottom: '20px', fontFamily: "'Amiri', serif", fontSize: '1.25rem' }}>مواعيد وأوقات المسجد</h4>
-          <ul>
-            <li className={styles.hoursRow} style={{ color: '#ccc', marginBottom: '10px', fontSize: '0.9rem' }}>
-              <span>الصلوات الخمس</span>
-              <span className={styles.time} style={{ color: 'var(--admin-accent)' }}>يومياً مع الجماعة</span>
-            </li>
-            <li className={styles.hoursRow} style={{ color: '#ccc', marginBottom: '10px', fontSize: '0.9rem' }}>
-              <span>حلقات القرآن الكريم</span>
-              <span className={styles.time} style={{ color: 'var(--admin-accent)' }}>بعد العصر والفجر</span>
-            </li>
-            <li className={styles.hoursRow} style={{ color: '#ccc', marginBottom: '10px', fontSize: '0.9rem' }}>
-              <span>الأنشطة التربوية</span>
-              <span className={styles.time} style={{ color: 'var(--admin-accent)' }}>نهاية الأسبوع</span>
-            </li>
+          <h4 style={sectionTitle}>مواعيد وأوقات المسجد</h4>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {HOURS.map(({ label, time }) => (
+              <li key={label} style={{ display: 'flex', justifyContent: 'space-between', gap: '8px', alignItems: 'center' }}>
+                <span style={{ color: BODY, fontSize: '0.9rem' }}>{label}</span>
+                <span style={{ color: GOLD, fontSize: '0.85rem', fontWeight: '600', whiteSpace: 'nowrap' }}>{time}</span>
+              </li>
+            ))}
           </ul>
         </div>
 
+        {/* ── Quick Links ── */}
         <div className={styles.col}>
-          <h4 style={{ color: 'var(--admin-accent)', marginBottom: '20px', fontFamily: "'Amiri', serif", fontSize: '1.25rem' }}>روابط سريعة</h4>
-          <ul style={{ listStyle: 'none', padding: 0 }}>
+          <h4 style={sectionTitle}>روابط سريعة</h4>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {QUICK.map(({ label, href }) => (
-              <li key={label} style={{ marginBottom: '10px' }}>
-                <a href={href} style={{ color: '#ccc', textDecoration: 'none', fontSize: '0.9rem', transition: '0.3s' }}
-                   onMouseOver={e => e.target.style.color = 'var(--admin-accent)'}
-                   onMouseOut={e => e.target.style.color = '#ccc'}>
+              <li key={label}>
+                <a href={href}
+                  style={{ color: BODY, textDecoration: 'none', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '6px', transition: 'color 0.25s' }}
+                  onMouseOver={e => e.currentTarget.style.color = GOLD}
+                  onMouseOut={e  => e.currentTarget.style.color = BODY}
+                >
+                  <span style={{ color: GOLD, fontSize: '0.65rem', lineHeight: 1 }}>◀</span>
                   {label}
                 </a>
               </li>
@@ -92,31 +121,37 @@ export default function Footer() {
           </ul>
         </div>
 
+        {/* ── Map ── */}
         <div className={styles.col}>
-          <h4 style={{ color: 'var(--admin-accent)', marginBottom: '20px', fontFamily: "'Amiri', serif", fontSize: '1.25rem' }}>موقع المسجد والاتصال</h4>
-          <div className={styles.mapContainer} style={{ borderRadius: '15px', overflow: 'hidden', border: '1px solid var(--admin-border)', height: '110px', marginBottom: '15px' }}>
+          <h4 style={sectionTitle}>موقع المسجد والاتصال</h4>
+          <div style={{ borderRadius: 14, overflow: 'hidden', border: `1px solid ${BORDER}`, height: 120, marginBottom: 14, boxShadow: '0 4px 14px rgba(139,105,20,0.12)' }}>
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3383.168707175514!2d35.9189!3d32.001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151c9f7a7a7a7a7a%3A0x7a7a7a7a7a7a7a7a!2z2YXYs9is2K8g2K3w2YrZgdmF2Kkg2KjZhiDYp9mE2YrZhdin2YY!5e0!3m2!1sar!2sjo!4v1715000000000!5m2!1sar!2sjo"
-              width="100%"
-              height="100%"
+              width="100%" height="100%"
               style={{ border: 0 }}
-              allowFullScreen=""
-              loading="lazy"
+              allowFullScreen="" loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               title="Mosque Location"
-            ></iframe>
+            />
           </div>
-          <a href={shopInfo.mapsUrl} target="_blank" rel="noopener noreferrer" className={styles.address} style={{ display: 'flex', alignItems: 'center', color: '#ccc', textDecoration: 'none', fontSize: '0.85rem', marginBottom: '10px' }}>
-            <MapPinIcon />
-            <span>{shopInfo.address}</span>
+          <a href={shopInfo.mapsUrl} target="_blank" rel="noopener noreferrer"
+            style={{ display: 'flex', alignItems: 'center', color: BODY, textDecoration: 'none', fontSize: '0.85rem', marginBottom: 10, gap: 6 }}>
+            📍 <span>{shopInfo.address}</span>
           </a>
-          <a href={`mailto:${shopInfo.email}`} className={styles.emailLink} style={{ display: 'flex', alignItems: 'center', color: '#ccc', textDecoration: 'none', fontSize: '0.85rem' }}>
-            <EnvelopeIcon /> {shopInfo.email}
+          <a href={`mailto:${shopInfo.email}`}
+            style={{ display: 'flex', alignItems: 'center', color: BODY, textDecoration: 'none', fontSize: '0.85rem', gap: 6 }}>
+            ✉️ {shopInfo.email}
           </a>
         </div>
       </div>
 
-      <div className={styles.bottom} style={{ borderTop: '1px solid var(--admin-border)', paddingTop: '20px', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '15px', color: '#777', fontSize: '0.8rem' }}>
+      {/* ── Bottom bar ── */}
+      <div style={{
+        maxWidth: 1200, margin: '40px auto 0', padding: '20px 50px',
+        borderTop: `1px solid ${BORDER}`,
+        display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap',
+        gap: 12, color: '#6B4F35', fontSize: '0.8rem',
+      }}>
         <span>© {new Date().getFullYear()} {shopInfo.name}. جميع الحقوق محفوظة لبيت الله.</span>
         <span>بإشراف مشايخ المسجد واللجنة التربوية وحلقات التحفيظ.</span>
       </div>
